@@ -10,6 +10,14 @@
 
 const PDFTemplates = {
 
+    precosFamiliares: {
+        diagnostico: { 1: 150, 2: 150, 3: 150, 4: 150, 5: 150, 6: 150 },
+        documentacao: { 1: 350, 2: 500, 3: 600, 4: 700, 5: 800, 6: 900 },
+        vistos: { 1: 750, 2: 1100, 3: 1350, 4: 1600, 5: 1850, 6: 2100 },
+        aterragem: { 1: 600, 2: 800, 3: 1000, 4: 1150, 5: 1300, 6: 1450 },
+        premium: { 1: 2000, 2: 2900, 3: 3500, 4: 4100, 5: 4700, 6: 5300 }
+    },
+
     // ==============================
     // COMMON ELEMENTS
     // ==============================
@@ -48,7 +56,7 @@ const PDFTemplates = {
                     <div class="pdf-client-field"><strong>Telefone:</strong> <span>${data.telefone || '—'}</span></div>
                     <div class="pdf-client-field"><strong>Passaporte:</strong> <span>${data.passaporte || '—'}</span></div>
                 </div>
-                ${data.membros ? `<div class="pdf-client-row"><div class="pdf-client-field"><strong>Membros da família:</strong> <span>${data.membros}</span></div></div>` : ''}
+                ${data.pessoas && parseInt(data.pessoas) > 1 ? `<div class="pdf-client-row"><div class="pdf-client-field"><strong>Quantidade de Pessoas Cobertas:</strong> <span>${data.pessoas} Pessoas</span></div></div>` : (data.membros ? `<div class="pdf-client-row"><div class="pdf-client-field"><strong>Membros da família:</strong> <span>${data.membros}</span></div></div>` : '')}
             </div>
         `;
     },
@@ -62,91 +70,104 @@ const PDFTemplates = {
                 nome: 'Diagnóstico Estratégico',
                 valor: 150,
                 itens: [
-                    'Videochamada de 60 a 90 minutos',
-                    'Análise completa de perfil migratório',
-                    'Plano de Ação personalizado em PDF',
-                    '15 dias de suporte via WhatsApp',
-                    'Valor 100% dedutível em pacotes futuros'
+                    'Videochamada de 60 a 90 minutos de sessão estratégica',
+                    'Análise completa de perfil migratório familiar',
+                    'Plano de Ação personalizado estruturado em PDF',
+                    '15 dias de suporte via WhatsApp limitado exclusivamente ao esclarecimento de dúvidas sobre a interpretação do Plano de Ação',
+                    'Valor 100% dedutível em contratações futuras de Assessoria Integral (Documentação, Vistos ou Premium)'
                 ],
                 exclusoes: [
-                    'Organização ou envio de documentos',
-                    'Agendamento no consulado',
-                    'Serviços na Espanha'
+                    'Busca, emissão, organização, revisão ou envio de certidões/documentos',
+                    'Preenchimento de formulários de visto ou agendamentos consulares',
+                    'Serviços locais ou de relocation na Espanha',
+                    'Suporte a processos migratórios já ativos ou novas consultas fora do escopo do Plano de Ação'
                 ]
             },
             documentacao: {
                 nome: 'Documentação Brasil',
                 valor: 350,
                 itens: [
-                    'Checklist personalizado de documentos',
-                    'Orientação sobre certidões e apostilamentos',
-                    'Coordenação com tradutores juramentados',
-                    'Revisão final do dossiê completo',
-                    '30 dias de suporte via WhatsApp'
+                    'Checklist personalizado de documentos necessários no Brasil',
+                    'Orientação técnica sobre emissão de certidões brasileiras e apostilamento de Haia',
+                    'Coordenação direta e orçamento com tradutores juramentados credenciados parceiros',
+                    'Revisão técnica minuciosa de todo o dossiê final para evitar erros e riscos de indeferimento consular',
+                    'Suporte via WhatsApp em dias úteis e horário comercial (segunda a sexta, das 09h às 18h) durante a vigência contratual'
                 ],
                 exclusoes: [
-                    'Custos de traduções juramentadas (pago diretamente ao tradutor)',
-                    'Taxas de cartório e apostilamento',
-                    'Agendamento e acompanhamento no consulado'
+                    'Custos diretos de traduções juramentadas (pagos diretamente ao profissional responsável)',
+                    'Taxas de cartório, certidões de inteiro teor e emolumentos de apostilamento de Haia',
+                    'Agendamento consular, preenchimento de formulários ou acompanhamento de vistos',
+                    'Qualquer taxa governamental brasileira ou espanhola'
                 ]
             },
             vistos: {
                 nome: 'Assessoria de Vistos',
                 valor: 750,
                 itens: [
-                    'Tudo do pacote "Documentação Brasil"',
-                    'Agendamento de cita no Consulado',
-                    'Treinamento para entrevista consular',
-                    'Acompanhamento até a decisão final',
-                    'Orientação sobre seguro saúde obrigatório',
-                    '60 dias de suporte via WhatsApp'
+                    'Tudo incluso no pacote "Documentação Brasil"',
+                    'Preenchimento completo dos formulários oficiais de solicitação de visto da Espanha',
+                    'Monitoramento operacional e suporte manual no agendamento de datas (citas) no Consulado espanhol',
+                    'Treinamento prévio e simulação individual para a entrevista consular',
+                    'Indicação e suporte na cotação de seguros de saúde espanhóis obrigatórios e homologados (sem copago)',
+                    'Acompanhamento das etapas e suporte operacional completo até a decisão consular final',
+                    'Suporte via WhatsApp em dias úteis e horário comercial (segunda a sexta, das 09h às 18h)'
                 ],
                 exclusoes: [
-                    'Custos de traduções e taxas consulares',
-                    'Valor do seguro saúde',
-                    'Passagens aéreas',
-                    'Serviços de instalação na Espanha'
+                    'Taxa Consular do Visto (paga diretamente pelo contratante ao Consulado da Espanha, aprox. 80€ por pessoa)',
+                    'Custo da contratação da apólice do Seguro Saúde Espanhol',
+                    'Custos com passagens aéreas e reservas de viagem',
+                    'Traduções juramentadas, buscas ou apostilamentos cartoriais no Brasil',
+                    'Serviços de aterragem, NIE/TIE locais ou instalação na Espanha'
                 ]
             },
             aterragem: {
                 nome: 'Aterragem Espanha',
                 valor: 600,
                 itens: [
-                    'Suporte para NIE/TIE e abertura de conta bancária',
-                    'Agendamento de Empadronamiento',
-                    'Busca segura de moradia (visitas e análise de contrato)',
-                    'Orientação sobre matrícula escolar dos filhos',
-                    '30 dias de suporte presencial/remoto'
+                    'Busca segura de moradia na Espanha (limitada à curadoria e análise de até 3 imóveis e análise jurídica do contrato de aluguel por advogados parceiros)',
+                    'Agendamento e suporte nos trâmites presenciais para emissão de NIE/TIE na Espanha',
+                    'Agendamento e orientação para o Empadronamiento municipal',
+                    'Suporte e orientação para abertura de conta em banco espanhol (remoto ou presencial)',
+                    'Orientação e auxílio no processo de matrícula escolar pública ou privada de filhos menores',
+                    'Suporte presencial ou remoto para esclarecimento de trâmites básicos de instalação local (30 dias)'
                 ],
                 exclusoes: [
-                    'Valores de aluguel, fiança e taxas',
-                    'Transporte e deslocamento local',
-                    'Serviços jurídicos ou notariais'
+                    'Custos mensais de aluguel de imóveis, depósito de caução (fianças) ou taxas de corretagem de imobiliárias espanholas',
+                    'Despesas de transporte físico, alimentação, passagens ou hotelaria do contratante',
+                    'Defesas jurídicas complexas contra negativas, recursos administrativos em tribunais espanhóis ou regularizações judiciais',
+                    'Taxas governamentais obrigatórias (ex: taxa modelo 790 para emissão física do cartão TIE)'
                 ]
             },
             premium: {
                 nome: 'Premium Família VIP',
                 valor: 2000,
                 itens: [
-                    'Diagnóstico Estratégico completo',
-                    'Documentação Brasil completa',
-                    'Assessoria de Visto, Arraigo ou Reagrupamento',
-                    'Seguro Saúde Obrigatório incluído',
-                    'Assessoria de Passagens Aéreas (com reserva de retorno)',
-                    'Busca segura de Moradia na Espanha',
-                    'Aterragem completa na Espanha',
-                    'Suporte prioritário ilimitado durante todo o processo'
+                    'Diagnóstico Estratégico completo com Plano de Ação',
+                    'Documentação Brasil integral (apoio, revisão, orçamento e coordenação)',
+                    'Assessoria de Visto, Reagrupamento Consular ou Arraigo de forma completa',
+                    'Seguro Saúde Espanhol obrigatório (primeiro ano incluso para o contratante titular)',
+                    'Assessoria personalizada de logística e curadoria de passagens aéreas',
+                    'Busca de moradia na Espanha (curadoria abrangente, com até 5 visitas em vídeo efetuadas pela assessoria e análise de contrato)',
+                    'Aterragem completa na Espanha (NIE/TIE, Empadronamiento, Conta Bancária e matrícula escolar)',
+                    'Suporte prioritário via WhatsApp com tempo de resposta estendido (segunda a domingo)'
                 ],
                 exclusoes: [
-                    'Custos de traduções e taxas consulares',
-                    'Valores de passagens aéreas',
-                    'Valores de aluguel e fiança na Espanha'
+                    'Taxas consulares cobradas individualmente pelo Consulado espanhol (aprox. 80€ por pessoa)',
+                    'Valores diretos de passagens aéreas do contratante e familiares',
+                    'Custos mensais de aluguel de imóveis, taxas administrativas de imobiliárias ou fianças da moradia',
+                    'Custos de cartórios e taxas de apostilamentos de Haia no Brasil',
+                    'Custos de traduções juramentadas'
                 ]
             }
         };
 
-        const plano = planos[data.plano] || planos.diagnostico;
-        const valor = data.valorCustom || plano.valor;
+        const pessoas = parseInt(data.pessoas) || 1;
+        const planoId = data.plano || 'diagnostico';
+        const plano = planos[planoId] || planos.diagnostico;
+        const valorPadrao = (PDFTemplates.precosFamiliares[planoId] && PDFTemplates.precosFamiliares[planoId][pessoas]) || plano.valor;
+        const valor = data.valorCustom || valorPadrao;
+        
+        const planoNomeFormatado = pessoas > 1 ? `${plano.nome} (${pessoas} Pessoas)` : plano.nome;
         const today = new Date();
         const contratoNum = `DE-${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}-${String(Math.floor(Math.random()*9000)+1000)}`;
 
@@ -160,7 +181,7 @@ const PDFTemplates = {
                 ${this.clientBox(data)}
 
                 <div class="pdf-plan-box">
-                    <h3>${plano.nome}</h3>
+                    <h3>${planoNomeFormatado}</h3>
                     <div class="pdf-plan-price">${valor.toLocaleString('pt-BR')}€</div>
                     <ul class="pdf-plan-features">
                         ${plano.itens.map(i => `<li>${i}</li>`).join('')}
@@ -533,19 +554,76 @@ const PDFTemplates = {
     // 5. PROPOSTA COMERCIAL
     // ==============================
     proposta(data) {
-        const plano = data.plano || 'vistos';
-        const planoNome = Auth.planoLabels[plano] || 'Assessoria de Vistos';
-
-        const pacotes = {
-            diagnostico: { valor: 150, itens: ['Videochamada de 60-90 min', 'Análise de perfil completa', 'Plano de Ação em PDF', '15 dias de suporte WhatsApp'] },
-            documentacao: { valor: 350, itens: ['Checklist personalizado', 'Apoio certidões e apostilas', 'Coordenação de traduções', 'Revisão final do dossiê'] },
-            vistos: { valor: 750, itens: ['Tudo do "Documentação Brasil"', 'Agendamento no Consulado', 'Treinamento de entrevista', 'Acompanhamento até aprovação'] },
-            aterragem: { valor: 600, itens: ['Suporte NIE/TIE e banco', 'Empadronamiento rápido', 'Busca segura de moradia', 'Matrícula escolar dos filhos'] },
-            premium: { valor: 2000, itens: ['Diagnóstico + Documentação completa', 'Assessoria de Visto completa', 'Seguro Saúde incluído', 'Passagens Aéreas assessoradas', 'Busca de Moradia', 'Aterragem na Espanha', 'Suporte prioritário ilimitado'] }
+        const planos = {
+            diagnostico: {
+                nome: 'Diagnóstico Estratégico',
+                valor: 150,
+                itens: [
+                    'Videochamada de 60 a 90 minutos de sessão estratégica',
+                    'Análise completa de perfil migratório familiar',
+                    'Plano de Ação personalizado estruturado em PDF',
+                    '15 dias de suporte via WhatsApp limitado exclusivamente ao esclarecimento de dúvidas sobre a interpretação do Plano de Ação',
+                    'Valor 100% dedutível em contratações futuras de Assessoria Integral (Documentação, Vistos ou Premium)'
+                ]
+            },
+            documentacao: {
+                nome: 'Documentação Brasil',
+                valor: 350,
+                itens: [
+                    'Checklist personalizado de documentos necessários no Brasil',
+                    'Orientação técnica sobre emissão de certidões brasileiras e apostilamento de Haia',
+                    'Coordenação direta e orçamento com tradutores juramentados credenciados parceiros',
+                    'Revisão técnica minuciosa de todo o dossiê final para evitar erros e riscos de indeferimento consular',
+                    'Suporte via WhatsApp em dias úteis e horário comercial (segunda a sexta, das 09h às 18h) durante a vigência contratual'
+                ]
+            },
+            vistos: {
+                nome: 'Assessoria de Vistos',
+                valor: 750,
+                itens: [
+                    'Tudo incluso no pacote "Documentação Brasil"',
+                    'Preenchimento completo dos formulários oficiais de solicitação de visto da Espanha',
+                    'Monitoramento operacional e suporte manual no agendamento de datas (citas) no Consulado espanhol',
+                    'Treinamento prévio e simulação individual para a entrevista consular',
+                    'Indicação e suporte na cotação de seguros de saúde espanhóis obrigatórios e homologados (sem copago)',
+                    'Acompanhamento das etapas e suporte operacional completo até a decisão consular final',
+                    'Suporte via WhatsApp em dias úteis e horário comercial (segunda a sexta, das 09h às 18h)'
+                ]
+            },
+            aterragem: {
+                nome: 'Aterragem Espanha',
+                valor: 600,
+                itens: [
+                    'Busca segura de moradia na Espanha (limitada à curadoria e análise de até 3 imóveis e análise jurídica do contrato de aluguel por advogados parceiros)',
+                    'Agendamento e suporte nos trâmites presenciais para emissão de NIE/TIE na Espanha',
+                    'Agendamento e orientação para o Empadronamiento municipal',
+                    'Suporte e orientação para abertura de conta em banco espanhol (remoto ou presencial)',
+                    'Orientação e auxílio no processo de matrícula escolar pública ou privada de filhos menores',
+                    'Suporte presencial ou remoto para esclarecimento de trâmites básicos de instalação local (30 dias)'
+                ]
+            },
+            premium: {
+                nome: 'Premium Família VIP',
+                valor: 2000,
+                itens: [
+                    'Diagnóstico Estratégico completo com Plano de Ação',
+                    'Documentação Brasil integral (apoio, revisão, orçamento e coordenação)',
+                    'Assessoria de Visto, Reagrupamento Consular ou Arraigo de forma completa',
+                    'Seguro Saúde Espanhol obrigatório (primeiro ano incluso para o contratante titular)',
+                    'Assessoria personalizada de logística e curadoria de passagens aéreas',
+                    'Busca de moradia na Espanha (curadoria abrangente, com até 5 visitas em vídeo efetuadas pela assessoria e análise de contrato)',
+                    'Aterragem completa na Espanha (NIE/TIE, Empadronamiento, Conta Bancária e matrícula escolar)',
+                    'Suporte prioritário via WhatsApp com tempo de resposta estendido (segunda a domingo)'
+                ]
+            }
         };
 
-        const pac = pacotes[plano] || pacotes.vistos;
-        const valor = data.valorCustom || pac.valor;
+        const pessoas = parseInt(data.pessoas) || 1;
+        const planoId = data.plano || 'vistos';
+        const pac = planos[planoId] || planos.vistos;
+        const valorPadrao = (PDFTemplates.precosFamiliares[planoId] && PDFTemplates.precosFamiliares[planoId][pessoas]) || pac.valor;
+        const valor = data.valorCustom || valorPadrao;
+        const planoNomeFormatado = pessoas > 1 ? `${pac.nome} (${pessoas} Pessoas)` : pac.nome;
 
         return `
             <div class="pdf-document">
@@ -589,7 +667,7 @@ const PDFTemplates = {
 
                 <div class="pdf-section-title">O Pacote Recomendado para Você</div>
                 <div class="pdf-plan-box">
-                    <h3>${planoNome}</h3>
+                    <h3>${planoNomeFormatado}</h3>
                     <div class="pdf-plan-price">${valor.toLocaleString('pt-BR')}€</div>
                     <ul class="pdf-plan-features">
                         ${pac.itens.map(i => `<li>${i}</li>`).join('')}
@@ -949,9 +1027,27 @@ const PDFTemplates = {
         const extensos = {
             150: 'cento e cinquenta euros',
             350: 'trezentos e cinquenta euros',
+            500: 'quinhentos euros',
             600: 'seiscentos euros',
+            700: 'setecentos euros',
             750: 'setecentos e cinquenta euros',
-            2000: 'dois mil euros'
+            800: 'oitocentos euros',
+            900: 'novecentos euros',
+            1000: 'mil euros',
+            1100: 'mil e cem euros',
+            1150: 'mil cento e cinquenta euros',
+            1300: 'mil e trezentos euros',
+            1350: 'mil trezentos e cinquenta euros',
+            1450: 'mil quatrocentos e cinquenta euros',
+            1600: 'mil e seiscentos euros',
+            1850: 'mil oitocentos e cinquenta euros',
+            2000: 'dois mil euros',
+            2100: 'dois mil e cem euros',
+            2900: 'dois mil e novecentos euros',
+            3500: 'três mil e quinhentos euros',
+            4100: 'quatro mil e cem euros',
+            4700: 'quatro mil e setecentos euros',
+            5300: 'cinco mil e trezentos euros'
         };
         return extensos[valor] || `${valor} euros`;
     },

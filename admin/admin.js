@@ -953,6 +953,23 @@ async function initGerarPDF() {
     const profissaoSelect = document.getElementById('pdf-profissao');
     const idiomaCheckbox = document.getElementById('pdf-idioma-requisito');
 
+    const planoSelect = document.getElementById('pdf-plano');
+    const pessoasSelect = document.getElementById('pdf-pessoas');
+    const valorInput = document.getElementById('pdf-valor');
+
+    function recarregarPrecoAutomatico() {
+        const plano = planoSelect?.value;
+        const pessoas = parseInt(pessoasSelect?.value) || 1;
+        if (plano && PDFTemplates.precosFamiliares && PDFTemplates.precosFamiliares[plano]) {
+            valorInput.value = PDFTemplates.precosFamiliares[plano][pessoas] || '';
+        }
+    }
+
+    if (planoSelect && pessoasSelect && valorInput) {
+        planoSelect.addEventListener('change', recarregarPrecoAutomatico);
+        pessoasSelect.addEventListener('change', recarregarPrecoAutomatico);
+    }
+
     // Show/hide conditional fields
     typeSelect.addEventListener('change', () => {
         const type = typeSelect.value;
@@ -1048,6 +1065,7 @@ async function initGerarPDF() {
             telefone: document.getElementById('pdf-telefone').value.trim(),
             passaporte: document.getElementById('pdf-passaporte').value.trim(),
             plano: document.getElementById('pdf-plano').value,
+            pessoas: parseInt(document.getElementById('pdf-pessoas').value) || 1,
             tipoVisto: document.getElementById('pdf-visto').value,
             valorCustom: parseFloat(document.getElementById('pdf-valor').value) || undefined,
             valor: parseFloat(document.getElementById('pdf-valor').value) || 0,

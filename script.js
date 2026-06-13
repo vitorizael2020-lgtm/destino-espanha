@@ -408,4 +408,183 @@ document.addEventListener('DOMContentLoaded', () => {
         whatsappFloat.style.transform = 'scale(0.5)';
         whatsappFloat.style.transition = '0.4s cubic-bezier(0.16, 1, 0.3, 1)';
     }
+
+    // ==============================
+    // 10. TESTIMONIALS CAROUSEL
+    // ==============================
+    const carouselContainer = document.querySelector('.cases-carousel-container');
+    const wrapper = document.querySelector('.cases-carousel-wrapper');
+    const track = document.querySelector('.cases-carousel-track');
+    const slides = document.querySelectorAll('.case-card-small');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    const dotsContainer = document.querySelector('.carousel-dots');
+
+    if (wrapper && slides.length > 0) {
+        let currentIndex = 0;
+        const totalSlides = slides.length;
+        const gap = 24; // Definido no CSS (.cases-carousel-track gap: 24px)
+        let autoplayInterval;
+
+        // 1. Criar os dots de navegação dinamicamente
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                scrollToSlide(i);
+                stopAutoplay();
+                startAutoplay();
+            });
+            dotsContainer.appendChild(dot);
+        }
+
+        const dots = dotsContainer.querySelectorAll('.dot');
+
+        // Retorna a largura real de um card (incluindo o gap)
+        function getSlideWidth() {
+            if (slides.length === 0) return 0;
+            return slides[0].offsetWidth + gap;
+        }
+
+        // Função para rolar até o slide específico
+        function scrollToSlide(index) {
+            if (index < 0) index = 0;
+            if (index >= totalSlides) index = totalSlides - 1;
+            
+            currentIndex = index;
+            const targetScroll = index * getSlideWidth();
+            wrapper.scrollTo({
+                left: targetScroll,
+                behavior: 'smooth'
+            });
+            updateDots(index);
+        }
+
+        // Atualizar classe ativa dos dots
+        function updateDots(activeIndex) {
+            dots.forEach((dot, idx) => {
+                if (idx === activeIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        // 2. Setas de Navegação (Prev / Next)
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex < totalSlides - 1) {
+                    scrollToSlide(currentIndex + 1);
+                } else {
+                    scrollToSlide(0); // Volta ao início
+                }
+                stopAutoplay();
+                startAutoplay();
+            });
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    scrollToSlide(currentIndex - 1);
+                } else {
+                    scrollToSlide(totalSlides - 1); // Vai pro final
+                }
+                stopAutoplay();
+                startAutoplay();
+            });
+        }
+
+        // 3. Sincronizar dots quando rolar manualmente (arrastar ou scroll nativo)
+        let scrollTimeout;
+        wrapper.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const slideWidth = getSlideWidth();
+                if (slideWidth > 0) {
+                    const activeIndex = Math.round(wrapper.scrollLeft / slideWidth);
+                    currentIndex = activeIndex;
+                    updateDots(activeIndex);
+                }
+            }, 100);
+        });
+
+        // 4. Autoplay Inteligente
+        function startAutoplay() {
+            autoplayInterval = setInterval(() => {
+                if (currentIndex < totalSlides - 1) {
+                    scrollToSlide(currentIndex + 1);
+                } else {
+                    scrollToSlide(0);
+                }
+            }, 5000); // 5 segundos
+        }
+
+        function stopAutoplay() {
+            clearInterval(autoplayInterval);
+        }
+
+        // Pausa no Hover e foco
+        if (carouselContainer) {
+            carouselContainer.addEventListener('mouseenter', stopAutoplay);
+            carouselContainer.addEventListener('mouseleave', startAutoplay);
+            carouselContainer.addEventListener('focusin', stopAutoplay);
+            carouselContainer.addEventListener('focusout', startAutoplay);
+        }
+
+        // Inicializar Autoplay
+        startAutoplay();
+
+        // 5. Suporte a Arrastar (Drag to Scroll) no Desktop
+        let isDown = false;
+        let startX;
+        let scrollLeftVal;
+
+        wrapper.addEventListener('mousedown', (e) => {
+            isDown = true;
+            wrapper.style.cursor = 'grabbing';
+            startX = e.pageX - wrapper.offsetLeft;
+            scrollLeftVal = wrapper.scrollLeft;
+            stopAutoplay();
+        });
+
+        wrapper.addEventListener('mouseleave', () => {
+            if (isDown) {
+                isDown = false;
+                wrapper.style.cursor = 'grab';
+                startAutoplay();
+            }
+        });
+
+        wrapper.addEventListener('mouseup', () => {
+            if (isDown) {
+                isDown = false;
+                wrapper.style.cursor = 'grab';
+                startAutoplay();
+                // Ajusta para o slide mais próximo depois de soltar
+                setTimeout(() => {
+                    const slideWidth = getSlideWidth();
+                    if (slideWidth > 0) {
+                        const index = Math.round(wrapper.scrollLeft / slideWidth);
+                        scrollToSlide(index);
+                    }
+                }, 50);
+            }
+        });
+
+        wrapper.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - wrapper.offsetLeft;
+            const walk = (x - startX) * 1.5; // Fator de sensibilidade
+            wrapper.scrollLeft = scrollLeftVal - walk;
+        });
+
+        // Ajustar layout e dots em caso de redimensionamento da janela
+        window.addEventListener('resize', () => {
+            scrollToSlide(currentIndex);
+        });
+    }
 });

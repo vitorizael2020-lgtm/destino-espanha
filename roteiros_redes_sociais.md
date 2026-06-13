@@ -10,7 +10,7 @@ Aqui estão os roteiros para você gravar hoje e as copys (textos) para colocar 
 
 ### Vídeo 1: A "Dor" do Custo Real (Topo de Funil)
 **Gancho (0-3s):** Você sabe quanto custa de verdade trazer a sua família para a Espanha? E não, não é só a passagem.
-**Corpo (3-20s):** Muita gente acha que é só comprar o voo e chegar. Mas para entrar em um apartamento alugado hoje, você vai precisar de 3 a 4 mil euros logo de cara, somando fiança e o primeiro mês. Se você vier com o visto errado ou faltar um documento, esse dinheiro vai pelo ralo enquanto você não se legaliza. Eu sei porque já passei por isso quando vim para a Europa há 4 anos.
+**Corpo (3-20s):** Muita gente acha que é só comprar o voo e chegar. Mas para entrar em um apartamento alugado hoje, você vai precisar de 3 a 4 mil euros logo de cara, somando fiança e o primeiro mês. Se você vier com o visto errado ou faltar um documento, esse dinheiro vai pelo ralo enquanto você não se legaliza. Eu sei porque já passei por isso quando vim para a Europa há 7 anos.
 **Chamada para Ação (CTA) (20-30s):** Não traga sua família no escuro. Nós somos uma assessoria especializada em planejamento para brasileiros. Vai no link do meu perfil e fala comigo no WhatsApp que eu analiso o seu caso.
 
 ### Vídeo 2: O Caso de Sucesso do CAP (Meio de Funil)
