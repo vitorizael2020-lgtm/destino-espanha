@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contratos e Recibos | Destino Espanha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/portal.css">
+</head>
+<body>
+    <div class="portal-layout">
+        <button class="sidebar-mobile-toggle" id="sidebar-toggle">☰</button>
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo"><img src="../logo.jpg" alt="Logo Destino Espanha" style="height: 32px; border-radius: 50%; object-fit: cover;"> Destino<span>Espanha</span></div>
+                <div class="sidebar-role">Área do Cliente</div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-title">Meu Processo</div>
+                <a href="painel.html" class="sidebar-link">
+                    <span class="link-icon">📊</span> Meu Painel
+                </a>
+                <a href="documentos.html" class="sidebar-link">
+                    <span class="link-icon">📄</span> Documentos
+                </a>
+                <a href="contratos.html" class="sidebar-link active">
+                    <span class="link-icon">📝</span> Contratos e Recibos
+                </a>
+                <a href="servicos.html" class="sidebar-link">
+                    <span class="link-icon">🛒</span> Nossos Serviços
+                </a>
+                <div class="sidebar-section-title">Atalhos</div>
+                <a href="https://wa.me/34642874197" class="sidebar-link" target="_blank">
+                    <span class="link-icon">💬</span> Falar no WhatsApp
+                </a>
+                <a href="../index.html" class="sidebar-link" target="_blank">
+                    <span class="link-icon">🌐</span> Ver Site
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="user-avatar">C</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="user-name">Cliente</div>
+                        <div class="sidebar-user-email" id="user-email">cliente@email.com</div>
+                    </div>
+                </div>
+                <button class="btn-logout" id="btn-logout">
+                    <span>🚪</span> Sair da conta
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="portal-content">
+            <header class="portal-header">
+                <h1>Contratos e Recibos</h1>
+            </header>
+
+            <div class="portal-body">
+                <!-- Contracts Section -->
+                <div class="doc-list" style="margin-bottom: 28px;">
+                    <div class="doc-list-header">
+                        <h3>📝 Contratos</h3>
+                    </div>
+                    <div id="contracts-list">
+                        <div class="empty-state" style="padding: 40px;">
+                            <div class="empty-state-icon">📝</div>
+                            <div class="empty-state-text">Carregando contratos...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Receipts Section -->
+                <div class="doc-list">
+                    <div class="doc-list-header">
+                        <h3>💰 Recibos de Pagamento</h3>
+                    </div>
+                    <div id="receipts-list">
+                        <div class="empty-state" style="padding: 40px;">
+                            <div class="empty-state-icon">💰</div>
+                            <div class="empty-state-text">Carregando recibos...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../shared/supabase-config.js"></script>
+    <script src="../shared/auth.js"></script>
+    <script src="cliente.js"></script>
+</body>
+</html>

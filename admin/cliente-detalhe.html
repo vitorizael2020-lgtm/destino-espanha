@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhe do Cliente | Destino Espanha Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/portal.css">
+    <link rel="stylesheet" href="../css/pdf.css">
+</head>
+<body>
+    <div class="portal-layout">
+        <button class="sidebar-mobile-toggle" id="sidebar-toggle">☰</button>
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo"><img src="../logo.jpg" alt="Logo Destino Espanha" style="height: 32px; border-radius: 50%; object-fit: cover;"> Destino<span>Espanha</span></div>
+                <div class="sidebar-role">Administrador</div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-title">Principal</div>
+                <a href="dashboard.html" class="sidebar-link">
+                    <span class="link-icon">📊</span> Dashboard
+                </a>
+                <a href="gerar-pdf.html" class="sidebar-link">
+                    <span class="link-icon">📄</span> Gerar PDF
+                </a>
+                <div class="sidebar-section-title">Atalhos</div>
+                <a href="../index.html" class="sidebar-link" target="_blank">
+                    <span class="link-icon">🌐</span> Ver Site
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="user-avatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="user-name">Admin</div>
+                        <div class="sidebar-user-email" id="user-email">admin@email.com</div>
+                    </div>
+                </div>
+                <button class="btn-logout" id="btn-logout">
+                    <span>🚪</span> Sair da conta
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="portal-content">
+            <header class="portal-header">
+                <h1>
+                    <a href="dashboard.html" style="color: var(--text-muted); font-size: 0.8em;">← Voltar</a>
+                    <span id="page-title" style="display: block; margin-top: 4px;">Carregando...</span>
+                </h1>
+                <div class="header-actions">
+                    <button class="btn-portal btn-secondary" id="btn-gen-pdf">
+                        <span>📄</span> Gerar PDF
+                    </button>
+                    <button class="btn-portal btn-danger" id="btn-delete-client">
+                        <span>🗑️</span> Excluir Cliente
+                    </button>
+                </div>
+            </header>
+
+            <div class="portal-body" id="client-body">
+                <!-- Client Header Card -->
+                <div class="progress-section" id="client-header-card">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+                        <div>
+                            <h2 id="client-name" style="font-size: 1.4rem;">—</h2>
+                            <div style="display: flex; gap: 12px; align-items: center; margin-top: 6px;">
+                                <span class="status-badge" id="client-fase-badge">—</span>
+                                <span style="font-size: 0.85rem; color: var(--text-light);" id="client-plano-label">—</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Valor do Contrato</div>
+                            <div style="font-family: var(--font-serif); font-size: 1.8rem; font-weight: 800; color: var(--gold-dark);" id="client-valor">0€</div>
+                        </div>
+                    </div>
+
+                    <!-- Phase Selector -->
+                    <div style="margin-bottom: 16px;">
+                        <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Mudar Fase</label>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="fase-buttons"></div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <div class="info-card-icon docs">📧</div>
+                            <div>
+                                <div class="info-card-title">Contato</div>
+                                <div id="client-email" style="font-size: 0.9rem; color: var(--text-main);">—</div>
+                                <div id="client-telefone" style="font-size: 0.85rem; color: var(--text-light);">—</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <div class="info-card-icon date">🛂</div>
+                            <div>
+                                <div class="info-card-title">Tipo de Visto</div>
+                                <div id="client-visto" style="font-size: 0.9rem; color: var(--text-main);">—</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <div class="info-card-icon msg">💰</div>
+                            <div>
+                                <div class="info-card-title">Pagamento</div>
+                                <div style="font-size: 0.9rem; color: var(--text-main);"><span id="client-pago">0€</span> / <span id="client-total">0€</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Diagnóstico & Análise de Perfil -->
+                <div class="info-card" style="margin-bottom: 24px; display: block;" id="diagnostico-card">
+                    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 14px; margin-bottom: 20px;">
+                        <h3 style="font-size: 1.1rem; margin: 0; display: flex; align-items: center; gap: 8px;">
+                            <span>🧭</span> Diagnóstico Estratégico & Análise de Perfil
+                        </h3>
+                        <span class="status-badge status-diagnostico" style="font-size: 0.75rem; background: var(--bg-section); color: var(--gold-dark); border: 1px solid rgba(212,168,83,0.3);">Fase de Diagnóstico</span>
+                    </div>
+                    
+                    <!-- Seção 1: Perfil Geral & Família -->
+                    <div style="font-size: 0.82rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 4px; border-bottom: 1px solid rgba(0,0,0,0.05); margin-top: 10px;">1. Perfil Geral & Família</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label for="diag-objetivo" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Objetivo de Imigração *</label>
+                            <select id="diag-objetivo" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; background: #fff; font-size: 0.88rem;">
+                                <option value="estudo_cap">Visto de Estudo (Autoescola / CAP)</option>
+                                <option value="nao_lucrativa">Residência Não Lucrativa</option>
+                                <option value="nomade">Nômade Digital</option>
+                                <option value="trabalho">Visto de Trabalho / Validação Profissional</option>
+                                <option value="arraigo">Regularização por Arraigo</option>
+                                <option value="reagrupamento">Reagrupamento Familiar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="diag-idade-titular" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Idade do Titular</label>
+                            <input type="number" id="diag-idade-titular" placeholder="Ex: 35" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; font-size: 0.88rem;">
+                        </div>
+                        <div class="form-group">
+                            <label for="diag-origem" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Origem no Brasil (Cidade/Estado)</label>
+                            <input type="text" id="diag-origem" placeholder="Ex: Uruguaiana - RS" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; font-size: 0.88rem;">
+                        </div>
+                        <div class="form-group">
+                            <label for="diag-profissao" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Profissão / Qualificação do Titular</label>
+                            <input type="text" id="diag-profissao" placeholder="Ex: Médico, Enfermeira, Soldador, TI" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; font-size: 0.88rem;">
+                        </div>
+                        <div class="form-group">
+                            <label for="diag-idioma" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Nível de Espanhol</label>
+                            <select id="diag-idioma" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; background: #fff; font-size: 0.88rem;">
+                                <option value="nenhum">Nenhum conhecimento</option>
+                                <option value="basico">Básico / Iniciante</option>
+                                <option value="intermediario">Intermediário</option>
+                                <option value="avancado">Avançado / Fluente</option>
+                                <option value="dele_b2">Com Certificado DELE/SIELE B2</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="diag-cnh" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Possui CNH brasileira?</label>
+                            <input type="text" id="diag-cnh" placeholder="Ex: Categoria D ativa" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; font-size: 0.88rem;">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label for="diag-membros" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Composição Familiar (Membros & Idades)</label>
+                            <textarea id="diag-membros" rows="2" placeholder="Ex: Esposa (32 anos, Influencer), Filho (6 anos)" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-family: var(--font-sans); font-size: 0.88rem; outline: none; resize: vertical;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="diag-motivacao" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Motivação para Imigrar</label>
+                            <textarea id="diag-motivacao" rows="2" placeholder="Ex: Qualidade de vida, segurança, exercer profissão regulamentada" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-family: var(--font-sans); font-size: 0.88rem; outline: none; resize: vertical;"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Seção 2: Estratégia, Financeiro & Prazos -->
+                    <div style="font-size: 0.82rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 4px; border-bottom: 1px solid rgba(0,0,0,0.05); margin-top: 24px;">2. Estratégia, Financeiro & Prazos</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label for="diag-financeiro" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Reserva Financeira (€)</label>
+                            <input type="text" id="diag-financeiro" placeholder="Ex: 25.000€" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; font-size: 0.88rem;">
+                        </div>
+                        <div class="form-group">
+                            <label for="diag-renda" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Renda Mensal Remota / Passiva (€)</label>
+                            <input type="text" id="diag-renda" placeholder="Ex: Renda passiva de 2.000€/mês" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; font-size: 0.88rem;">
+                        </div>
+                        <div class="form-group">
+                            <label for="diag-estrategia-ida" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Estratégia de Ida</label>
+                            <select id="diag-estrategia-ida" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; background: #fff; font-size: 0.88rem;">
+                                <option value="todos_juntos">Toda a família viaja junto</option>
+                                <option value="titular_na_frente">Titular vai na frente para preparar terreno</option>
+                                <option value="estrategia_economia">Titular vai na frente por economia</option>
+                                <option value="personalizada">Outra estratégia personalizada</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="diag-prazo" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Prazo / Expectativa de Viagem</label>
+                            <input type="text" id="diag-prazo" placeholder="Ex: 6 meses (Janeiro/2027)" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; font-size: 0.88rem;">
+                        </div>
+                    </div>
+
+                    <!-- Seção 3: Preferências na Espanha -->
+                    <div style="font-size: 0.82rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 4px; border-bottom: 1px solid rgba(0,0,0,0.05); margin-top: 24px;">3. Preferências Geográficas & Habitação na Espanha</div>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 16px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label for="diag-pref-regiao" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Preferência de Região / Clima</label>
+                            <select id="diag-pref-regiao" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; background: #fff; font-size: 0.88rem;">
+                                <option value="litoral_praia">Próximo à praia / Litoral</option>
+                                <option value="interior_centro">Centro do país / Interior (ex: Madrid)</option>
+                                <option value="norte_verde">Norte da Espanha (Clima mais frio/verde)</option>
+                                <option value="sul_quente">Sul da Espanha (Clima mais quente)</option>
+                                <option value="indiferente">Indiferente / Sem preferência específica</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="diag-pref-moradia" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Expectativas de Habitação / Estilo de Vida</label>
+                            <input type="text" id="diag-pref-moradia" placeholder="Ex: Apartamento 3 quartos, orçamento até 1.000€/mês, cidade média" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; outline: none; font-size: 0.88rem;">
+                        </div>
+                    </div>
+
+                    <!-- Seção 4: Notas Extras -->
+                    <div style="font-size: 0.82rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 4px; border-bottom: 1px solid rgba(0,0,0,0.05); margin-top: 24px;">4. Observações Extras</div>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="diag-notas" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Observações Migratórias Extras</label>
+                        <textarea id="diag-notas" rows="2" placeholder="Ex: Possui cidadania italiana pendente, cônjuge pode trabalhar remoto, etc." style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-family: var(--font-sans); font-size: 0.88rem; outline: none; resize: vertical;"></textarea>
+                    </div>
+
+                    <!-- Prompt Generator Box -->
+                    <div style="background: var(--bg-section); padding: 16px; border-radius: var(--radius-md); border: 1px solid rgba(0,0,0,0.05); margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                            <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--primary); margin: 0; display: flex; align-items: center; gap: 6px;">
+                                <span>🤖</span> Prompt de Análise para Inteligência Artificial
+                            </h4>
+                            <button class="btn-portal btn-secondary btn-small" id="btn-copy-prompt" style="padding: 4px 12px; font-size: 0.78rem;">
+                                📋 Copiar Prompt
+                            </button>
+                        </div>
+                        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+                            Copie o prompt abaixo e cole no Gemini ou DeepSeek (DeepResearch) para gerar um relatório completo da rota recomendada e custos para o cliente.
+                        </p>
+                        <div id="diag-prompt-preview" style="background: var(--bg-white); border: 1px solid rgba(0,0,0,0.08); padding: 12px; border-radius: 6px; font-size: 0.78rem; font-family: monospace; white-space: pre-wrap; max-height: 120px; overflow-y: auto; color: var(--text-light); line-height: 1.4;">
+                            Aguardando dados...
+                        </div>
+                    </div>
+
+                    <!-- Gemini Output -->
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="diag-resultado" style="font-size: 0.88rem; font-weight: 700; color: var(--primary); display: block; margin-bottom: 6px;">📝 Resposta da Pesquisa / Plano de Ação Estruturado</label>
+                        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">
+                            Cole a resposta do Gemini/DeepSeek abaixo (em formato Markdown ou texto simples). Ela será formatada e injetada no PDF e no portal do cliente.
+                        </p>
+                        <textarea id="diag-resultado" rows="8" placeholder="Cole a análise da IA aqui..." style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; font-family: var(--font-sans); font-size: 0.88rem; line-height: 1.5; resize: vertical; outline: none;"></textarea>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                        <button class="btn-portal btn-secondary" id="btn-save-diagnostico">
+                            <span>💾</span> Salvar Dados da Análise
+                        </button>
+                        <button class="btn-portal btn-primary" id="btn-generate-diag-pdf">
+                            <span>📄</span> Gerar PDF de Diagnóstico
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Two Column Layout -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                    <!-- Documents -->
+                    <div class="doc-list" id="documents-section">
+                        <div class="doc-list-header" style="justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <h3 style="margin: 0;">📄 Documentos</h3>
+                                <span style="font-size: 0.82rem; color: var(--text-muted);" id="docs-count">0/0</span>
+                            </div>
+                            <button class="btn-portal btn-secondary btn-small" id="btn-add-doc" style="padding: 4px 10px;">+ Adicionar</button>
+                        </div>
+                        <div id="docs-list-body">
+                            <div class="empty-state" style="padding: 30px;">
+                                <div class="empty-state-text">Carregando documentos...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes & Timeline -->
+                    <div>
+                        <!-- Internal Notes -->
+                        <div class="info-card" style="margin-bottom: 20px;">
+                            <h3 style="font-size: 1rem; margin-bottom: 12px;">📝 Notas Internas</h3>
+                            <textarea id="client-notas" rows="4" style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; font-family: var(--font-sans); font-size: 0.88rem; resize: vertical; outline: none;" placeholder="Anotações sobre o cliente (só admin vê)..."></textarea>
+                            <button class="btn-portal btn-secondary btn-small" id="btn-save-notes" style="margin-top: 8px;">Salvar Notas</button>
+                        </div>
+
+                        <!-- Important Dates -->
+                        <div class="info-card" style="margin-bottom: 20px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                <h3 style="font-size: 1rem;">📅 Datas Importantes</h3>
+                                <button class="btn-portal btn-secondary btn-small" id="btn-add-date">+ Adicionar</button>
+                            </div>
+                            <div id="dates-list">
+                                <div style="font-size: 0.85rem; color: var(--text-muted);">Nenhuma data cadastrada.</div>
+                            </div>
+                        </div>
+
+                        <!-- History -->
+                        <div class="timeline">
+                            <h3>📜 Histórico</h3>
+                            <ul class="timeline-list" id="history-list">
+                                <li class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div>
+                                        <div class="timeline-text">Carregando...</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Change Doc Status -->
+    <div class="modal-overlay" id="modal-doc-status">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-doc-title">Documento</h3>
+                <button class="modal-close" id="modal-close-doc">✕</button>
+            </div>
+            <div class="form-group">
+                <label for="doc-status-select">Status</label>
+                <select id="doc-status-select">
+                    <option value="pendente">⬜ Pendente</option>
+                    <option value="enviado">🟡 Enviado</option>
+                    <option value="aprovado">✅ Aprovado</option>
+                    <option value="revisar">❌ Revisar</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="doc-comment">Comentário para o cliente</label>
+                <textarea id="doc-comment" rows="3" placeholder="Ex: Certidão precisa ser inteiro teor..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-portal btn-secondary" id="btn-cancel-doc">Cancelar</button>
+                <button class="btn-portal btn-primary" id="btn-save-doc-status">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add Date -->
+    <div class="modal-overlay" id="modal-add-date">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nova Data Importante</h3>
+                <button class="modal-close" id="modal-close-date">✕</button>
+            </div>
+            <div class="form-group">
+                <label for="date-titulo">Título</label>
+                <input type="text" id="date-titulo" placeholder="Ex: Entrevista no Consulado">
+            </div>
+            <div class="form-group">
+                <label for="date-data">Data</label>
+                <input type="date" id="date-data">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-portal btn-secondary" id="btn-cancel-date">Cancelar</button>
+                <button class="btn-portal btn-primary" id="btn-save-date">Adicionar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add Custom Document -->
+    <div class="modal-overlay" id="modal-add-custom-doc">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Adicionar Documento Extra</h3>
+                <button class="modal-close" id="modal-close-custom-doc">✕</button>
+            </div>
+            <div class="form-group">
+                <label for="custom-doc-name">Nome do Documento</label>
+                <input type="text" id="custom-doc-name" placeholder="Ex: CNH Categoria E, Histórico Escolar...">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                    <label for="custom-doc-category">Categoria</label>
+                    <select id="custom-doc-category">
+                        <option value="pessoal">Pessoal</option>
+                        <option value="trabalho">Trabalho/Profissão</option>
+                        <option value="estudo">Estudo/Formação</option>
+                        <option value="financeiro">Financeiro</option>
+                        <option value="saude">Saúde</option>
+                        <option value="moradia">Moradia</option>
+                        <option value="familiar">Familiar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="custom-doc-mandatory">Obrigatório?</label>
+                    <select id="custom-doc-mandatory">
+                        <option value="true">Sim</option>
+                        <option value="false">Não</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="custom-doc-deadline">Prazo / Data Limite (Opcional)</label>
+                <input type="date" id="custom-doc-deadline">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-portal btn-secondary" id="btn-cancel-custom-doc">Cancelar</button>
+                <button class="btn-portal btn-primary" id="btn-save-custom-doc">Adicionar Documento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../shared/supabase-config.js"></script>
+    <script src="../shared/auth.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

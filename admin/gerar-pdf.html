@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar PDF | Destino Espanha Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/portal.css">
+    <link rel="stylesheet" href="../css/pdf.css">
+</head>
+<body>
+    <div class="portal-layout">
+        <button class="sidebar-mobile-toggle" id="sidebar-toggle">☰</button>
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo"><img src="../logo.jpg" alt="Logo Destino Espanha" style="height: 32px; border-radius: 50%; object-fit: cover;"> Destino<span>Espanha</span></div>
+                <div class="sidebar-role">Administrador</div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-title">Principal</div>
+                <a href="dashboard.html" class="sidebar-link">
+                    <span class="link-icon">📊</span> Dashboard
+                </a>
+                <a href="gerar-pdf.html" class="sidebar-link active">
+                    <span class="link-icon">📄</span> Gerar PDF
+                </a>
+                <div class="sidebar-section-title">Atalhos</div>
+                <a href="../index.html" class="sidebar-link" target="_blank">
+                    <span class="link-icon">🌐</span> Ver Site
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="user-avatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="user-name">Admin</div>
+                        <div class="sidebar-user-email" id="user-email">admin@email.com</div>
+                    </div>
+                </div>
+                <button class="btn-logout" id="btn-logout">
+                    <span>🚪</span> Sair da conta
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="portal-content">
+            <header class="portal-header">
+                <h1>Gerar PDF</h1>
+            </header>
+
+            <div class="portal-body">
+                <div style="display: grid; grid-template-columns: 400px 1fr; gap: 28px; align-items: flex-start;">
+                    <!-- Form Panel -->
+                    <div class="info-card" style="padding: 28px;">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 20px;">⚙️ Configurações</h3>
+
+                        <div class="form-group">
+                            <label for="pdf-type">Tipo de Documento *</label>
+                            <select id="pdf-type">
+                                <option value="contrato">📝 Contrato de Serviço</option>
+                                <option value="plano_acao">📋 Plano de Ação (Pós-Diagnóstico)</option>
+                                <option value="checklist">✅ Checklist de Documentos</option>
+                                <option value="preparacao_docs">📂 Guia de Preparação de Documentos</option>
+                                <option value="recibo">💰 Recibo / Fatura</option>
+                                <option value="proposta">📊 Proposta Comercial</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pdf-client-select">Cliente (opcional)</label>
+                            <select id="pdf-client-select">
+                                <option value="">— Preencher manualmente —</option>
+                            </select>
+                        </div>
+
+                        <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.06); margin: 20px 0;">
+                        <h4 style="font-size: 0.88rem; color: var(--text-light); margin-bottom: 14px;">Dados do Cliente</h4>
+
+                        <div class="form-group">
+                            <label for="pdf-nome">Nome *</label>
+                            <input type="text" id="pdf-nome" placeholder="Nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="pdf-email">E-mail</label>
+                            <input type="email" id="pdf-email" placeholder="email@exemplo.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="pdf-telefone">Telefone</label>
+                            <input type="text" id="pdf-telefone" placeholder="+55 99 99999-9999">
+                        </div>
+                        <div class="form-group">
+                            <label for="pdf-passaporte">Passaporte</label>
+                            <input type="text" id="pdf-passaporte" placeholder="Nº do passaporte">
+                        </div>
+
+                        <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.06); margin: 20px 0;">
+                        <h4 style="font-size: 0.88rem; color: var(--text-light); margin-bottom: 14px;">Detalhes do Serviço</h4>
+
+                        <div class="form-group">
+                            <label for="pdf-plano">Plano</label>
+                            <select id="pdf-plano">
+                                <option value="diagnostico">Diagnóstico Estratégico (150€)</option>
+                                <option value="documentacao">Documentação Brasil (350€)</option>
+                                <option value="vistos" selected>Assessoria de Vistos (750€)</option>
+                                <option value="aterragem">Aterragem Espanha (600€)</option>
+                                <option value="premium">Premium Família VIP (2.000€)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pdf-visto">Tipo de Visto</label>
+                            <select id="pdf-visto">
+                                <option value="estudo_cap">Estudo (CAP - Geral)</option>
+                                <option value="estudo_cap_validacao">Estudo (CAP + Validação CNH E)</option>
+                                <option value="estudo_cap_transicao">Estudo (CAP + Habilitação C do Zero)</option>
+                                <option value="nao_lucrativa">Residência Não Lucrativa</option>
+                                <option value="nomade">Nômade Digital</option>
+                                <option value="arraigo">Arraigo</option>
+                                <option value="reagrupamento">Reagrupamento Familiar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pdf-valor">Valor (€)</label>
+                            <input type="number" id="pdf-valor" placeholder="750" min="0" step="0.01">
+                        </div>
+
+                        <!-- Recibo-specific fields -->
+                        <div id="recibo-fields" style="display: none;">
+                            <div class="form-group">
+                                <label for="pdf-metodo">Método de Pagamento</label>
+                                <select id="pdf-metodo">
+                                    <option value="PIX">PIX</option>
+                                    <option value="Transferência Bancária">Transferência Bancária</option>
+                                    <option value="Cartão de Crédito (Stripe)">Cartão de Crédito (Stripe)</option>
+                                    <option value="PayPal">PayPal</option>
+                                    <option value="Wise">Wise</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="pdf-pago" checked style="margin-right: 6px;">
+                                    Marcar como PAGO
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Plano de Ação specific -->
+                        <div id="plano-acao-fields" style="display: none;">
+                            <div class="form-group">
+                                <label for="pdf-justificativa">Justificativa da Rota</label>
+                                <textarea id="pdf-justificativa" rows="3" placeholder="Por que este visto é ideal para o cliente..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="pdf-observacoes">Observações</label>
+                                <textarea id="pdf-observacoes" rows="3" placeholder="Notas adicionais para o plano..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Preparação de Documentos specific -->
+                        <div id="preparacao-docs-fields" style="display: none;">
+                            <div class="form-group">
+                                <label for="pdf-profissao">Profissão / Área de Validação</label>
+                                <select id="pdf-profissao">
+                                    <option value="geral">Geral / Outros</option>
+                                    <option value="enfermagem">Enfermagem (Enfermeiro/a)</option>
+                                    <option value="medicina">Medicina (Médico/a)</option>
+                                    <option value="soldador">Soldador (Área Técnica)</option>
+                                    <option value="motorista">Motorista Profissional (CAP/DGT)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="pdf-idioma-group" style="margin-top: 12px; margin-bottom: 12px;">
+                                <label style="display: flex; align-items: center; cursor: pointer; gap: 8px;">
+                                    <input type="checkbox" id="pdf-idioma-requisito">
+                                    <span style="font-size: 0.88rem; font-weight: 500;">Exigir Espanhol B2 (DELE/SIELE)</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="pdf-instrucoes-extra">Instruções Extras / Observações</label>
+                                <textarea id="pdf-instrucoes-extra" rows="3" placeholder="Informações adicionais específicas para este cliente..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="save-portal-container" style="display: none; margin-top: 15px;">
+                            <label style="display: flex; align-items: center; cursor: pointer; gap: 8px;">
+                                <input type="checkbox" id="pdf-save-portal" checked>
+                                <span>📤 Salvar no Portal do Cliente</span>
+                            </label>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button class="btn-portal btn-secondary" id="btn-preview" style="flex: 1;">
+                                👁️ Preview
+                            </button>
+                            <button class="btn-portal btn-primary" id="btn-generate" style="flex: 1;">
+                                📥 Baixar PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preview Panel -->
+                    <div>
+                        <div class="info-card" style="padding: 20px;">
+                            <h3 style="font-size: 1rem; margin-bottom: 16px;">👁️ Pré-visualização</h3>
+                            <div id="pdf-preview" style="background: #e2e8f0; border-radius: 8px; min-height: 500px; display: flex; align-items: center; justify-content: center; overflow: auto;">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">📄</div>
+                                    <div class="empty-state-text">Clique em "Preview" para ver o documento</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../shared/supabase-config.js"></script>
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/pdf-templates.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

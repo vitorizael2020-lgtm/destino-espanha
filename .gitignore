@@ -1,0 +1,11 @@
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+node_modules/
+.env
+.env.local
+
+# Backups e scripts de automação local
+google-apps-script-tasks.js
+test-pdfs.html
+*.log

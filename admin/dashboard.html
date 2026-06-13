@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin | Destino Espanha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/portal.css">
+    <link rel="stylesheet" href="../css/pdf.css">
+</head>
+<body>
+    <div class="portal-layout">
+        <!-- Mobile Toggle -->
+        <button class="sidebar-mobile-toggle" id="sidebar-toggle">☰</button>
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo"><img src="../logo.jpg" alt="Logo Destino Espanha" style="height: 32px; border-radius: 50%; object-fit: cover;"> Destino<span>Espanha</span></div>
+                <div class="sidebar-role">Administrador</div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-title">Principal</div>
+                <a href="dashboard.html" class="sidebar-link active">
+                    <span class="link-icon">📊</span> Dashboard
+                </a>
+                <a href="gerar-pdf.html" class="sidebar-link">
+                    <span class="link-icon">📄</span> Gerar PDF
+                </a>
+                <div class="sidebar-section-title">Atalhos</div>
+                <a href="../index.html" class="sidebar-link" target="_blank">
+                    <span class="link-icon">🌐</span> Ver Site
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="user-avatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="user-name">Admin</div>
+                        <div class="sidebar-user-email" id="user-email">admin@email.com</div>
+                    </div>
+                </div>
+                <button class="btn-logout" id="btn-logout">
+                    <span>🚪</span> Sair da conta
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="portal-content">
+            <header class="portal-header">
+                <h1>Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn-portal btn-primary" id="btn-new-client">
+                        <span>➕</span> Novo Cliente
+                    </button>
+                </div>
+            </header>
+
+            <div class="portal-body">
+                <!-- Metrics -->
+                <div class="metrics-grid" id="metrics-grid">
+                    <div class="metric-card gold">
+                        <div class="metric-icon">👥</div>
+                        <div class="metric-value" id="metric-total">0</div>
+                        <div class="metric-label">Total de Clientes</div>
+                    </div>
+                    <div class="metric-card blue">
+                        <div class="metric-icon">⚡</div>
+                        <div class="metric-value" id="metric-active">0</div>
+                        <div class="metric-label">Em Andamento</div>
+                    </div>
+                    <div class="metric-card green">
+                        <div class="metric-icon">✅</div>
+                        <div class="metric-value" id="metric-done">0</div>
+                        <div class="metric-label">Concluídos</div>
+                    </div>
+                    <div class="metric-card orange">
+                        <div class="metric-icon">💰</div>
+                        <div class="metric-value" id="metric-revenue">0€</div>
+                        <div class="metric-label">Receita Total</div>
+                    </div>
+                </div>
+
+                <!-- Pending Requests (Solicitações) -->
+                <div id="pending-requests-container" style="display: none; margin-bottom: 24px;">
+                    <div style="background: rgba(212,168,83,0.1); border: 1px solid rgba(212,168,83,0.3); border-radius: var(--radius-md); padding: 20px;">
+                        <h3 style="color: var(--gold-dark); font-size: 1.1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                            <span>🛒</span> Solicitações Pendentes
+                        </h3>
+                        <div id="pending-requests-list" style="display: flex; flex-direction: column; gap: 12px;">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clients Table -->
+                <div class="data-table-wrapper">
+                    <div class="data-table-header">
+                        <h3>Clientes</h3>
+                        <div class="data-table-filters">
+                            <select class="filter-select" id="filter-plano">
+                                <option value="">Todos os Planos</option>
+                                <option value="diagnostico">Diagnóstico</option>
+                                <option value="documentacao">Documentação</option>
+                                <option value="vistos">Vistos</option>
+                                <option value="aterragem">Aterragem</option>
+                                <option value="premium">Premium VIP</option>
+                                <option value="avulso">Avulso</option>
+                            </select>
+                            <select class="filter-select" id="filter-fase">
+                                <option value="">Todas as Fases</option>
+                                <option value="lead">Lead</option>
+                                <option value="diagnostico">Diagnóstico</option>
+                                <option value="documentacao">Documentação</option>
+                                <option value="visto">Visto</option>
+                                <option value="aterragem">Aterragem</option>
+                                <option value="concluido">Concluído</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="clients-table-body">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Plano</th>
+                                    <th>Fase</th>
+                                    <th>Docs</th>
+                                    <th>Valor</th>
+                                    <th>Início</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-tbody">
+                                <tr><td colspan="6"><div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text">Carregando clientes...</div></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Novo Cliente -->
+    <div class="modal-overlay" id="modal-new-client">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Novo Cliente</h3>
+                <button class="modal-close" id="modal-close-new">✕</button>
+            </div>
+
+            <div class="alert alert-error" id="new-client-error"></div>
+            <div class="alert alert-success" id="new-client-success"></div>
+
+            <form id="form-new-client">
+                <div class="form-group">
+                    <label for="nc-nome">Nome Completo *</label>
+                    <input type="text" id="nc-nome" required placeholder="Ex: João Silva">
+                </div>
+                <div class="form-group">
+                    <label for="nc-email">E-mail *</label>
+                    <input type="email" id="nc-email" required placeholder="joao@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="nc-telefone">Telefone / WhatsApp</label>
+                    <input type="text" id="nc-telefone" placeholder="+55 99 99999-9999">
+                </div>
+                <div class="form-group">
+                    <label for="nc-plano">Plano *</label>
+                    <select id="nc-plano" required>
+                        <option value="diagnostico">Diagnóstico Estratégico (150€)</option>
+                        <option value="documentacao">Documentação Brasil (350€)</option>
+                        <option value="vistos" selected>Assessoria de Vistos (750€)</option>
+                        <option value="aterragem">Aterragem Espanha (600€)</option>
+                        <option value="premium">Premium Família VIP (2.000€)</option>
+                        <option value="avulso">Serviço Avulso</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nc-visto">Tipo de Visto</label>
+                    <select id="nc-visto">
+                        <option value="">— Não definido —</option>
+                        <option value="estudo_cap">Estudo (CAP - Geral)</option>
+                        <option value="estudo_cap_validacao">Estudo (CAP + Validação CNH E)</option>
+                        <option value="estudo_cap_transicao">Estudo (CAP + Habilitação C do Zero)</option>
+                        <option value="nao_lucrativa">Residência Não Lucrativa</option>
+                        <option value="nomade">Nômade Digital</option>
+                        <option value="arraigo">Arraigo</option>
+                        <option value="reagrupamento">Reagrupamento Familiar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nc-valor">Valor Total (€)</label>
+                    <input type="number" id="nc-valor" placeholder="750" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="nc-fase">Fase Inicial</label>
+                    <select id="nc-fase">
+                        <option value="lead">Novo Lead</option>
+                        <option value="diagnostico" selected>Diagnóstico</option>
+                        <option value="documentacao">Documentação</option>
+                        <option value="visto">Visto</option>
+                        <option value="aterragem">Aterragem</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nc-notas">Notas Internas</label>
+                    <textarea id="nc-notas" rows="3" placeholder="Observações sobre o cliente..."></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-portal btn-secondary" id="btn-cancel-new">Cancelar</button>
+                    <button type="submit" class="btn-portal btn-primary" id="btn-save-client">
+                        <span>💾</span> Criar Cliente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../shared/supabase-config.js"></script>
+    <script src="../shared/auth.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
