@@ -9,3 +9,6 @@ node_modules/
 google-apps-script-tasks.js
 test-pdfs.html
 *.log
+
+# Local Netlify folder
+.netlify
