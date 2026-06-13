@@ -14,71 +14,82 @@ const Auth = {
     // ==============================
     init(requiredRole = null) {
         return new Promise(async (resolve, reject) => {
-            // Fetch current user/session from supabase
-            const { data: { session } } = await supabase.auth.getSession();
-            const user = session ? session.user : null;
-            
-            const handleUser = async (user) => {
-                if (user) {
-                    Auth.currentUser = user;
-                    try {
-                        // Fetch user profile from database
-                        const { data, error } = await supabase
-                            .from('users')
-                            .select('*')
-                            .eq('id', user.id)
-                            .single();
-                            
-                        if (data && !error) {
-                            Auth.userData = data;
+            if (typeof supabase === 'undefined' || !supabase || !supabase.auth) {
+                console.error('Supabase SDK não inicializado ou bloqueado por AdBlock/Brave.');
+                resolve(null);
+                return;
+            }
 
-                            // Check role if required
-                            if (requiredRole && Auth.userData.role !== requiredRole) {
-                                Auth.redirectByRole(Auth.userData.role);
-                                return;
-                             }
+            try {
+                // Fetch current user/session from supabase
+                const { data: { session } } = await supabase.auth.getSession();
+                const user = session ? session.user : null;
+                
+                const handleUser = async (user) => {
+                    if (user) {
+                        Auth.currentUser = user;
+                        try {
+                            // Fetch user profile from database
+                            const { data, error } = await supabase
+                                .from('users')
+                                .select('*')
+                                .eq('id', user.id)
+                                .single();
+                                
+                            if (data && !error) {
+                                Auth.userData = data;
 
-                            resolve(Auth.userData);
-                        } else {
-                            console.error('User profile not found in Supabase:', error);
-                            Auth.logout();
-                            reject(new Error('Perfil não encontrado'));
+                                // Check role if required
+                                if (requiredRole && Auth.userData.role !== requiredRole) {
+                                    Auth.redirectByRole(Auth.userData.role);
+                                    return;
+                                 }
+
+                                resolve(Auth.userData);
+                            } else {
+                                console.error('User profile not found in Supabase:', error);
+                                Auth.logout();
+                                reject(new Error('Perfil não encontrado'));
+                            }
+                        } catch (error) {
+                            console.error('Error fetching user data:', error);
+                            reject(error);
                         }
-                    } catch (error) {
-                        console.error('Error fetching user data:', error);
-                        reject(error);
+                    } else {
+                        Auth.currentUser = null;
+                        Auth.userData = null;
+                        const currentPage = window.location.pathname;
+                        if (!currentPage.includes('login.html') && !currentPage.includes('index.html') && currentPage !== '/') {
+                            window.location.href = Auth.getBasePath() + 'login.html';
+                        }
+                        resolve(null);
                     }
-                } else {
-                    Auth.currentUser = null;
-                    Auth.userData = null;
-                    const currentPage = window.location.pathname;
-                    if (!currentPage.includes('login.html') && !currentPage.includes('index.html') && currentPage !== '/') {
-                        window.location.href = Auth.getBasePath() + 'login.html';
-                    }
-                    resolve(null);
-                }
-            };
+                };
 
-            // Run initially
-            await handleUser(user);
+                // Run initially
+                await handleUser(user);
 
-            // Listen for changes
-            supabase.auth.onAuthStateChange(async (event, session) => {
-                const newUser = session ? session.user : null;
-                if (event === 'SIGNED_OUT') {
-                    Auth.currentUser = null;
-                    Auth.userData = null;
-                    const currentPage = window.location.pathname;
-                    if (!currentPage.includes('login.html') && !currentPage.includes('index.html') && currentPage !== '/') {
-                        window.location.href = Auth.getBasePath() + 'login.html';
+                // Listen for changes
+                supabase.auth.onAuthStateChange(async (event, session) => {
+                    const newUser = session ? session.user : null;
+                    if (event === 'SIGNED_OUT') {
+                        Auth.currentUser = null;
+                        Auth.userData = null;
+                        const currentPage = window.location.pathname;
+                        if (!currentPage.includes('login.html') && !currentPage.includes('index.html') && currentPage !== '/') {
+                            window.location.href = Auth.getBasePath() + 'login.html';
+                        }
+                    } else if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+                        // Only trigger if state changed to avoid infinite loops or duplicate loads
+                        if (!Auth.currentUser || Auth.currentUser.id !== newUser?.id) {
+                            await handleUser(newUser);
+                        }
                     }
-                } else if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-                    // Only trigger if state changed to avoid infinite loops or duplicate loads
-                    if (!Auth.currentUser || Auth.currentUser.id !== newUser?.id) {
-                        await handleUser(newUser);
-                    }
-                }
-            });
+                });
+            } catch (err) {
+                console.error('Erro ao ler sessão do Supabase:', err);
+                resolve(null);
+            }
         });
     },
 

@@ -82,6 +82,18 @@
     <script src="shared/auth.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Check if Supabase initialized correctly (e.g. AdBlock / Brave Shield)
+            if (typeof supabase === 'undefined' || !supabase || !supabase.auth) {
+                const loginAlert = document.getElementById('login-alert');
+                if (loginAlert) {
+                    loginAlert.innerHTML = '⚠️ <strong>Erro de conexão:</strong> Não foi possível conectar ao banco de dados. Se você usa bloqueador de anúncios (AdBlock) ou navegador Brave, desative a proteção/escudo para este site para conseguir logar.';
+                    loginAlert.classList.add('show');
+                }
+                const loginBtn = document.getElementById('btn-login');
+                if (loginBtn) loginBtn.disabled = true;
+                return;
+            }
+
             // Check if already logged in
             Auth.init().then(userData => {
                 if (userData) {
