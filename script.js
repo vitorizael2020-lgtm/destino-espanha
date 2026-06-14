@@ -598,7 +598,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 gtag('event', 'conversion', {
                     'send_to': 'AW-18239034284/qeSeCJrL8r4cEKynhvlD',
                     'value': 1.0,
-                    'currency': 'EUR'
+                    'currency': 'EUR',
+                    // Garante o envio mesmo quando o app do WhatsApp abre e a
+                    // página é descarregada (crítico no celular, maioria do tráfego).
+                    'transport_type': 'beacon'
                 });
             }
         });
