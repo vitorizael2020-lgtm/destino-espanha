@@ -587,4 +587,20 @@ document.addEventListener('DOMContentLoaded', () => {
             scrollToSlide(currentIndex);
         });
     }
+
+    // ==============================
+    // 6. GOOGLE ADS CONVERSION TRACKING
+    // ==============================
+    const waLinks = document.querySelectorAll('a[href*="wa.me"]');
+    waLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-18239034284/qeSeCJrL8r4cEKynhvlD',
+                    'value': 1.0,
+                    'currency': 'EUR'
+                });
+            }
+        });
+    });
 });
