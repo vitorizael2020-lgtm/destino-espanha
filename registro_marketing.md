@@ -2,7 +2,7 @@
 
 **Para que serve:** histórico único de tudo que fazemos em marketing (anúncios, site, rastreamento), com **data e hora**, pra não perdermos o fio. **Sempre que falarmos de marketing, este documento deve ser consultado e atualizado.**
 
-> Última atualização: **2026-06-15 13:15**
+> Última atualização: **2026-06-15 13:16**
 
 ---
 
@@ -30,6 +30,7 @@
 ## 🗓️ Linha do tempo (mais recente primeiro)
 
 ### 2026-06-15
+- **13:16** — 🎬✍️ **Roteiros de TikTok expandidos para FALADOS completos** (14 roteiros, palavra por palavra) + **template de reação a notícia diária** + lifestyle usando b-roll (La Manga, Murcia, praias, palmeiras). Marcados 🎯 impulsionar (só Brasil) vs 🌱 orgânico/marca. **Foco de público: brasileiros que vêm DIRETO do Brasil** (NÃO Portugal/já-na-Espanha). `roteiros_tiktok.md`.
 - **13:15** — 🎬 **12 roteiros de TikTok orgânico criados** (`roteiros_tiktok.md`): caminhoneiro/CAP, nômade digital, aposentado, mito turista, história do Vitor, família, 4 passos, erros do visto, "é caro?", visto estudo, Portugal→Espanha, POV. Alinhados aos temas quentes da pesquisa. *(Conteúdo orgânico pra gravar — diferente do kit de anúncios pagos `roteiros_redes_sociais.md`.)*
 - **~11:25** — ➕ **7 keywords de alto valor adicionadas** (frase) ao Grupo 1: Nômade Digital (`visto nomade digital espanha`, `...requisitos`, `...para brasileiros`, `como tirar...`) + Não Lucrativa/Aposentado (`visto não lucrativa espanha`, `visto de aposentado espanha`, `como morar na espanha sendo aposentado`). *Interim: usam o anúncio genérico — merecem **anúncio próprio** depois. Algumas em "baixo volume" (nicho).*
 - **~11:12** — ⛔ **~36 palavras NEGATIVAS adicionadas** (nível campanha): turismo, emprego/vagas, outros países (não-Portugal), cidadania por descendência, golden visa, curso de espanhol, futebol, reddit, etc. *(Deixei "grátis" e "portugal" de fora de propósito — pra não bloquear leads da isca gratuita e brasileiros vindos de Portugal.)*
