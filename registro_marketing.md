@@ -2,7 +2,7 @@
 
 **Para que serve:** histórico único de tudo que fazemos em marketing (anúncios, site, rastreamento), com **data e hora**, pra não perdermos o fio. **Sempre que falarmos de marketing, este documento deve ser consultado e atualizado.**
 
-> Última atualização: **2026-06-15 11:12**
+> Última atualização: **2026-06-15 11:25**
 
 ---
 
@@ -30,6 +30,7 @@
 ## 🗓️ Linha do tempo (mais recente primeiro)
 
 ### 2026-06-15
+- **~11:25** — ➕ **7 keywords de alto valor adicionadas** (frase) ao Grupo 1: Nômade Digital (`visto nomade digital espanha`, `...requisitos`, `...para brasileiros`, `como tirar...`) + Não Lucrativa/Aposentado (`visto não lucrativa espanha`, `visto de aposentado espanha`, `como morar na espanha sendo aposentado`). *Interim: usam o anúncio genérico — merecem **anúncio próprio** depois. Algumas em "baixo volume" (nicho).*
 - **~11:12** — ⛔ **~36 palavras NEGATIVAS adicionadas** (nível campanha): turismo, emprego/vagas, outros países (não-Portugal), cidadania por descendência, golden visa, curso de espanhol, futebol, reddit, etc. *(Deixei "grátis" e "portugal" de fora de propósito — pra não bloquear leads da isca gratuita e brasileiros vindos de Portugal.)*
 - **11:05** — ➕ **9 palavras-chave de alto volume adicionadas** (correspondência de frase) ao Grupo 1, com base na pesquisa (`visto espanha para brasileiros`, `como morar na espanha legalmente`, `imigrar para a espanha`, `visto de residência espanha`, etc.). Reaproveitou o anúncio atual. ⚠️ As 6 keywords antigas estão em correspondência **AMPLA** (revisar → frase); negativas ainda pendentes.
 - **10:17** — 🔎 **Pesquisa de palavras-chave + tendências** (via agente). **Achado-chave:** a campanha mira "assessoria/consultoria" = volume de busca quase nulo; o público busca a dor/objetivo (`visto espanha para brasileiros`, `como morar na espanha legalmente`, `visto nomade digital requisitos`). Faltam grupos de alto volume (nômade digital, não lucrativa/aposentado, residência/família, estudo, CNH/CAP). Tendência quente: motorista CAP/caminhoneiro. Golden Visa morto (negativar). **Relatório completo: `pesquisa_palavras_chave_2026-06.md`.**
