@@ -2,7 +2,7 @@
 
 **Para que serve:** histórico único de tudo que fazemos em marketing (anúncios, site, rastreamento), com **data e hora**, pra não perdermos o fio. **Sempre que falarmos de marketing, este documento deve ser consultado e atualizado.**
 
-> Última atualização: **2026-06-15 10:01**
+> Última atualização: **2026-06-15 10:17**
 
 ---
 
@@ -30,6 +30,7 @@
 ## 🗓️ Linha do tempo (mais recente primeiro)
 
 ### 2026-06-15
+- **10:17** — 🔎 **Pesquisa de palavras-chave + tendências** (via agente). **Achado-chave:** a campanha mira "assessoria/consultoria" = volume de busca quase nulo; o público busca a dor/objetivo (`visto espanha para brasileiros`, `como morar na espanha legalmente`, `visto nomade digital requisitos`). Faltam grupos de alto volume (nômade digital, não lucrativa/aposentado, residência/família, estudo, CNH/CAP). Tendência quente: motorista CAP/caminhoneiro. Golden Visa morto (negativar). **Relatório completo: `pesquisa_palavras_chave_2026-06.md`.**
 - **~10:00** — ✅ **Verificação do anunciante concluída** (Vitor) → **conta saiu da pausa**. Campanha de Search passou a **"Qualificada (aprendizado)"** (veiculando).
 - **~09:40** — Adicionadas à campanha de Search: **4 frases de destaque** (*Análise grátis WhatsApp · Sem compromisso · Suporte Brasil e Espanha · +7 anos de experiência*) e **4 sitelinks** (*Análise Gratuita* → topo; *Quem Somos* → #historia; *Pacotes e Preços* → #servicos; *Resultados Reais* → #cases), cada sitelink com 2 descrições. *(entraram "Em análise")*
 - **manhã** — **Campanha de Search criada e ativada** (Vitor ativou; PMax pausado). Configuração detalhada abaixo.
@@ -69,7 +70,9 @@
 ---
 
 ## ⏳ Pendências / próximos passos
-- [ ] (após 3-5 dias) Revisar **termos de pesquisa** e adicionar **palavras negativas**.
+- [ ] **(PRIORITÁRIO) Migrar o eixo de palavras-chave** para termos-objetivo e subir os grupos 2-4 (Morar/Imigrar, Nômade Digital, Residência/Família, Estudo) + teste CNH/CAP — ver `pesquisa_palavras_chave_2026-06.md`.
+- [ ] Puxar **volume exato + CPC** no Planejador de Palavras-chave (Keyword Planner) das ~30 keywords recomendadas.
+- [ ] (após 3-5 dias) Revisar **termos de pesquisa** e adicionar **palavras negativas** (lista pronta no relatório de pesquisa).
 - [ ] Confirmar se as **conversões do WhatsApp** estão entrando.
 - [ ] Adicionar **grupos 2 e 3** (Morar na Espanha, Nômade Digital) — ver `plano_campanha_search_google_ads.md`.
 - [ ] Após ~15-30 conversões: trocar lance para **Maximizar conversões**.
