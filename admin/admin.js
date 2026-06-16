@@ -31,16 +31,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupSidebar();
     setupLogout();
 
-    // ==============================
-    // ROUTE: Detect current page
-    // ==============================
-    const page = window.location.pathname.split('/').pop();
+    const page = window.location.pathname.split('/').pop().toLowerCase().replace('.html', '');
 
-    if (page === 'dashboard.html' || page === '') {
+    if (page === 'dashboard' || page === '' || page === 'admin') {
         initDashboard();
-    } else if (page === 'cliente-detalhe.html') {
+    } else if (page === 'cliente-detalhe') {
         initClienteDetalhe();
-    } else if (page === 'gerar-pdf.html') {
+    } else if (page === 'gerar-pdf') {
         initGerarPDF();
     }
 });

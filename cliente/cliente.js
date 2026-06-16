@@ -35,18 +35,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupSidebar();
     setupLogout();
 
-    // ==============================
-    // ROUTE
-    // ==============================
-    const page = window.location.pathname.split('/').pop();
+    const page = window.location.pathname.split('/').pop().toLowerCase().replace('.html', '');
 
-    if (page === 'painel.html' || page === '') {
+    if (page === 'painel' || page === '' || page === 'cliente') {
         initPainel(userData);
-    } else if (page === 'documentos.html') {
+    } else if (page === 'documentos') {
         initDocumentos(userData);
-    } else if (page === 'contratos.html') {
+    } else if (page === 'contratos') {
         initContratos(userData);
-    } else if (page === 'servicos.html') {
+    } else if (page === 'servicos') {
         initServicos(userData);
     }
 });

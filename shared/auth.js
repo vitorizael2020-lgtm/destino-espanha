@@ -68,8 +68,8 @@ const Auth = {
                     } else {
                         Auth.currentUser = null;
                         Auth.userData = null;
-                        const currentPage = window.location.pathname;
-                        if (!currentPage.includes('login.html') && !currentPage.includes('index.html') && currentPage !== '/') {
+                        const currentPage = window.location.pathname.toLowerCase();
+                        if (!currentPage.includes('login') && !currentPage.includes('index') && currentPage !== '/') {
                             window.location.href = Auth.getBasePath() + 'login.html';
                         }
                         resolve(null);
@@ -85,8 +85,8 @@ const Auth = {
                     if (event === 'SIGNED_OUT') {
                         Auth.currentUser = null;
                         Auth.userData = null;
-                        const currentPage = window.location.pathname;
-                        if (!currentPage.includes('login.html') && !currentPage.includes('index.html') && currentPage !== '/') {
+                        const currentPage = window.location.pathname.toLowerCase();
+                        if (!currentPage.includes('login') && !currentPage.includes('index') && currentPage !== '/') {
                             window.location.href = Auth.getBasePath() + 'login.html';
                         }
                     } else if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
