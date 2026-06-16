@@ -2,7 +2,7 @@
 
 **Para que serve:** histórico único de tudo que fazemos em marketing (anúncios, site, rastreamento), com **data e hora**, pra não perdermos o fio. **Sempre que falarmos de marketing, este documento deve ser consultado e atualizado.**
 
-> Última atualização: **2026-06-15 13:16**
+> Última atualização: **2026-06-16 22:50**
 
 ---
 
@@ -28,6 +28,9 @@
 ---
 
 ## 🗓️ Linha do tempo (mais recente primeiro)
+
+### 2026-06-16
+- **22:50** — 🎉🎉 **PRIMEIRA VENDA FECHADA + 3 leads!** Origem confirmada pelo Vitor: **Anúncio do Google (Search)**. A campanha de Pesquisa (criada em 15/06) converteu em **~1 dia**, com só **€ 4,82/dia**. **Valida a virada PMax → Search** — primeiro ROI real. ✅
 
 ### 2026-06-15
 - **13:16** — 🎬✍️ **Roteiros de TikTok expandidos para FALADOS completos** (14 roteiros, palavra por palavra) + **template de reação a notícia diária** + lifestyle usando b-roll (La Manga, Murcia, praias, palmeiras). Marcados 🎯 impulsionar (só Brasil) vs 🌱 orgânico/marca. **Foco de público: brasileiros que vêm DIRETO do Brasil** (NÃO Portugal/já-na-Espanha). `roteiros_tiktok.md`.
