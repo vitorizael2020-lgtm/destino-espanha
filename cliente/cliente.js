@@ -329,6 +329,29 @@ async function initDocumentos(userData) {
                     `;
                 }
 
+                const exp = getDocExplanation(doc.nome);
+                let helpBtnHtml = '';
+                let helpDrawerHtml = '';
+                if (exp) {
+                    helpBtnHtml = `
+                        <button class="btn-doc-help" data-doc-id="${doc.id}" style="background: none; border: none; color: var(--gold-dark); font-size: 0.8rem; font-weight: 600; cursor: pointer; padding: 4px 0; margin-top: 6px; display: inline-flex; align-items: center; gap: 4px; text-decoration: underline; transition: color 0.2s;">
+                            <span>💡</span> Como preparar / Evitar rejeição (Consulado)
+                        </button>
+                    `;
+                    helpDrawerHtml = `
+                        <div class="doc-help-drawer" id="help-${doc.id}" style="display: none; margin-top: 8px; padding: 14px; background: rgba(212, 168, 83, 0.05); border-left: 3px solid var(--gold); border-radius: 8px; font-size: 0.82rem; line-height: 1.5; color: var(--text-main); text-align: left;">
+                            <div style="margin-bottom: 8px; color: var(--text-main);">
+                                <strong style="color: var(--gold-dark);">📋 Como preparar:</strong><br>
+                                <span style="color: var(--text-light);">${exp.preparar}</span>
+                            </div>
+                            <div style="color: var(--text-main);">
+                                <strong style="color: var(--accent-red); display: inline-flex; align-items: center; gap: 4px;">⚠️ O que o consulado NÃO aceita (Evite erros):</strong><br>
+                                <span style="color: var(--text-light);">${exp.naoEnviar}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 html += `
                     <div class="doc-item" style="${isDiagnostico ? 'display: flex; align-items: center;' : ''}">
                         <div class="doc-icon" style="${isDiagnostico ? 'display: flex; align-items: center; justify-content: center;' : ''}">${docIconHtml}</div>
@@ -338,6 +361,8 @@ async function initDocumentos(userData) {
                                 ${docCategoryHtml}
                             </div>
                             ${doc.comentarioAdmin ? `<div class="doc-comment">💬 ${doc.comentarioAdmin}</div>` : ''}
+                            ${helpBtnHtml}
+                            ${helpDrawerHtml}
                         </div>
                         <div class="doc-actions">
                             ${docActionsHtml}
@@ -348,6 +373,22 @@ async function initDocumentos(userData) {
         });
 
         container.innerHTML = html;
+
+        // Help drawer toggle clicks
+        container.querySelectorAll('.btn-doc-help').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const docId = btn.dataset.docId;
+                const drawer = container.querySelector(`#help-${docId}`);
+                if (drawer) {
+                    const isOpen = drawer.style.display === 'block';
+                    drawer.style.display = isOpen ? 'none' : 'block';
+                    btn.innerHTML = isOpen 
+                        ? '<span>💡</span> Como preparar / Evitar rejeição (Consulado)' 
+                        : '<span>💡</span> Ocultar explicações de preparação';
+                }
+            });
+        });
 
         if (isDiagnostico) {
             // Checkbox change clicks
@@ -918,4 +959,101 @@ async function initServicos(userData) {
             btnConfirm.innerHTML = '<span>✅</span> Confirmar Aquisição';
         }
     });
+}
+
+function getDocExplanation(nome) {
+    const nomeLower = nome.toLowerCase();
+    
+    if (nomeLower.includes('passaporte')) {
+        return {
+            preparar: 'Cópia colorida e nítida em PDF ou imagem da página de dados (com sua foto e dados) e da página de assinatura.',
+            naoEnviar: 'Fotos com reflexo de flash, desfocadas, cortando as bordas do passaporte, ou passaporte com validade inferior à sua estadia total na Espanha.'
+        };
+    }
+    if (nomeLower.includes('rg ou rne')) {
+        return {
+            preparar: 'Cópia frente e verso nítida e colorida do seu RG brasileiro (emitido há menos de 10 anos) ou do seu RNE/RNM de residente.',
+            naoEnviar: '<strong>A CNH (Carteira de Habilitação) NÃO é aceita como substituta do RG pelo consulado!</strong> Também não envie carteiras de conselhos de classe (OAB, CREA, etc.) como identificação principal.'
+        };
+    }
+    if (nomeLower.includes('comprovante de residência') || nomeLower.includes('residência da jurisdição')) {
+        return {
+            preparar: 'Fatura de serviços fixos (Água, Luz, Gás Canalizado, Internet Banda Larga Fixa) ou Contrato de Locação registrado em cartório, emitido nos últimos 90 dias em seu nome ou no nome dos pais (neste caso, comprovando filiação).',
+            naoEnviar: '<strong>Fatura de celular (telefone móvel) é expressamente REJEITADA!</strong> Extratos bancários simples, boletos de compras ou faturas de cartão de crédito não servem como comprovante de endereço.'
+        };
+    }
+    if (nomeLower.includes('formulário')) {
+        return {
+            preparar: 'Preencha o formulário oficial de Visto Nacional em espanhol (letras de forma legíveis), assinale os campos corretos e assine à caneta de forma idêntica ao passaporte.',
+            naoEnviar: 'Formulários com campos obrigatórios em branco (use "N/A" ou risque se não aplicar), assinaturas rasuradas ou divergentes do passaporte original.'
+        };
+    }
+    if (nomeLower.includes('fotografia')) {
+        return {
+            preparar: 'Foto colorida recente (menos de 6 meses), fundo branco, enquadramento focado de frente, com ombros e rosto nítidos.',
+            naoEnviar: 'Selfies, fotos com óculos de sol, sorrindo, com sombras no rosto, fundo colorido ou fotos impressas em papel comum (deve ser papel fotográfico).'
+        };
+    }
+    if (nomeLower.includes('antecedentes criminais')) {
+        return {
+            preparar: 'Emita a Certidão de Antecedentes Criminais no portal da Polícia Federal. <strong>O número do seu passaporte deve estar escrito no corpo da certidão</strong>. O documento precisa ser apostilado em cartório e traduzido por tradutor juramentado.',
+            naoEnviar: '<strong>Certidões emitidas pela Polícia Civil estadual ou secretarias estaduais não são aceitas!</strong> Não envie sem o número do passaporte ou sem o apostilamento.'
+        };
+    }
+    if (nomeLower.includes('atestado médico')) {
+        return {
+            preparar: 'Atestado emitido por médico (CRM ativo) com a frase exata: <i>"não padece de nenhuma das enfermidades que podem ter graves repercussões na saúde pública em conformidade com o RSI 2005"</i>. Reconheça a firma da assinatura do médico em cartório antes de apostilar.',
+            naoEnviar: 'Atestados genéricos (como de aptidão física simples) sem a menção ao RSI 2005. Atestados sem reconhecimento de firma em cartório ou com mais de 90 dias de emissão.'
+        };
+    }
+    if (nomeLower.includes('seguro saúde') || nomeLower.includes('seguro de saúde')) {
+        return {
+            preparar: 'Apólice de seguro médico de companhia espanhola autorizada (ex: Adeslas, Sanitas, ASISA). Deve ter cobertura integral na Espanha, repatriação, franquia zero (sem copago) e nenhuma carência (sin carencias).',
+            naoEnviar: '<strong>Seguro viagem internacional padrão (como os do cartão de crédito, Mastercard, Assist Card, GTA, etc.) é sumariamente REJEITADO!</strong> Seguros com coparticipação (onde você paga uma parte da consulta) também são negados.'
+        };
+    }
+    if (nomeLower.includes('extratos bancários')) {
+        return {
+            preparar: 'Extratos bancários originais de conta corrente/investimentos dos últimos 3 meses. <strong>Todas as páginas devem estar assinadas e carimbadas a caneta pelo gerente da sua agência física.</strong>',
+            naoEnviar: '<strong>Prints de aplicativos móveis ou PDFs simples baixados diretamente da internet (sem assinatura física e carimbo do gerente) são REJEITADOS!</strong> Depósitos expressivos e sem origem comprovada feitos às vésperas (ballooning) levam a indeferimento por suspeita de fraude.'
+        };
+    }
+    if (nomeLower.includes('imposto de renda')) {
+        return {
+            preparar: 'Cópia da Declaração de IRPF completa do ano corrente, acompanhada obrigatoriamente do Recibo de Entrega à Receita Federal.',
+            naoEnviar: 'Declaração simplificada incompleta ou sem o recibo de entrega oficial.'
+        };
+    }
+    if (nomeLower.includes('rendimento recorrente') || nomeLower.includes('holerites')) {
+        return {
+            preparar: '3 últimos holerites (se empregado CLT), comprovantes de pró-labore com contrato social (se empresário/autônomo), ou comprovantes de recebimento de pensão/aposentadoria.',
+            naoEnviar: 'Transferências informais sem holerite correspondente ou sem documentação de vínculo formal.'
+        };
+    }
+    if (nomeLower.includes('termo de responsabilidade') || nomeLower.includes('sponsor')) {
+        return {
+            preparar: 'Declaração formal ou escritura pública lavrada em cartório com assinatura reconhecida por autenticidade e apostilada, onde o patrocinador assume as despesas do aluno, acompanhada das provas financeiras dele.',
+            naoEnviar: 'Declarações simples sem reconhecimento de assinatura em cartório ou de patrocinadores que não tenham comprovação de renda robusta.'
+        };
+    }
+    if (nomeLower.includes('carta de aceitação') || nomeLower.includes('matrícula')) {
+        return {
+            preparar: 'Carta de matrícula/aceitação oficial da escola espanhola constando estudos em tempo integral (mínimo de 20h/semana) e quitação das taxas. Escolas de espanhol devem ser credenciadas pelo Instituto Cervantes.',
+            naoEnviar: 'E-mails simples de confirmação de interesse, ou matrículas em cursos com menos de 20 horas semanais de aula.'
+        };
+    }
+    if (nomeLower.includes('diploma')) {
+        return {
+            preparar: 'Cópia do diploma do último grau acadêmico concluído no Brasil, apostilado em cartório e traduzido por tradutor juramentado.',
+            naoEnviar: 'Apenas históricos escolares sem a apresentação do diploma correspondente.'
+        };
+    }
+    if (nomeLower.includes('pagamento da matrícula') || nomeLower.includes('pagamento do curso')) {
+        return {
+            preparar: 'Comprovante oficial de remessa internacional (SWIFT, Wise ou recibo oficial da escola) comprovando a quitação da taxa do curso.',
+            naoEnviar: 'Comprovantes de agendamento bancário ou capturas de tela sem confirmação de envio.'
+        };
+    }
+    
+    return null;
 }
