@@ -572,6 +572,20 @@ async function initDocumentos(userData) {
 
     // Initial load
     await loadDocs();
+
+    // Passagem info banner toggle
+    const togglePassagem = document.getElementById('toggle-passagem-info');
+    const contentPassagem = document.getElementById('passagem-info-content');
+    const arrowPassagem = document.getElementById('passagem-info-arrow');
+    if (togglePassagem && contentPassagem) {
+        togglePassagem.addEventListener('click', () => {
+            const isHidden = contentPassagem.style.display === 'none' || contentPassagem.style.display === '';
+            contentPassagem.style.display = isHidden ? 'block' : 'none';
+            if (arrowPassagem) {
+                arrowPassagem.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        });
+    }
 }
 
 // ==============================
@@ -963,6 +977,13 @@ async function initServicos(userData) {
 
 function getDocExplanation(nome) {
     const nomeLower = nome.toLowerCase();
+    
+    if (nomeLower.includes('passagem') || nomeLower.includes('reserva de voo') || nomeLower.includes('reserva de retorno') || nomeLower.includes('voo')) {
+        return {
+            preparar: 'Se o consulado ou a assessoria solicitar especificamente, nós providenciaremos a reserva temporária garantida (Onward Ticket) para o dia da sua imigração. Não compre passagem real de ida/volta.',
+            naoEnviar: '<strong>NÃO compre passagens aéreas definitivas antes de ter o visto colado em mãos!</strong> O consulado não exige a passagem para vistos de longa duração e adverte de forma contundente contra a compra prévia devido ao risco de atrasos.'
+        };
+    }
     
     if (nomeLower.includes('passaporte')) {
         return {

@@ -73,6 +73,25 @@
                     </div>
                 </div>
 
+                <!-- Passagem Aérea Warning Banner -->
+                <div style="background: rgba(74, 124, 255, 0.05); border: 1px solid rgba(74, 124, 255, 0.15); border-radius: var(--radius-md); padding: 18px 24px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none;" id="toggle-passagem-info">
+                        <span style="font-size: 1.3rem;">✈️</span>
+                        <div style="flex: 1;">
+                            <div style="font-size: 0.9rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                                <span>Por que não pedimos Passagem Aérea de Ida e Volta na lista de documentos?</span>
+                                <span style="font-size: 0.75rem; color: var(--accent-blue); font-weight: 500; text-decoration: underline; background: rgba(74, 124, 255, 0.1); padding: 2px 8px; border-radius: 4px;">Clique para ver a explicação</span>
+                            </div>
+                        </div>
+                        <span id="passagem-info-arrow" style="font-size: 0.8rem; transition: transform 0.3s; color: var(--text-light); font-weight: bold; margin-left: 8px;">▼</span>
+                    </div>
+                    <div id="passagem-info-content" style="display: none; font-size: 0.82rem; color: var(--text-light); line-height: 1.5; border-top: 1px solid rgba(74, 124, 255, 0.1); padding-top: 12px; margin-top: 4px;">
+                        O Consulado-Geral da Espanha em São Paulo <strong>não exige a apresentação de passagens aéreas (nem de ida, nem de volta)</strong> para a concessão de Visto de Estudante (Visto Nacional de longa duração, superior a 90 dias).<br><br>
+                        <strong>⚠️ Recomendação Oficial do Consulado:</strong> Não compre passagens aéreas antes de ter o visto aprovado e o passaporte em mãos. O tempo de processamento pode variar, e comprar voos antecipadamente pode gerar prejuízos com multas, taxas de remarcação ou cancelamentos.<br><br>
+                        <em>Nota: A exigência de passagem de ida e volta marcada aplica-se somente a viagens de turismo (estadias de curta duração de até 90 dias).</em>
+                    </div>
+                </div>
+
                 <!-- Progress Bar -->
                 <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
                     <div style="flex: 1;">
