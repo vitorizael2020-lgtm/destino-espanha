@@ -4,6 +4,16 @@
    and role-based access (admin vs cliente)
    ======================================== */
 
+// Corrige a tela travada ao usar o botão "voltar" do navegador.
+// Se a página foi restaurada do back-forward cache (bfcache), recarregamos:
+// isso reinicializa o Supabase/auth do zero e evita o lock de autenticação
+// que fica preso quando a página volta de um estado congelado.
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});
+
 const Auth = {
     // Current user data (populated after login)
     currentUser: null,
