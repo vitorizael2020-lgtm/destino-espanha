@@ -1,0 +1,12 @@
+# Arquivos que NÃO devem ir pro site público (Cloudflare Static Assets)
+.git
+.gitignore
+.assetsignore
+wrangler.jsonc
+node_modules
+.claude
+.netlify
+server.js
+google-apps-script-tasks.js
+Imagens_Google_Ads/
+*.md

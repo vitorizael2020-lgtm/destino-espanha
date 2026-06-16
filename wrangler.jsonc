@@ -1,0 +1,9 @@
+{
+  // Configuração do Cloudflare Workers (Static Assets) — site estático Destino Espanha.
+  // Serve os arquivos do repositório como site estático (sem código de servidor).
+  "name": "destino-espanha",
+  "compatibility_date": "2026-06-16",
+  "assets": {
+    "directory": "./"
+  }
+}
