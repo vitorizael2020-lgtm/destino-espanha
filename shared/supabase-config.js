@@ -2,8 +2,8 @@
    DESTINO ESPANHA — Supabase Configuration
    ======================================== */
 
-const supabaseUrl = "https://gspnaxqokidaqynybbty.supabase.co";
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcG5heHFva2lkYXF5bnliYnR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMTU2ODAsImV4cCI6MjA5Njg5MTY4MH0.4aF-tka-uMSQcSdNiWJDnmI4tYTkBKlan0yit1Tftno";
+const supabaseUrl = "https://ohfvsnfmbeipblqlpxif.supabase.co";
+const supabaseAnonKey = "sb_publishable_6RFtDNuqdfs5qgRgGviJWA_-nMb4xy9";
 
 
 // Initialize Supabase Client
