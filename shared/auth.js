@@ -70,7 +70,7 @@ const Auth = {
                 await handleUser(user);
 
                 // Listen for changes
-                supabase.auth.onAuthStateChange(async (event, session) => {
+                supabase.auth.onAuthStateChange((event, session) => {
                     const newUser = session ? session.user : null;
                     if (event === 'SIGNED_OUT') {
                         Auth.currentUser = null;
@@ -82,7 +82,12 @@ const Auth = {
                     } else if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
                         // Only trigger if state changed to avoid infinite loops or duplicate loads
                         if (!Auth.currentUser || Auth.currentUser.id !== newUser?.id) {
-                            await handleUser(newUser);
+                            // IMPORTANTE: NUNCA usar await em chamadas do Supabase aqui dentro.
+                            // O callback do onAuthStateChange segura o lock interno do GoTrue (auth);
+                            // se a gente await numa query (que também precisa do lock), trava tudo —
+                            // e as consultas seguintes (ex.: carregar clientes) ficam penduradas pra sempre.
+                            // Por isso adiamos com setTimeout, pra rodar FORA do lock.
+                            setTimeout(() => handleUser(newUser), 0);
                         }
                     }
                 });
