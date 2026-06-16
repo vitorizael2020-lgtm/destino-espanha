@@ -131,7 +131,18 @@ const Auth = {
             return { success: true };
         } catch (error) {
             console.error('Login error:', error);
-            let message = error.message || 'Erro ao fazer login.';
+            let message = '';
+            if (typeof error === 'string') {
+                message = error;
+            } else if (error && error.message && error.message !== '{}') {
+                message = error.message;
+            } else if (error && error.error_description) {
+                message = error.error_description;
+            } else if (error && error.msg) {
+                message = error.msg;
+            } else {
+                message = 'E-mail ou senha incorretos. Verifique seus dados.';
+            }
             if (message.includes('Invalid login credentials')) {
                 message = 'E-mail ou senha incorretos.';
             }
