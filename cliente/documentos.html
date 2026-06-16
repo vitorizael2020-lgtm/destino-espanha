@@ -92,6 +92,39 @@
                     </div>
                 </div>
 
+                <!-- Regras do Consulado Banner -->
+                <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.18); border-radius: var(--radius-md); padding: 18px 24px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none;" id="toggle-regras-consulado">
+                        <span style="font-size: 1.3rem;">⚠️</span>
+                        <div style="flex: 1;">
+                            <div style="font-size: 0.9rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                                <span>Alertas Vitais do Consulado (Cópias, Apostila e Taxas)</span>
+                                <span style="font-size: 0.75rem; color: var(--accent-orange); font-weight: 500; text-decoration: underline; background: rgba(245, 158, 11, 0.1); padding: 2px 8px; border-radius: 4px;">Clique para expandir as regras</span>
+                            </div>
+                        </div>
+                        <span id="regras-info-arrow" style="font-size: 0.8rem; transition: transform 0.3s; color: var(--text-light); font-weight: bold; margin-left: 8px;">▼</span>
+                    </div>
+                    <div id="regras-info-content" style="display: none; font-size: 0.82rem; color: var(--text-light); line-height: 1.5; border-top: 1px solid rgba(245, 158, 11, 0.15); padding-top: 12px; margin-top: 4px; display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <strong style="color: var(--primary);">1. Apresente Originais + Cópias Simples A4 de TUDO:</strong><br>
+                            O consulado exige a apresentação da via original acompanhada de uma cópia simples de todas as páginas de cada documento. <strong>Atenção:</strong> Isso inclui tirar cópia também do verso da folha (onde o cartório cola o selo da Apostila de Haia) e de todas as páginas das traduções juramentadas. Se for sem cópias impressas, o dossiê pode ser recusado na hora.
+                        </div>
+                        <div>
+                            <strong style="color: var(--primary);">2. Regra do Duplo Apostilamento (Traduções no Brasil):</strong><br>
+                            Primeiro, você deve apostilar o documento original em português. Em seguida, envia-o para o tradutor juramentado. Se a tradução for feita por um tradutor no Brasil, <strong>a assinatura do tradutor também precisa ser apostilada</strong> em cartório. A única forma de evitar esse segundo apostilamento é contratar um tradutor jurado na Espanha (Traductor Jurado).
+                        </div>
+                        <div>
+                            <strong style="color: var(--primary);">3. Taxa Consular de Visto Nacional (R$ 433,00):</strong><br>
+                            No dia do seu agendamento presencial no Consulado em São Paulo (Jardim América), você deverá pagar a taxa consular, que custa aproximadamente R$ 433,00 (sujeita a alteração cambial sutil). O consulado exige que o pagamento seja feito via <strong>PIX</strong> na hora ou em <strong>dinheiro vivo (com valor exato)</strong>. Eles não aceitam cartão de crédito/débito.
+                        </div>
+                        <!-- Bloco dinâmico para motoristas profissionais (CAP) -->
+                        <div id="regras-cap-warning" style="display: none; border-top: 1px dashed rgba(245, 158, 11, 0.3); padding-top: 12px; margin-top: 4px; background: rgba(212, 168, 83, 0.05); padding: 10px; border-radius: 6px;">
+                            <strong style="color: var(--gold-dark); display: inline-flex; align-items: center; gap: 4px;">🚚 Importante para Motoristas (Visto CAP):</strong><br>
+                            Não se esqueça de levar a sua <strong>CNH brasileira original</strong> para a Espanha, <strong>devidamente apostilada no Brasil e com tradução juramentada</strong>. Embora o consulado não exija a CNH para aprovar o visto, ela será obrigatória para iniciar o processo de <em>Canje</em> (troca de carteira de motorista) nas províncias espanholas e matrícula final na autoescola.
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Progress Bar -->
                 <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
                     <div style="flex: 1;">

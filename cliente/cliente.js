@@ -586,6 +586,26 @@ async function initDocumentos(userData) {
             }
         });
     }
+
+    // Regras Consulado banner toggle
+    const toggleRegras = document.getElementById('toggle-regras-consulado');
+    const contentRegras = document.getElementById('regras-info-content');
+    const arrowRegras = document.getElementById('regras-info-arrow');
+    if (toggleRegras && contentRegras) {
+        toggleRegras.addEventListener('click', () => {
+            const isHidden = contentRegras.style.display === 'none' || contentRegras.style.display === '';
+            contentRegras.style.display = isHidden ? 'flex' : 'none';
+            if (arrowRegras) {
+                arrowRegras.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        });
+    }
+
+    // Lembrete CNH/CAP condicional
+    const capWarning = document.getElementById('regras-cap-warning');
+    if (capWarning && userData.tipoVisto && userData.tipoVisto.toLowerCase().includes('cap')) {
+        capWarning.style.display = 'block';
+    }
 }
 
 // ==============================
@@ -977,6 +997,19 @@ async function initServicos(userData) {
 
 function getDocExplanation(nome) {
     const nomeLower = nome.toLowerCase();
+    
+    if (nomeLower.includes('certidão de nascimento')) {
+        return {
+            preparar: 'Solicite a certidão de nascimento em Inteiro Teor em cartório no Brasil. Em seguida, ela deve ser apostilada em cartório e traduzida por tradutor juramentado para o espanhol.',
+            naoEnviar: 'Certidões em modelo simples (breve relato) não são aceitas pelo consulado. Não envie a certidão sem a devida tradução juramentada e o apostilamento.'
+        };
+    }
+    if (nomeLower.includes('certidão de casamento') || nomeLower.includes('união estável')) {
+        return {
+            preparar: 'Certidão de casamento ou escritura pública de união estável emitida em cartório no Brasil. Deve ser apostilada em cartório e traduzida por tradutor juramentado para o espanhol.',
+            naoEnviar: 'Declarações informais de convivência sem registro ou certidões antigas desatualizadas. O consulado rejeita qualquer documento familiar sem apostilamento e tradução juramentada.'
+        };
+    }
     
     if (nomeLower.includes('passagem') || nomeLower.includes('reserva de voo') || nomeLower.includes('reserva de retorno') || nomeLower.includes('voo')) {
         return {

@@ -235,7 +235,7 @@ const Auth = {
             { nome: 'Comprovante de Residência da Jurisdição SP/PR/MS (Água, Luz, Gás, Internet Fixa ou Contrato de Locação)', obrigatorio: true, categoria: 'pessoal' },
             { nome: 'Formulário de Visto Nacional (Preenchido e Assinado)', obrigatorio: true, categoria: 'pessoal' },
             { nome: 'Fotografia Biométrica Recente (Fundo claro, padrão passaporte)', obrigatorio: true, categoria: 'pessoal' },
-            { nome: 'Certidão de Nascimento (Inteiro Teor - Apostilada)', obrigatorio: false, categoria: 'pessoal' },
+            { nome: 'Certidão de Nascimento (Inteiro Teor - Apostilada e Traduzida)', obrigatorio: false, categoria: 'pessoal' },
             { nome: 'Certidão de Casamento / União Estável (Apostilada e Traduzida)', obrigatorio: false, categoria: 'pessoal' },
             { nome: 'Antecedentes Criminais da Polícia Federal (Apostilada, Traduzida e constando o Nº do Passaporte)', obrigatorio: true, categoria: 'pessoal' },
             { nome: 'Atestado Médico (Modelo Bilíngue RSI 2005 - Firma Reconhecida em Cartório e Apostilado)', obrigatorio: true, categoria: 'saude' },
