@@ -418,6 +418,9 @@ async function initClienteDetalhe() {
     // Load documents
     loadDocuments(clientId);
 
+    // Load and manage client's Invoice (Nota Fiscal)
+    loadNotaFiscal(clientId);
+
     // History
     renderHistory(clientData.historico || []);
 
@@ -1360,5 +1363,188 @@ async function initGerarPDF() {
 
         btn.disabled = false;
         btn.innerHTML = '<span>📥</span> Baixar PDF';
+    });
+}
+
+async function loadNotaFiscal(clientId) {
+    const statusContainer = document.getElementById('nf-status-container');
+    const fileInput = document.getElementById('nf-file-input');
+    const uploadBtn = document.getElementById('btn-upload-nf');
+
+    if (!statusContainer || !fileInput || !uploadBtn) return;
+
+    // Fetch the client data to retrieve history correctly
+    let clientData = null;
+    try {
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', clientId)
+            .single();
+        if (!error && data) {
+            clientData = data;
+        }
+    } catch (e) {
+        console.error('Error fetching client details for NF history:', e);
+    }
+
+    // Habilita o botão quando escolhe arquivo
+    fileInput.addEventListener('change', () => {
+        uploadBtn.disabled = fileInput.files.length === 0;
+        if (fileInput.files.length > 0) {
+            uploadBtn.classList.remove('btn-secondary');
+            uploadBtn.classList.add('btn-primary');
+        } else {
+            uploadBtn.classList.remove('btn-primary');
+            uploadBtn.classList.add('btn-secondary');
+        }
+    });
+
+    const renderNF = async () => {
+        try {
+            statusContainer.innerHTML = '<span style="color: var(--text-muted);">Buscando nota fiscal...</span>';
+            const { data, error } = await supabase
+                .from('contratos')
+                .select('*')
+                .eq('userId', clientId)
+                .eq('tipo', 'nota_fiscal');
+
+            if (error) throw error;
+            
+            const nf = data && data.length > 0 ? data[0] : null;
+
+            if (nf) {
+                statusContainer.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(16, 185, 129, 0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.18);">
+                        <div style="flex: 1; min-width: 0; padding-right: 8px;">
+                            <span style="color: var(--accent-green); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem;">🧾 Nota Fiscal Ativa</span>
+                            <div style="font-size: 0.72rem; color: var(--text-light); margin-top: 2px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">Enviada em ${new Date(nf.dataGeracao).toLocaleDateString('pt-BR')}</div>
+                        </div>
+                        <div style="display: flex; gap: 6px; flex-shrink: 0;">
+                            <a href="${nf.arquivoUrl}" target="_blank" class="btn-portal btn-secondary btn-small" style="padding: 4px 8px; font-size: 0.72rem; display: flex; align-items: center; gap: 2px;" title="Visualizar arquivo">👁️ Ver</a>
+                            <button class="btn-portal btn-small btn-delete-nf" data-nf-id="${nf.id}" data-nf-url="${nf.arquivoUrl}" style="padding: 4px 8px; font-size: 0.72rem; background: rgba(239, 68, 68, 0.1); color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.2); display: flex; align-items: center; gap: 2px;" title="Excluir arquivo">🗑️ Excluir</button>
+                        </div>
+                    </div>
+                `;
+
+                // Adiciona o click para excluir
+                statusContainer.querySelector('.btn-delete-nf').addEventListener('click', async (e) => {
+                    if (!confirm('Tem certeza que deseja excluir esta nota fiscal do cliente?')) return;
+                    
+                    const nfId = e.currentTarget.dataset.nfId;
+                    const nfUrl = e.currentTarget.dataset.nfUrl;
+
+                    try {
+                        e.currentTarget.disabled = true;
+                        e.currentTarget.textContent = '⏳...';
+
+                        // 1. Deleta da tabela contratos
+                        const { error: deleteErr } = await supabase
+                            .from('contratos')
+                            .delete()
+                            .eq('id', nfId);
+
+                        if (deleteErr) throw deleteErr;
+
+                        // 2. Tenta extrair o path do storage e excluir do storage
+                        try {
+                            const storagePath = nfUrl.split('/storage/v1/object/public/contratos/').pop();
+                            if (storagePath) {
+                                await supabase.storage.from('contratos').remove([decodeURIComponent(storagePath)]);
+                            }
+                        } catch (stErr) {
+                            console.error('Error removing file from storage:', stErr);
+                        }
+
+                        // 3. Registra no histórico
+                        const newHistory = [...((clientData && clientData.historico) || [])];
+                        newHistory.push({
+                            data: new Date().toISOString(),
+                            acao: 'Nota Fiscal removida do portal',
+                            por: Auth.userData.nome || 'Admin'
+                        });
+
+                        await supabase
+                            .from('users')
+                            .update({ historico: newHistory })
+                            .eq('id', clientId);
+
+                        window.location.reload();
+                    } catch (err) {
+                        console.error('Error deleting NF:', err);
+                        alert('Erro ao excluir nota fiscal.');
+                        renderNF();
+                    }
+                });
+            } else {
+                statusContainer.innerHTML = '<span style="color: var(--text-light);">Nenhuma nota fiscal emitida ainda.</span>';
+            }
+        } catch (err) {
+            console.error('Error loading NF status:', err);
+            statusContainer.innerHTML = '<span style="color: var(--accent-red);">Erro ao carregar nota fiscal.</span>';
+        }
+    };
+
+    // Executa inicialmente
+    await renderNF();
+
+    // Event listener para o botão de upload
+    uploadBtn.addEventListener('click', async () => {
+        if (fileInput.files.length === 0) return;
+        const file = fileInput.files[0];
+
+        try {
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<span>⏳</span> Enviando...';
+
+            // 1. Upload do arquivo para o bucket contratos
+            const ext = file.name.split('.').pop();
+            const filename = `nf_${Date.now()}.${ext}`;
+            const storagePath = `${clientId}/${filename}`;
+
+            const { data: uploadData, error: uploadErr } = await supabase.storage
+                .from('contratos')
+                .upload(storagePath, file);
+
+            if (uploadErr) throw uploadErr;
+
+            // Get public URL
+            const { data: { publicUrl: downloadUrl } } = supabase.storage
+                .from('contratos')
+                .getPublicUrl(storagePath);
+
+            // 2. Insere registro na tabela contratos
+            const { error: insertErr } = await supabase
+                .from('contratos')
+                .insert({
+                    userId: clientId,
+                    tipo: 'nota_fiscal',
+                    dataGeracao: new Date().toISOString(),
+                    arquivoUrl: downloadUrl,
+                    status: 'ativo'
+                });
+
+            if (insertErr) throw insertErr;
+
+            // 3. Registra no histórico
+            const newHistory = [...((clientData && clientData.historico) || [])];
+            newHistory.push({
+                data: new Date().toISOString(),
+                acao: 'Nota Fiscal emitida e enviada para o portal',
+                por: Auth.userData.nome || 'Admin'
+            });
+
+            await supabase
+                .from('users')
+                .update({ historico: newHistory })
+                .eq('id', clientId);
+
+            window.location.reload();
+        } catch (err) {
+            console.error('Error uploading NF:', err);
+            alert('Erro ao enviar arquivo da nota fiscal.');
+            uploadBtn.disabled = false;
+            uploadBtn.innerHTML = '<span>📤</span> Enviar Nota Fiscal';
+        }
     });
 }

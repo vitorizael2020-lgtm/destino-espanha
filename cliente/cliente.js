@@ -767,6 +767,7 @@ async function initContratos(userData) {
 
         const contracts = allDocs.filter(d => d.tipo === 'contrato' || d.tipo === 'plano_acao' || d.tipo === 'proposta' || d.tipo === 'checklist' || d.tipo === 'preparacao_docs');
         const receipts = allDocs.filter(d => d.tipo === 'recibo');
+        const nfs = allDocs.filter(d => d.tipo === 'nota_fiscal');
 
         // Render contracts
         const contractsContainer = document.getElementById('contracts-list');
@@ -789,6 +790,29 @@ async function initContratos(userData) {
                     </div>
                 `;
             }).join('');
+        }
+
+        // Render Notas Fiscais
+        const nfSection = document.getElementById('nf-section');
+        const nfsContainer = document.getElementById('nfs-list');
+        if (nfSection && nfsContainer) {
+            if (nfs.length === 0) {
+                nfSection.style.display = 'none';
+            } else {
+                nfSection.style.display = 'block';
+                nfsContainer.innerHTML = nfs.map(nf => `
+                    <div class="doc-item">
+                        <div class="doc-icon">🧾</div>
+                        <div class="doc-info">
+                            <div class="doc-name">Nota Fiscal</div>
+                            <div class="doc-category">Recebida em ${Auth.formatDate(nf.dataGeracao)}</div>
+                        </div>
+                        <div class="doc-actions">
+                            ${nf.arquivoUrl ? `<a href="${nf.arquivoUrl}" target="_blank" class="btn-portal btn-secondary btn-small">📥 Baixar Nota Fiscal</a>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
 
         // Render receipts
@@ -814,6 +838,10 @@ async function initContratos(userData) {
         console.error('Error loading contracts:', error);
         document.getElementById('contracts-list').innerHTML = '<div class="empty-state" style="padding: 30px;"><div class="empty-state-text">Erro ao carregar.</div></div>';
         document.getElementById('receipts-list').innerHTML = '<div class="empty-state" style="padding: 30px;"><div class="empty-state-text">Erro ao carregar.</div></div>';
+        const nfsList = document.getElementById('nfs-list');
+        if (nfsList) {
+            nfsList.innerHTML = '<div class="empty-state" style="padding: 30px;"><div class="empty-state-text">Erro ao carregar.</div></div>';
+        }
     }
 }
 

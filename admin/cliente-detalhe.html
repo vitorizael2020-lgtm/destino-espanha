@@ -344,6 +344,25 @@
                             </button>
                         </div>
 
+                        <!-- Nota Fiscal do Cliente -->
+                        <div class="info-card" style="margin-bottom: 20px;">
+                            <h3 style="font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span>🧾</span> Nota Fiscal do Cliente
+                            </h3>
+                            <div id="nf-status-container" style="margin-bottom: 14px; font-size: 0.85rem;">
+                                <span style="color: var(--text-muted);">Carregando informações da nota fiscal...</span>
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom: 12px;" id="nf-upload-form">
+                                <label for="nf-file-input" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 6px;">Fazer upload da Nota Fiscal (PDF, JPG, PNG)</label>
+                                <input type="file" id="nf-file-input" accept=".pdf,.jpg,.jpeg,.png" style="width: 100%; font-size: 0.82rem; padding: 4px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; background: #fff;">
+                            </div>
+                            
+                            <button class="btn-portal btn-secondary btn-small" id="btn-upload-nf" style="width: 100%; justify-content: center; display: flex; align-items: center; gap: 4px;" disabled>
+                                <span>📤</span> Enviar Nota Fiscal
+                            </button>
+                        </div>
+
                         <!-- Important Dates -->
                         <div class="info-card" style="margin-bottom: 20px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
