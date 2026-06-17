@@ -266,7 +266,7 @@ async function initDocumentos(userData) {
             renderDocs();
 
             // Ajuste dinâmico para a Jurisdição de Porto Alegre (SC / RS)
-            const isPortoAlegre = userData && (userData.email === 'davidbateracwb@gmail.com' || 
+            const isPortoAlegre = userData && (userData.email.toLowerCase() === 'davidbateracwb@gmail.com' || 
                                   (documents && documents.some(d => d.nome.toLowerCase().includes('porto alegre'))));
 
             if (isPortoAlegre) {
@@ -1084,7 +1084,7 @@ async function initServicos(userData) {
 
 function getDocExplanation(nome, userData) {
     const nomeLower = nome.toLowerCase();
-    const isDavid = userData && userData.email === 'davidbateracwb@gmail.com';
+    const isDavid = userData && userData.email && userData.email.toLowerCase() === 'davidbateracwb@gmail.com';
     
     if (nomeLower.includes('certidão de nascimento')) {
         return {
