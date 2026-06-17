@@ -247,6 +247,11 @@ const Auth = {
         ];
 
         const vistoSpecific = {
+            estudo: [
+                { nome: 'Carta de Aceitação / Matrícula (Carga horária mínima > 20h/semana e quitação do curso)', obrigatorio: true, categoria: 'estudo' },
+                { nome: 'Comprovante de Pagamento da Matrícula/Curso', obrigatorio: true, categoria: 'estudo' },
+                { nome: 'Comprovante de Pagamento da Taxa Consular (Consulado de Porto Alegre)', obrigatorio: true, categoria: 'pessoal' }
+            ],
             estudo_cap: [
                 { nome: 'Carta de Aceitação / Matrícula (Carga horária mínima > 20h/semana e quitação do curso)', obrigatorio: true, categoria: 'estudo' },
                 { nome: 'Diploma de Escolaridade Anterior (Apostilado e Traduzido)', obrigatorio: true, categoria: 'estudo' },
@@ -367,6 +372,7 @@ const Auth = {
     },
 
     vistoLabels: {
+        estudo: 'Estudo (Idioma / Geral)',
         estudo_cap: 'Estudo (CAP)',
         estudo_cap_validacao: 'Estudo (CAP + Validação CNH E)',
         estudo_cap_transicao: 'Estudo (CAP + Habilitação C do Zero)',

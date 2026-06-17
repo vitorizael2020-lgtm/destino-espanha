@@ -1024,10 +1024,22 @@ function getDocExplanation(nome) {
             naoEnviar: 'Fotos com reflexo de flash, desfocadas, cortando as bordas do passaporte, ou passaporte com validade inferior à sua estadia total na Espanha.'
         };
     }
+    if (nomeLower.includes('rg ou cnh') || (nomeLower.includes('rg') && nomeLower.includes('cnh'))) {
+        return {
+            preparar: 'Cópia frente e verso nítida e colorida do seu RG brasileiro ou da sua CNH (ambos emitidos há menos de 10 anos) para comprovação de identidade secundária no Consulado de Porto Alegre.',
+            naoEnviar: 'Documentos vencidos, fotos desfocadas ou cópias ilegíveis/rasuradas.'
+        };
+    }
     if (nomeLower.includes('rg ou rne')) {
         return {
             preparar: 'Cópia frente e verso nítida e colorida do seu RG brasileiro (emitido há menos de 10 anos) ou do seu RNE/RNM de residente.',
-            naoEnviar: '<strong>A CNH (Carteira de Habilitação) NÃO é aceita como substituta do RG pelo consulado!</strong> Também não envie carteiras de conselhos de classe (OAB, CREA, etc.) como identificação principal.'
+            naoEnviar: '<strong>A CNH (Carteira de Habilitação) NÃO é aceita como substituta do RG pelo consulado de São Paulo!</strong> Também não envie carteiras de conselhos de classe (OAB, CREA, etc.) como identificação principal.'
+        };
+    }
+    if (nomeLower.includes('taxa consular') || nomeLower.includes('pagamento da taxa')) {
+        return {
+            preparar: 'O comprovante de pagamento da taxa de visto correspondente (aproximadamente R$ 433,00). O pagamento é feito presencialmente no dia da entrevista. No Consulado de São Paulo, o pagamento é feito via PIX ou dinheiro com valor exato. No Consulado de Porto Alegre, siga as orientações específicas fornecidas no agendamento.',
+            naoEnviar: 'Comprovantes de transferências bancárias comuns não autorizadas pelo consulado.'
         };
     }
     if (nomeLower.includes('comprovante de residência') || nomeLower.includes('residência da jurisdição')) {
