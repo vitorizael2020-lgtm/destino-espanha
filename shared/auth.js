@@ -187,7 +187,7 @@ const Auth = {
         }
 
         try {
-            const tempPassword = 'Destino2026!';
+            const tempPassword = 'Destino2026!'; // senha padrão fixa para novos clientes (cliente troca no 1º acesso via "Esqueci a senha")
             
             // Invoke the SECURE postgres function we created
             const { data: newUserId, error } = await supabase.rpc('admin_create_user', {
