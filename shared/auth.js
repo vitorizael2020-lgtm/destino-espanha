@@ -187,7 +187,7 @@ const Auth = {
         }
 
         try {
-            const tempPassword = Auth.generateTempPassword();
+            const tempPassword = 'Destino2026!';
             
             // Invoke the SECURE postgres function we created
             const { data: newUserId, error } = await supabase.rpc('admin_create_user', {
