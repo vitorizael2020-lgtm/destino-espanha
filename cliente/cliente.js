@@ -264,7 +264,94 @@ async function initDocumentos(userData) {
             document.getElementById('docs-progress-text').textContent = pct + '%';
 
             renderDocs();
+
+            // Ajuste dinâmico para a Jurisdição de Porto Alegre (SC / RS)
+            const isPortoAlegre = userData && (userData.email === 'davidbateracwb@gmail.com' || 
+                                  (documents && documents.some(d => d.nome.toLowerCase().includes('porto alegre'))));
+
+            if (isPortoAlegre) {
+                // 1. Atualiza explicação de Passagem Aérea para Porto Alegre
+                const contentPassagem = document.getElementById('passagem-info-content');
+                if (contentPassagem) {
+                    contentPassagem.innerHTML = `
+                        O Consulado-Geral da Espanha em Porto Alegre <strong>não exige a apresentação de passagens aéreas (nem de ida, nem de volta)</strong> para a concessão de Visto de Estudante (Visto Nacional de longa duração, superior a 90 dias).<br><br>
+                        <strong>⚠️ Recomendação Oficial do Consulado:</strong> Não compre passagens aéreas antes de ter o visto aprovado e o passaporte em mãos. O tempo de processamento pode variar, e comprar voos antecipadamente pode gerar prejuízos com multas, taxas de remarcação ou cancelamentos.<br><br>
+                        <em>Nota: A exigência de passagem de ida e volta marcada aplica-se somente a viagens de turismo (estadias de curta duração de até 90 dias).</em>
+                    `;
+                }
+
+                // 2. Atualiza os Alertas Vitais do Consulado para Porto Alegre
+                const contentRegras = document.getElementById('regras-info-content');
+                if (contentRegras) {
+                    contentRegras.innerHTML = `
+                        <div>
+                            <strong style="color: var(--primary);">1. Apresente Originais + Cópias Simples A4 de TUDO:</strong><br>
+                            O consulado de Porto Alegre exige a apresentação da via original acompanhada de uma cópia simples de todas as páginas de cada documento. <strong>Atenção:</strong> Isso inclui tirar cópia de <strong>todas as páginas do passaporte (capa a capa, incluindo as páginas em branco)</strong>, do verso da folha (onde o cartório cola o selo da Apostila de Haia) e de todas as páginas das traduções juramentadas. Se for sem cópias impressas, o dossiê pode ser recusado.
+                        </div>
+                        <div>
+                            <strong style="color: var(--primary);">2. Regra do Duplo Apostilamento (Traduções no Brasil):</strong><br>
+                            Primeiro, você deve apostilar o documento original em português. Em seguida, envia-o para o tradutor juramentado. Se a tradução for feita por um tradutor no Brasil, <strong>a assinatura do tradutor também precisa ser apostilada</strong> em cartório. A única forma de evitar esse segundo apostilamento é contratar um tradutor jurado na Espanha (Traductor Jurado).
+                        </div>
+                        <div>
+                            <strong style="color: var(--primary);">3. Taxa Consular de Visto Nacional (R$ 433,00):</strong><br>
+                            Você deverá pagar a taxa consular, que custa aproximadamente R$ 433,00 (sujeita a alteração cambial sutil). O consulado de Porto Alegre exige que o pagamento seja feito conforme as orientações de agendamento (geralmente via <strong>depósito bancário identificado em agência física do Banco do Brasil</strong>). Guarde o comprovante original do depósito para apresentar no dia da entrevista.
+                        </div>
+                        <!-- Bloco dinâmico para motoristas profissionais (CAP) -->
+                        <div id="regras-cap-warning" style="display: none; border-top: 1px dashed rgba(245, 158, 11, 0.3); padding-top: 12px; margin-top: 4px; background: rgba(212, 168, 83, 0.05); padding: 10px; border-radius: 6px;">
+                            <strong style="color: var(--gold-dark); display: inline-flex; align-items: center; gap: 4px;">🚚 Importante para Motoristas (Visto CAP):</strong><br>
+                            Não se esqueça de levar a sua <strong>CNH brasileira original</strong> para a Espanha, <strong>devidamente apostilada no Brasil e com tradução juramentada</strong>. Embora o consulado não exija a CNH para aprovar o visto, ela será obrigatória para iniciar o processo de <em>Canje</em> (troca de carteira de motorista) nas províncias espanholas e matrícula final na autoescola.
+                        </div>
+                    `;
+                    // Re-aplica visibilidade do lembrete de motorista se for o caso
+                    const capWarning = document.getElementById('regras-cap-warning');
+                    if (capWarning && userData.tipoVisto && userData.tipoVisto.toLowerCase().includes('cap')) {
+                        capWarning.style.display = 'block';
+                    }
+                }
+
+                // 3. Adiciona o Banner "Por que Porto Alegre?" se não existir
+                if (!document.getElementById('porto-alegre-explanation-banner')) {
+                    const progressBarContainer = document.querySelector('.progress-bar-track')?.closest('div');
+                    if (progressBarContainer) {
+                        const poaBanner = document.createElement('div');
+                        poaBanner.id = 'porto-alegre-explanation-banner';
+                        poaBanner.style.cssText = 'background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.18); border-radius: var(--radius-md); padding: 18px 24px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px;';
+                        poaBanner.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none;" id="toggle-poa-info">
+                                <span style="font-size: 1.3rem;">📍</span>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.9rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                                        <span>Por que meu visto é processado em Porto Alegre se moro em Santa Catarina?</span>
+                                        <span style="font-size: 0.75rem; color: #10b981; font-weight: 500; text-decoration: underline; background: rgba(16, 185, 129, 0.1); padding: 2px 8px; border-radius: 4px;">Clique para ver a explicação</span>
+                                    </div>
+                                </div>
+                                <span id="poa-info-arrow" style="font-size: 0.8rem; transition: transform 0.3s; color: var(--text-light); font-weight: bold; margin-left: 8px;">▼</span>
+                            </div>
+                            <div id="poa-info-content" style="display: none; font-size: 0.82rem; color: var(--text-light); line-height: 1.5; border-top: 1px solid rgba(16, 185, 129, 0.15); padding-top: 12px; margin-top: 4px;">
+                                Existem Consulados Honorários da Espanha em Santa Catarina (localizados em Florianópolis e Blumenau). No entanto, esses escritórios honorários servem apenas para assistência básica a cidadãos espanhóis e <strong>não processam vistos</strong>.<br><br>
+                                O trâmite de solicitação de vistos (como o de estudante) para quem mora em Santa Catarina deve ser feito <strong>obrigatoriamente no Consulado-Geral da Espanha em Porto Alegre</strong>, que é o órgão central com jurisdição oficial sobre todo o estado de Santa Catarina e Rio Grande do Sul.
+                            </div>
+                        `;
+                        progressBarContainer.parentNode.insertBefore(poaBanner, progressBarContainer);
+
+                        const togglePoa = document.getElementById('toggle-poa-info');
+                        const contentPoa = document.getElementById('poa-info-content');
+                        const arrowPoa = document.getElementById('poa-info-arrow');
+                        if (togglePoa && contentPoa) {
+                            togglePoa.addEventListener('click', () => {
+                                const isHidden = contentPoa.style.display === 'none' || contentPoa.style.display === '';
+                                contentPoa.style.display = isHidden ? 'block' : 'none';
+                                if (arrowPoa) {
+                                    arrowPoa.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+                                }
+                            });
+                        }
+                    }
+                }
+            }
         } catch (error) {
+            console.error('Error loading docs:', error);
+        }
             console.error('Error loading docs:', error);
         }
     }
@@ -329,7 +416,7 @@ async function initDocumentos(userData) {
                     `;
                 }
 
-                const exp = getDocExplanation(doc.nome);
+                const exp = getDocExplanation(doc.nome, userData);
                 let helpBtnHtml = '';
                 let helpDrawerHtml = '';
                 if (exp) {
@@ -995,8 +1082,9 @@ async function initServicos(userData) {
     });
 }
 
-function getDocExplanation(nome) {
+function getDocExplanation(nome, userData) {
     const nomeLower = nome.toLowerCase();
+    const isDavid = userData && userData.email === 'davidbateracwb@gmail.com';
     
     if (nomeLower.includes('certidão de nascimento')) {
         return {
@@ -1020,8 +1108,12 @@ function getDocExplanation(nome) {
     
     if (nomeLower.includes('passaporte')) {
         return {
-            preparar: 'Cópia colorida e nítida em PDF ou imagem da página de dados (com sua foto e dados) e da página de assinatura.',
-            naoEnviar: 'Fotos com reflexo de flash, desfocadas, cortando as bordas do passaporte, ou passaporte com validade inferior à sua estadia total na Espanha.'
+            preparar: isDavid 
+                ? 'Cópia colorida, completa e nítida em PDF de <strong>absolutamente todas as páginas do passaporte</strong> (capa a capa, inclusive as páginas em branco), conforme exigência do Consulado de Porto Alegre. O passaporte deve estar válido para todo o período da estadia.' 
+                : 'Cópia colorida e nítida em PDF ou imagem da página de dados (com sua foto e dados) e da página de assinatura.',
+            naoEnviar: isDavid
+                ? 'Enviar apenas a página de dados (Porto Alegre exige todas as páginas!). Evite também fotos com reflexo de flash, desfocadas ou cortando as bordas das páginas.'
+                : 'Fotos com reflexo de flash, desfocadas, cortando as bordas do passaporte, ou passaporte com validade inferior à sua estadia total na Espanha.'
         };
     }
     if (nomeLower.includes('rg ou cnh') || (nomeLower.includes('rg') && nomeLower.includes('cnh'))) {
@@ -1038,13 +1130,17 @@ function getDocExplanation(nome) {
     }
     if (nomeLower.includes('taxa consular') || nomeLower.includes('pagamento da taxa')) {
         return {
-            preparar: 'O comprovante de pagamento da taxa de visto correspondente (aproximadamente R$ 433,00). O pagamento é feito presencialmente no dia da entrevista. No Consulado de São Paulo, o pagamento é feito via PIX ou dinheiro com valor exato. No Consulado de Porto Alegre, siga as orientações específicas fornecidas no agendamento.',
+            preparar: isDavid
+                ? 'O comprovante de depósito identificado referente à taxa consular (aproximadamente R$ 433,00), que deve ser pago em agência física do Banco do Brasil conforme as instruções oficiais de agendamento do Consulado de Porto Alegre.'
+                : 'O comprovante de pagamento da taxa de visto correspondente (aproximadamente R$ 433,00). O pagamento é feito presencialmente no dia da entrevista. No Consulado de São Paulo, o pagamento é feito via PIX ou dinheiro com valor exato. No Consulado de Porto Alegre, siga as orientações específicas fornecidas no agendamento.',
             naoEnviar: 'Comprovantes de transferências bancárias comuns não autorizadas pelo consulado.'
         };
     }
     if (nomeLower.includes('comprovante de residência') || nomeLower.includes('residência da jurisdição')) {
         return {
-            preparar: 'Fatura de serviços fixos (Água, Luz, Gás Canalizado, Internet Banda Larga Fixa) ou Contrato de Locação registrado em cartório, emitido nos últimos 90 dias em seu nome ou no nome dos pais (neste caso, comprovando filiação).',
+            preparar: isDavid
+                ? 'Fatura de serviços fixos (Água, Luz, Gás Canalizado, Internet Banda Larga Fixa) ou Contrato de Locação registrado em cartório em Santa Catarina (jurisdição de Porto Alegre), emitido nos últimos 90 dias em seu nome ou de seus pais (provando filiação).'
+                : 'Fatura de serviços fixos (Água, Luz, Gás Canalizado, Internet Banda Larga Fixa) ou Contrato de Locação registrado em cartório, emitido nos últimos 90 dias em seu nome ou no nome dos pais (neste caso, comprovando filiação).',
             naoEnviar: '<strong>Fatura de celular (telefone móvel) é expressamente REJEITADA!</strong> Extratos bancários simples, boletos de compras ou faturas de cartão de crédito não servem como comprovante de endereço.'
         };
     }
@@ -1080,8 +1176,12 @@ function getDocExplanation(nome) {
     }
     if (nomeLower.includes('extratos bancários')) {
         return {
-            preparar: 'Extratos bancários originais de conta corrente/investimentos dos últimos 3 meses. <strong>Todas as páginas devem estar assinadas e carimbadas a caneta pelo gerente da sua agência física.</strong>',
-            naoEnviar: '<strong>Prints de aplicativos móveis ou PDFs simples baixados diretamente da internet (sem assinatura física e carimbo do gerente) são REJEITADOS!</strong> Depósitos expressivos e sem origem comprovada feitos às vésperas (ballooning) levam a indeferimento por suspeita de fraude.'
+            preparar: isDavid
+                ? 'Extratos bancários originais de conta corrente/investimentos dos últimos 3 a 4 meses demonstrando saldo mínimo de 7.200€ (<strong>recomendado ter de 8.000€ a 10.000€</strong> como margem de segurança no Consulado de Porto Alegre). Todas as páginas devem estar assinadas e carimbadas a caneta pelo gerente da sua agência física.'
+                : 'Extratos bancários originais de conta corrente/investimentos dos últimos 3 meses. <strong>Todas as páginas devem estar assinadas e carimbadas a caneta pelo gerente da sua agência física.</strong>',
+            naoEnviar: isDavid
+                ? 'Saldos insuficientes, extratos da internet sem assinatura/carimbo do gerente físico, e depósitos expressivos sem origem comprovada feitos às vésperas da aplicação (ballooning). A patrocinadora deve injetar a diferença com antecedência.'
+                : '<strong>Prints de aplicativos móveis ou PDFs simples baixados diretamente da internet (sem assinatura física e carimbo do gerente) são REJEITADOS!</strong> Depósitos expressivos e sem origem comprovada feitos às vésperas (ballooning) levam a indeferimento por suspeita de fraude.'
         };
     }
     if (nomeLower.includes('imposto de renda')) {
@@ -1098,14 +1198,22 @@ function getDocExplanation(nome) {
     }
     if (nomeLower.includes('termo de responsabilidade') || nomeLower.includes('sponsor')) {
         return {
-            preparar: 'Declaração formal ou escritura pública lavrada em cartório com assinatura reconhecida por autenticidade e apostilada, onde o patrocinador assume as despesas do aluno, acompanhada das provas financeiras dele.',
-            naoEnviar: 'Declarações simples sem reconhecimento de assinatura em cartório ou de patrocinadores que não tenham comprovação de renda robusta.'
+            preparar: isDavid
+                ? 'Termo de Responsabilidade Financeira (Sponsor) assinado por sua amiga patrocinadora por meio de escritura pública (Acta de Manifestaciones) em cartório, com assinatura reconhecida por autenticidade e Apostila de Haia, acompanhado das comprovações de renda dela. Nota: O consulado é extremamente rigoroso com patrocinadores não familiares.'
+                : 'Declaração formal ou escritura pública lavrada em cartório com assinatura reconhecida por autenticidade e apostilada, onde o patrocinador assume as despesas do aluno, acompanhada das provas financeiras dele.',
+            naoEnviar: isDavid
+                ? 'Declarações simples sem escritura pública ou sem reconhecimento por autenticidade. Para mitigar o alto risco de recusa do consulado por ser patrocinadora amiga, a estratégia recomendada é a transferência prévia de todo o dinheiro do IPREM para a conta do David.'
+                : 'Declarações simples sem reconhecimento de assinatura em cartório ou de patrocinadores que não tenham comprovação de renda robusta.'
         };
     }
     if (nomeLower.includes('carta de aceitação') || nomeLower.includes('matrícula')) {
         return {
-            preparar: 'Carta de matrícula/aceitação oficial da escola espanhola constando estudos em tempo integral (mínimo de 20h/semana) e quitação das taxas. Escolas de espanhol devem ser credenciadas pelo Instituto Cervantes.',
-            naoEnviar: 'E-mails simples de confirmação de interesse, ou matrículas em cursos com menos de 20 horas semanais de aula.'
+            preparar: isDavid
+                ? 'Carta de matrícula/aceitação oficial da escola de espanhol em Madrid credenciada pelo Instituto Cervantes, constando estudos em tempo integral (mínimo de 20h/semana) e quitação das taxas.'
+                : 'Carta de matrícula/aceitação oficial da escola espanhola constando estudos em tempo integral (mínimo de 20h/semana) e quitação das taxas. Escolas de espanhol devem ser credenciadas pelo Instituto Cervantes.',
+            naoEnviar: isDavid
+                ? '<strong>ALERTA JURÍDICO (Trabalho 30h):</strong> Sob o novo Regulamento de Estrangeiria da Espanha (Real Decreto 1155/2024), vistos de idiomas <strong>não dão mais o direito automático ao trabalho</strong>. O foco deve ser estritamente o estudo. Não conte com renda de trabalho no planejamento financeiro inicial.'
+                : 'E-mails simples de confirmação de interesse, ou matrículas em cursos com menos de 20 horas semanais de aula.'
         };
     }
     if (nomeLower.includes('diploma')) {
@@ -1118,6 +1226,14 @@ function getDocExplanation(nome) {
         return {
             preparar: 'Comprovante oficial de remessa internacional (SWIFT, Wise ou recibo oficial da escola) comprovando a quitação da taxa do curso.',
             naoEnviar: 'Comprovantes de agendamento bancário ou capturas de tela sem confirmação de envio.'
+        };
+    }
+    if (nomeLower.includes('alojamento') || nomeLower.includes('hospedagem') || nomeLower.includes('acomodação')) {
+        return {
+            preparar: isDavid
+                ? 'Declaração formal de alojamento assinada pela sua amiga (proprietária/inquilina do imóvel em Madrid) acompanhada de cópia da escritura da propriedade ou contrato de aluguel de longa duração, documento de identidade (TIE) dela e empadronamiento atualizado do imóvel.'
+                : 'Comprovante de reserva de alojamento oficial, contrato de aluguel ou declaração de acolhimento (invitación/alojamento) com firma reconhecida do proprietário.',
+            naoEnviar: 'Reservas temporárias de curta duração (Airbnb/Hotéis) com menos de 90 dias se o seu visto for de longa duração, ou declarações de acolhimento sem documentos comprobatórios do imóvel.'
         };
     }
     
