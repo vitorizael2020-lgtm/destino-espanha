@@ -352,8 +352,6 @@ async function initDocumentos(userData) {
         } catch (error) {
             console.error('Error loading docs:', error);
         }
-            console.error('Error loading docs:', error);
-        }
     }
 
     function renderDocs() {
