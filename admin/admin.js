@@ -349,6 +349,26 @@ async function initClienteDetalhe() {
     document.getElementById('client-total').textContent = (clientData.valorTotal || 0).toLocaleString('pt-BR') + '€';
     document.getElementById('client-notas').value = clientData.notasInternas || '';
 
+    // Popula Controle Financeiro / Pagamento
+    document.getElementById('fin-valor-total').value = clientData.valorTotal || 0;
+    document.getElementById('fin-valor-pago').value = clientData.valorPago || 0;
+    document.getElementById('fin-data-segunda').value = clientData.segundoPagamentoData || '';
+    document.getElementById('fin-status-segunda').value = clientData.segundoPagamentoStatus || 'pendente';
+    
+    const calcRestante = () => {
+        const total = parseFloat(document.getElementById('fin-valor-total').value) || 0;
+        const pago = parseFloat(document.getElementById('fin-valor-pago').value) || 0;
+        const restante = total - pago;
+        const restanteEl = document.getElementById('fin-valor-restante');
+        if (restanteEl) {
+            restanteEl.textContent = restante.toLocaleString('pt-BR') + '€';
+            restanteEl.style.color = restante > 0 ? 'var(--accent-red)' : 'var(--accent-green)';
+        }
+    };
+    calcRestante();
+    document.getElementById('fin-valor-total').addEventListener('input', calcRestante);
+    document.getElementById('fin-valor-pago').addEventListener('input', calcRestante);
+
     // Phase badge
     const faseBadge = document.getElementById('client-fase-badge');
     faseBadge.textContent = Auth.faseLabels[clientData.fase] || clientData.fase;
@@ -419,6 +439,72 @@ async function initClienteDetalhe() {
             setTimeout(() => btn.textContent = 'Salvar Notas', 2000);
         } catch (error) {
             console.error('Error saving notes:', error);
+        }
+    });
+
+    // Save payment / financial info
+    document.getElementById('btn-save-financeiro').addEventListener('click', async () => {
+        const valorTotal = parseFloat(document.getElementById('fin-valor-total').value) || 0;
+        const valorPago = parseFloat(document.getElementById('fin-valor-pago').value) || 0;
+        const segundoPagamentoData = document.getElementById('fin-data-segunda').value || null;
+        const segundoPagamentoStatus = document.getElementById('fin-status-segunda').value;
+
+        try {
+            const btn = document.getElementById('btn-save-financeiro');
+            btn.disabled = true;
+            btn.textContent = '⏳ Salvando...';
+
+            // Gerencia no array datasImportantes
+            let newDates = [...(clientData.datasImportantes || [])];
+            const tituloParc = "Vencimento da 2ª Parcela (Consulado)";
+            
+            if (segundoPagamentoData) {
+                const existingDateIdx = newDates.findIndex(d => d.titulo === tituloParc);
+                if (existingDateIdx > -1) {
+                    newDates[existingDateIdx].data = segundoPagamentoData;
+                    newDates[existingDateIdx].concluida = (segundoPagamentoStatus === 'pago');
+                } else {
+                    newDates.push({
+                        titulo: tituloParc,
+                        data: segundoPagamentoData,
+                        concluida: (segundoPagamentoStatus === 'pago')
+                    });
+                }
+            } else {
+                newDates = newDates.filter(d => d.titulo !== tituloParc);
+            }
+
+            const newHistory = [...(clientData.historico || [])];
+            newHistory.push({
+                data: new Date().toISOString(),
+                acao: `Informações financeiras atualizadas (Total: ${valorTotal}€, Pago: ${valorPago}€)`,
+                por: Auth.userData.nome || 'Admin'
+            });
+
+            const { error } = await supabase
+                .from('users')
+                .update({
+                    valorTotal: valorTotal,
+                    valorPago: valorPago,
+                    segundoPagamentoData: segundoPagamentoData,
+                    segundoPagamentoStatus: segundoPagamentoStatus,
+                    datasImportantes: newDates,
+                    historico: newHistory
+                })
+                .eq('id', clientId);
+
+            if (error) throw error;
+            
+            btn.textContent = '✅ Salvo!';
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } catch (error) {
+            console.error('Error saving financial info:', error);
+            alert('Erro ao salvar informações de pagamento.');
+            const btn = document.getElementById('btn-save-financeiro');
+            btn.disabled = false;
+            btn.textContent = 'Salvar Pagamento';
         }
     });
 

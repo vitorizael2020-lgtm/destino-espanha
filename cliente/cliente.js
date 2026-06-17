@@ -167,6 +167,37 @@ async function initPainel(userData) {
     // Visa type
     document.getElementById('card-visto').textContent = Auth.vistoLabels[userData.tipoVisto] || 'Não definido';
 
+    // Payment Info Card
+    const cardPagamento = document.getElementById('card-pagamento');
+    if (cardPagamento) {
+        const total = userData.valorTotal || 0;
+        const pago = userData.valorPago || 0;
+        const restante = total - pago;
+        
+        if (restante <= 0 && total > 0) {
+            cardPagamento.innerHTML = `<span style="color: var(--accent-green); font-weight: 600;">Pago Integral (${total}€)</span>`;
+        } else if (total > 0) {
+            let labelParcela = '';
+            if (userData.segundoPagamentoData) {
+                const dataParts = userData.segundoPagamentoData.split('-');
+                let dataFormat = userData.segundoPagamentoData;
+                if (dataParts.length === 3) {
+                    dataFormat = `${dataParts[2]}/${dataParts[1]}/${dataParts[0]}`;
+                }
+                const statusLabel = userData.segundoPagamentoStatus === 'pago' 
+                    ? '<span style="color: var(--accent-green); font-weight: 600;">Pago ✓</span>'
+                    : '<span style="color: var(--accent-red); font-weight: 600;">Aguardando visto</span>';
+                
+                labelParcela = `<br><span style="font-size: 0.72rem; color: var(--text-light);">2ª parte (${restante}€): ${dataFormat} (${statusLabel})</span>`;
+            } else {
+                labelParcela = `<br><span style="font-size: 0.72rem; color: var(--text-light);">Pendente: ${restante}€</span>`;
+            }
+            cardPagamento.innerHTML = `<span style="font-weight: 600;">${pago}€</span> / ${total}€${labelParcela}`;
+        } else {
+            cardPagamento.textContent = 'Não configurado';
+        }
+    }
+
     // Documents count
     try {
         const { data: docsSnap, error } = await supabase

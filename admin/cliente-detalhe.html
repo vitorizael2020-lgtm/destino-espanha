@@ -302,6 +302,48 @@
                             <button class="btn-portal btn-secondary btn-small" id="btn-save-notes" style="margin-top: 8px;">Salvar Notas</button>
                         </div>
 
+                        <!-- Controle Financeiro / Pagamento -->
+                        <div class="info-card" style="margin-bottom: 20px;">
+                            <h3 style="font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span>💰</span> Controle Financeiro / Pagamento
+                            </h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                                <div class="form-group">
+                                    <label for="fin-valor-total" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main);">Valor Total (€)</label>
+                                    <input type="number" id="fin-valor-total" style="width: 100%; padding: 8px 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-size: 0.85rem;" placeholder="Ex: 750">
+                                </div>
+                                <div class="form-group">
+                                    <label for="fin-valor-pago" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main);">Valor Pago Inicial (€)</label>
+                                    <input type="number" id="fin-valor-pago" style="width: 100%; padding: 8px 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-size: 0.85rem;" placeholder="Ex: 375">
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; background: rgba(0,0,0,0.02); padding: 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.04);">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.82rem;">
+                                    <span style="color: var(--text-light);">Restante a Pagar (2ª Metade):</span>
+                                    <strong id="fin-valor-restante" style="color: var(--accent-red); font-weight: 700;">0€</strong>
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px; margin-bottom: 12px;">
+                                <div class="form-group">
+                                    <label for="fin-data-segunda" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main);">Vencimento 2ª Parcela</label>
+                                    <input type="date" id="fin-data-segunda" style="width: 100%; padding: 8px 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-size: 0.85rem;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="fin-status-segunda" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main);">Status 2ª Parc.</label>
+                                    <select id="fin-status-segunda" style="width: 100%; padding: 8px 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-size: 0.85rem; background: #fff;">
+                                        <option value="pendente">Pendente</option>
+                                        <option value="pago">Pago ✓</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <button class="btn-portal btn-primary btn-small" id="btn-save-financeiro" style="width: 100%; justify-content: center; display: flex; align-items: center; gap: 4px;">
+                                <span>💾</span> Salvar Pagamento
+                            </button>
+                        </div>
+
                         <!-- Important Dates -->
                         <div class="info-card" style="margin-bottom: 20px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
