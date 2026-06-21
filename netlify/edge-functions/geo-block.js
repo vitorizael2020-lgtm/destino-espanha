@@ -1,6 +1,8 @@
 // netlify/edge-functions/geo-block.js
-// Bloqueia visitantes fora da America Latina (ex: Portugal).
-// Libera bots de busca (Googlebot, Bingbot, etc.) para preservar o SEO.
+// Bloqueia visitantes fora da America Latina (ex: Portugal) no SITE PUBLICO.
+// As areas autenticadas (login, admin e cliente) ficam SEMPRE liberadas,
+// independente do pais, pois ja sao protegidas por login.
+// Libera tambem bots de busca (Googlebot, Bingbot, etc.) para preservar o SEO.
 
 // Paises permitidos (codigos ISO 3166-1 alpha-2) - America Latina
 const PAISES_PERMITIDOS = new Set([
@@ -26,6 +28,15 @@ const PAISES_PERMITIDOS = new Set([
   "PR"  // Porto Rico
 ]);
 
+// Prefixos de rota que ficam SEMPRE liberados (protegidos por login).
+// Acessiveis de qualquer pais para que voce (admin) e os clientes
+// possam logar de qualquer lugar.
+const ROTAS_LIBERADAS = [
+  "/login",
+  "/admin",
+  "/cliente"
+];
+
 // User-agents de bots de busca legitimos que devem passar (preserva SEO)
 const BOTS_PERMITIDOS = [
   "googlebot",
@@ -43,6 +54,15 @@ const BOTS_PERMITIDOS = [
 ];
 
 export default async (request, context) => {
+  const url = new URL(request.url);
+  const caminho = url.pathname.toLowerCase();
+
+  // Libera sempre as areas autenticadas (login, admin, cliente)
+  const ehRotaLiberada = ROTAS_LIBERADAS.some((rota) => caminho.startsWith(rota));
+  if (ehRotaLiberada) {
+    return context.next();
+  }
+
   const pais = context.geo && context.geo.country ? context.geo.country.code : null;
   const userAgent = (request.headers.get("user-agent") || "").toLowerCase();
 
