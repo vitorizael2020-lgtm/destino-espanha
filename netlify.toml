@@ -1,0 +1,7 @@
+# netlify.toml
+# Registra a Edge Function de bloqueio geografico.
+# A funcao roda em todas as rotas e bloqueia visitantes fora da America Latina.
+
+[[edge_functions]]
+  path = "/*"
+  function = "geo-block"
