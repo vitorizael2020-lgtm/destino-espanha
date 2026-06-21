@@ -94,6 +94,6 @@ const PAGINA_ERRO = `<!DOCTYPE html>
 </head>
 <body>
 <h1>403 Forbidden</h1>
-<p>Site em construção.</p>
+<p>Site em manutenção.</p>
 </body>
 </html>`;
