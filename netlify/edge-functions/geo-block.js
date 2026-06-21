@@ -97,33 +97,11 @@ const PAGINA_ERRO = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Acesso indisponivel</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #0b1d3a;
-    color: #f5f7fa;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 24px;
-  }
-  .card { max-width: 520px; }
-  h1 { font-size: 64px; color: #ffcc00; margin-bottom: 16px; }
-  h2 { font-size: 24px; margin-bottom: 16px; }
-  p { font-size: 16px; line-height: 1.6; color: #c7d0dd; }
-</style>
+<title>403 Forbidden</title>
 </head>
 <body>
-  <div class="card">
-    <h1>403</h1>
-    <h2>Acesso indisponivel na sua regiao</h2>
-    <p>Nossos servicos de assessoria estao disponiveis exclusivamente para residentes do Brasil e da America Latina.</p>
-  </div>
+<h1>403 Forbidden</h1>
+<p>Site em construção.</p>
 </body>
 </html>`;
