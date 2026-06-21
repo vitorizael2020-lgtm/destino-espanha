@@ -87,6 +87,16 @@ export default async (request, context) => {
     });
   }
 
+  // Redireciona para o WhatsApp real se o usuario for de um pais permitido
+  if (caminho === "/whatsapp" || caminho === "/whatsapp/") {
+    const texto = url.searchParams.get("text") || "";
+    const numero = "34642874197";
+    const waUrl = texto
+      ? `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`
+      : `https://wa.me/${numero}`;
+    return Response.redirect(waUrl, 302);
+  }
+
   // Pais permitido ou nao identificado: segue normalmente
   return context.next();
 };

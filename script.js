@@ -591,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==============================
     // 6. GOOGLE ADS CONVERSION TRACKING
     // ==============================
-    const waLinks = document.querySelectorAll('a[href*="wa.me"]');
+    const waLinks = document.querySelectorAll('a[href*="wa.me"], a[href*="/whatsapp"]');
     waLinks.forEach(link => {
         link.addEventListener('click', () => {
             if (typeof gtag !== 'undefined') {
