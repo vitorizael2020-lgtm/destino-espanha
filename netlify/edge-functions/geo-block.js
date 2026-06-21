@@ -34,7 +34,11 @@ const PAISES_PERMITIDOS = new Set([
 const ROTAS_LIBERADAS = [
   "/login",
   "/admin",
-  "/cliente"
+  "/cliente",
+  "/shared",
+  "/css",
+  "/logo.jpg",
+  "/favicon.ico"
 ];
 
 // User-agents de bots de busca legitimos que devem passar (preserva SEO)
