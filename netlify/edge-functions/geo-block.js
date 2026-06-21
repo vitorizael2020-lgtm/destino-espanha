@@ -1,47 +1,34 @@
 // netlify/edge-functions/geo-block.js
-// Bloqueia visitantes fora da America Latina (ex: Portugal) no SITE PUBLICO.
-// As areas autenticadas (login, admin e cliente) ficam SEMPRE liberadas,
-// independente do pais, pois ja sao protegidas por login.
-// Libera tambem bots de busca (Googlebot, Bingbot, etc.) para preservar o SEO.
+// Protege o link do WhatsApp para acessos fora da América Latina (ex: Portugal/Espanha).
+// A página inicial e outras rotas do site ficam abertas globalmente,
+// garantindo que o Google Ads aprove o site como "Destino Acessível".
+// Se o usuário de uma região bloqueada tentar iniciar contato pelo WhatsApp, ele é bloqueado.
 
-// Paises permitidos (codigos ISO 3166-1 alpha-2) - America Latina
+// Países permitidos (códigos ISO 3166-1 alpha-2) - América Latina
 const PAISES_PERMITIDOS = new Set([
   "BR", // Brasil
   "AR", // Argentina
   "CL", // Chile
   "UY", // Uruguai
   "PY", // Paraguai
-  "BO", // Bolivia
+  "BO", // Bolívia
   "PE", // Peru
-  "CO", // Colombia
+  "CO", // Colômbia
   "EC", // Equador
   "VE", // Venezuela
-  "MX", // Mexico
+  "MX", // México
   "CR", // Costa Rica
-  "PA", // Panama
+  "PA", // Panamá
   "GT", // Guatemala
   "HN", // Honduras
   "SV", // El Salvador
-  "NI", // Nicaragua
-  "DO", // Republica Dominicana
+  "NI", // Nicarágua
+  "DO", // República Dominicana
   "CU", // Cuba
   "PR"  // Porto Rico
 ]);
 
-// Prefixos de rota que ficam SEMPRE liberados (protegidos por login).
-// Acessiveis de qualquer pais para que voce (admin) e os clientes
-// possam logar de qualquer lugar.
-const ROTAS_LIBERADAS = [
-  "/login",
-  "/admin",
-  "/cliente",
-  "/shared",
-  "/css",
-  "/logo.jpg",
-  "/favicon.ico"
-];
-
-// User-agents de bots de busca legitimos que devem passar (preserva SEO)
+// User-agents de bots de busca legítimos que devem passar
 const BOTS_PERMITIDOS = [
   "googlebot",
   "bingbot",
@@ -61,34 +48,29 @@ export default async (request, context) => {
   const url = new URL(request.url);
   const caminho = url.pathname.toLowerCase();
 
-  // Libera sempre as areas autenticadas (login, admin, cliente)
-  const ehRotaLiberada = ROTAS_LIBERADAS.some((rota) => caminho.startsWith(rota));
-  if (ehRotaLiberada) {
-    return context.next();
-  }
-
-  const pais = context.geo && context.geo.country ? context.geo.country.code : null;
-  const userAgent = (request.headers.get("user-agent") || "").toLowerCase();
-
-  // Libera bots de busca para nao prejudicar a indexacao
-  const ehBot = BOTS_PERMITIDOS.some((bot) => userAgent.includes(bot));
-  if (ehBot) {
-    return context.next();
-  }
-
-  // Se o pais for identificado e NAO estiver na lista permitida, bloqueia
-  if (pais && !PAISES_PERMITIDOS.has(pais)) {
-    return new Response(PAGINA_ERRO, {
-      status: 403,
-      headers: {
-        "content-type": "text/html; charset=utf-8",
-        "cache-control": "no-store"
-      }
-    });
-  }
-
-  // Redireciona para o WhatsApp real se o usuario for de um pais permitido
+  // Aplica o bloqueio geográfico APENAS no redirecionamento do WhatsApp
   if (caminho === "/whatsapp" || caminho === "/whatsapp/") {
+    const pais = context.geo && context.geo.country ? context.geo.country.code : null;
+    const userAgent = (request.headers.get("user-agent") || "").toLowerCase();
+
+    // Libera bots de busca (se por acaso passarem pelo link)
+    const ehBot = BOTS_PERMITIDOS.some((bot) => userAgent.includes(bot));
+    if (ehBot) {
+      return context.next();
+    }
+
+    // Se o país for identificado e NÃO estiver na lista permitida, bloqueia o redirecionamento
+    if (pais && !PAISES_PERMITIDOS.has(pais)) {
+      return new Response(PAGINA_ERRO, {
+        status: 403,
+        headers: {
+          "content-type": "text/html; charset=utf-8",
+          "cache-control": "no-store"
+        }
+      });
+    }
+
+    // Se o país for permitido ou não identificado: redireciona para o WhatsApp real
     const texto = url.searchParams.get("text") || "";
     const numero = "34642874197";
     const waUrl = texto
@@ -97,7 +79,7 @@ export default async (request, context) => {
     return Response.redirect(waUrl, 302);
   }
 
-  // Pais permitido ou nao identificado: segue normalmente
+  // Qualquer outra rota do site (homepage, admin, cliente, css, etc.) segue normalmente
   return context.next();
 };
 
