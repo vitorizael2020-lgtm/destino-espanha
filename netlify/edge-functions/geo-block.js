@@ -44,6 +44,21 @@ const BOTS_PERMITIDOS = [
   "adsbot-google"
 ];
 
+// === ATENDENTES DO WHATSAPP (rota /whatsapp) ===========================
+// 🔧 TROCAR O NÚMERO: edite a lista abaixo (formato DDI+DDD+número, só dígitos).
+// 🔁 ATIVAR O RODÍZIO entre atendentes: descomente/adicione os outros números.
+//    Com 1 número, todo lead cai nele. Com 2 ou mais, o atendente é sorteado
+//    a cada acesso (a edge function não guarda estado, então o sorteio aleatório
+//    é o que melhor equilibra o volume sem precisar de banco de dados).
+const ATENDENTES_WHATSAPP = [
+  "34624159870", // Vitor
+  // "34XXXXXXXXX", // Atendente 2 — descomente e troque p/ entrar no rodízio
+];
+
+function escolherAtendente() {
+  return ATENDENTES_WHATSAPP[Math.floor(Math.random() * ATENDENTES_WHATSAPP.length)];
+}
+
 export default async (request, context) => {
   const url = new URL(request.url);
   const caminho = url.pathname.toLowerCase();
@@ -72,7 +87,7 @@ export default async (request, context) => {
 
     // Se o país for permitido ou não identificado: redireciona para o WhatsApp real
     const texto = url.searchParams.get("text") || "";
-    const numero = "34642874197";
+    const numero = escolherAtendente();
     const waUrl = texto
       ? `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`
       : `https://wa.me/${numero}`;
