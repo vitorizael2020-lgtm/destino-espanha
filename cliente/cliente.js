@@ -303,10 +303,24 @@ async function initDocumentos(userData) {
                 (documents && documents.some(d => d.nome && d.nome.toLowerCase().includes('porto alegre')))
             );
 
+            const isSalvador = userData && (
+                userData.consulado === 'salvador' ||
+                (userData.email && userData.email.toLowerCase() === 'diego.mesquita6@destinoespanhaassessoria.com')
+            );
+
             // 1. Atualiza explicação de Passagem Aérea
             const contentPassagem = document.getElementById('passagem-info-content');
             if (contentPassagem) {
-                if (isPortoAlegre) {
+                if (isSalvador) {
+                    contentPassagem.innerHTML = `
+                        Sua chegada em Madri está programada para o dia <strong>31/08/2026</strong>.<br><br>
+                        Toda a preparação de documentos e trâmites de solicitação dos seus vistos (Trabalho e Reagrupamento Familiar) foram planejados com base nessa data de viagem para que vocês cheguem a tempo do início das atividades em Sevilla em 01/09/2026.
+                    `;
+                    const toggleTitle = document.getElementById('toggle-passagem-info') ? document.getElementById('toggle-passagem-info').querySelector('div div div span') : null;
+                    if (toggleTitle) {
+                        toggleTitle.textContent = 'Informações sobre as passagens aéreas adquiridas para 31/08/2026';
+                    }
+                } else if (isPortoAlegre) {
                     contentPassagem.innerHTML = `
                         O Consulado-Geral da Espanha em Porto Alegre <strong>não exige a apresentação de passagens aéreas (nem de ida, nem de volta)</strong> para a concessão de Visto de Estudante (Visto Nacional de longa duração, superior a 90 dias).<br><br>
                         <strong>⚠️ Recomendação Oficial do Consulado:</strong> Não compre passagens aéreas antes de ter o visto aprovado e o passaporte em mãos. O tempo de processamento pode variar, e comprar voos antecipadamente pode gerar prejuízos com multas, taxas de remarcação ou cancelamentos.<br><br>
@@ -324,7 +338,22 @@ async function initDocumentos(userData) {
             // 2. Atualiza os Alertas Vitais do Consulado
             const contentRegras = document.getElementById('regras-info-content');
             if (contentRegras) {
-                if (isPortoAlegre) {
+                if (isSalvador) {
+                    contentRegras.innerHTML = `
+                        <div>
+                            <strong style="color: var(--primary);">1. Apresente Originais + Cópias Simples A4 de TUDO:</strong><br>
+                            O consulado de Salvador exige a apresentação da via original acompanhada de uma cópia simples de todas as páginas de cada documento. <strong>Atenção:</strong> Isso inclui tirar cópia também do verso da folha (onde o cartório cola o selo da Apostila de Haia) e de todas as páginas das traduções juramentadas. Se for sem cópias impressas, o dossiê pode ser recusado na hora.
+                        </div>
+                        <div>
+                            <strong style="color: var(--primary);">2. Regra do Duplo Apostilamento (Traduções no Brasil):</strong><br>
+                            Primeiro, você deve apostilar o documento original em português. Em seguida, envia-o para o tradutor juramentado. Se a tradução for feita por um tradutor no Brasil, <strong>a assinatura do tradutor também precisa ser apostilada</strong> em cartório. A única forma de evitar esse segundo apostilamento é contratar um tradutor jurado na Espanha (Traductor Jurado).
+                        </div>
+                        <div>
+                            <strong style="color: var(--primary);">3. Endereço e Taxa Consular (Consulado de Salvador):</strong><br>
+                            O Consulado-Geral da Espanha em Salvador atende no endereço: <em>Avenida Oceânica, 8, salas 102/103, Edifício Farol Praia Center, Barra, Salvador – BA</em>. O pagamento da taxa consular deve ser feito <strong>estritamente em dinheiro físico (cédulas no valor exato)</strong> no momento do atendimento presencial. O consulado não aceita PIX, cartão de crédito/débito e não fornece troco.
+                        </div>
+                    `;
+                } else if (isPortoAlegre) {
                     contentRegras.innerHTML = `
                         <div>
                             <strong style="color: var(--primary);">1. Apresente Originais + Cópias Simples A4 de TUDO:</strong><br>
@@ -430,8 +459,11 @@ async function initDocumentos(userData) {
         });
 
         const catLabels = {
-            pessoal: '📄 Documentos Pessoais',
+            pessoal_esposa: '👤 Documentos Pessoais (Esposa - Titular)',
             saude: '🏥 Saúde',
+            trabalho_esposa: '💼 Trabalho (Esposa - Titular)',
+            pessoal_diego: '👥 Agregado (Diego) - Reagrupamento Familiar',
+            pessoal: '📄 Documentos Pessoais',
             financeiro: '💰 Comprovação Financeira',
             estudo: '🎓 Estudo',
             trabalho: '💼 Trabalho',
@@ -441,8 +473,32 @@ async function initDocumentos(userData) {
             geral: '📁 Outros'
         };
 
+        const catOrder = [
+            'pessoal_esposa',
+            'saude',
+            'trabalho_esposa',
+            'pessoal_diego',
+            'pessoal',
+            'financeiro',
+            'estudo',
+            'trabalho',
+            'moradia',
+            'residencia',
+            'familiar',
+            'geral'
+        ];
+
         let html = '';
-        Object.entries(grouped).forEach(([cat, docs]) => {
+        const sortedCategories = Object.keys(grouped).sort((a, b) => {
+            const indexA = catOrder.indexOf(a);
+            const indexB = catOrder.indexOf(b);
+            const valA = indexA === -1 ? 999 : indexA;
+            const valB = indexB === -1 ? 999 : indexB;
+            return valA - valB;
+        });
+
+        sortedCategories.forEach(cat => {
+            const docs = grouped[cat];
             html += `<div style="padding: 12px 24px; background: var(--bg-section); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">${catLabels[cat] || cat}</div>`;
             docs.forEach(doc => {
                 const isApproved = doc.status === 'aprovado';
@@ -1171,6 +1227,10 @@ function getDocExplanation(nome, userData) {
         userData.consulado === 'porto_alegre' || 
         (userData.email && userData.email.toLowerCase() === 'davidbateracwb@gmail.com')
     );
+    const isSalvador = userData && (
+        userData.consulado === 'salvador' ||
+        (userData.email && userData.email.toLowerCase() === 'diego.mesquita6@destinoespanhaassessoria.com')
+    );
     
     if (nomeLower.includes('certidão de nascimento')) {
         return {
@@ -1186,6 +1246,12 @@ function getDocExplanation(nome, userData) {
     }
     
     if (nomeLower.includes('passagem') || nomeLower.includes('reserva de voo') || nomeLower.includes('reserva de retorno') || nomeLower.includes('voo')) {
+        if (isSalvador) {
+            return {
+                preparar: 'Suas passagens aéreas de ida já estão compradas para 31/08/2026. Apresente o comprovante de reserva emitido pela companhia aérea no dossiê de visto.',
+                naoEnviar: 'Não aplicável, pois as passagens já foram adquiridas.'
+            };
+        }
         return {
             preparar: 'Se o consulado ou a assessoria solicitar especificamente, nós providenciaremos a reserva temporária garantida (Onward Ticket) para o dia da sua imigração. Não compre passagem real de ida/volta.',
             naoEnviar: '<strong>NÃO compre passagens aéreas definitivas antes de ter o visto colado em mãos!</strong> O consulado não exige a passagem para vistos de longa duração e adverte de forma contundente contra a compra prévia devido ao risco de atrasos.'
@@ -1217,6 +1283,12 @@ function getDocExplanation(nome, userData) {
         };
     }
     if (nomeLower.includes('taxa consular') || nomeLower.includes('pagamento da taxa')) {
+        if (isSalvador) {
+            return {
+                preparar: 'Separe o valor correspondente à taxa consular em dinheiro físico (cédulas em moeda local, no valor exato) para pagar no dia do atendimento presencial no Consulado de Salvador.',
+                naoEnviar: 'O Consulado de Salvador NÃO aceita pagamentos via PIX, cartões de crédito/débito ou transferências bancárias.'
+            };
+        }
         return {
             preparar: isPoa
                 ? 'O comprovante de depósito identificado referente à taxa consular (aproximadamente R$ 433,00), que deve ser pago em agência física do Banco do Brasil conforme as instruções oficiais de agendamento do Consulado de Porto Alegre.'
@@ -1225,6 +1297,12 @@ function getDocExplanation(nome, userData) {
         };
     }
     if (nomeLower.includes('comprovante de residência') || nomeLower.includes('residência da jurisdição')) {
+        if (isSalvador) {
+            return {
+                preparar: 'Fatura de serviços fixos (Água, Luz, Gás Canalizado, Internet Banda Larga Fixa) ou Contrato de Locação registrado em cartório no estado de Sergipe ou Bahia (jurisdição de Salvador), emitido nos últimos 90 dias em seu nome ou de seus pais (provando filiação).',
+                naoEnviar: '<strong>Fatura de celular (telefone móvel) é expressamente REJEITADA!</strong> Extratos bancários simples, boletos de compras ou faturas de cartão de crédito não servem como comprovante de endereço.'
+            };
+        }
         return {
             preparar: isPoa
                 ? 'Fatura de serviços fixos (Água, Luz, Gás Canalizado, Internet Banda Larga Fixa) ou Contrato de Locação registrado em cartório em Santa Catarina (jurisdição de Porto Alegre), emitido nos últimos 90 dias em seu nome ou de seus pais (provando filiação).'
