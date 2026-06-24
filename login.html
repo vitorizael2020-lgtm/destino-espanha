@@ -116,6 +116,12 @@
             const loginAlert = document.getElementById('login-alert');
             const loginSuccess = document.getElementById('login-success');
 
+            // Check if redirected here because user is blocked (from init())
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('bloqueado') === '1') {
+                showBlockedCard();
+            }
+
             loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 loginAlert.classList.remove('show');
@@ -129,6 +135,10 @@
                 const result = await Auth.login(email, password);
 
                 if (!result.success) {
+                    if (result.error === '__BLOQUEADO__') {
+                        showBlockedCard();
+                        return;
+                    }
                     loginAlert.textContent = result.error;
                     loginAlert.classList.add('show');
                     loginBtn.classList.remove('loading');
@@ -136,6 +146,39 @@
                 }
                 // If success, the Auth.login already redirects
             });
+
+            function showBlockedCard() {
+                const loginSection = document.getElementById('login-form-section');
+                const resetSection = document.getElementById('reset-form-section');
+                if (loginSection) loginSection.style.display = 'none';
+                if (resetSection) resetSection.style.display = 'none';
+
+                // Create or show blocked card
+                let blockedCard = document.getElementById('blocked-card');
+                if (!blockedCard) {
+                    blockedCard = document.createElement('div');
+                    blockedCard.id = 'blocked-card';
+                    blockedCard.innerHTML = `
+                        <div style="text-align: center; padding: 20px 0;">
+                            <div style="font-size: 3rem; margin-bottom: 12px;">🔒</div>
+                            <h2 style="font-size: 1.2rem; font-weight: 700; color: #c0392b; margin-bottom: 8px;">Acesso Temporariamente Indisponível</h2>
+                            <p style="font-size: 0.9rem; color: #666; margin-bottom: 24px; line-height: 1.5;">
+                                Seu acesso ao portal está suspenso.<br>
+                                Entre em contato com nosso suporte para mais informações.
+                            </p>
+                            <a href="https://wa.me/34624159870?text=Ol%C3%A1!%20N%C3%A3o%20estou%20conseguindo%20acessar%20meu%20portal%20do%20cliente."
+                               target="_blank"
+                               style="display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: background 0.2s;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.638l4.648-1.422A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.239 0-4.332-.726-6.024-1.955a.5.5 0 00-.404-.078l-3.252.995.93-3.135a.5.5 0 00-.064-.427A9.946 9.946 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+                                Falar no WhatsApp
+                            </a>
+                        </div>
+                    `;
+                    const loginCard = document.querySelector('.login-card');
+                    if (loginCard) loginCard.appendChild(blockedCard);
+                }
+                blockedCard.style.display = 'block';
+            }
 
             // === FORGOT PASSWORD ===
             const forgotLink = document.getElementById('forgot-link');

@@ -49,6 +49,19 @@ const Auth = {
                             if (data && !error) {
                                 Auth.userData = data;
 
+                                // Check if client is blocked (admin is never blocked)
+                                if (data.bloqueado && data.role !== 'admin') {
+                                    await supabase.auth.signOut();
+                                    Auth.currentUser = null;
+                                    Auth.userData = null;
+                                    const currentPage = window.location.pathname.toLowerCase();
+                                    if (!currentPage.includes('login')) {
+                                        window.location.href = Auth.getBasePath() + 'login.html?bloqueado=1';
+                                    }
+                                    resolve(null);
+                                    return;
+                                }
+
                                 // Check role if required
                                 if (requiredRole && Auth.userData.role !== requiredRole) {
                                     Auth.redirectByRole(Auth.userData.role);
@@ -125,6 +138,12 @@ const Auth = {
             if (profileError || !profile) {
                 await supabase.auth.signOut();
                 throw new Error('Perfil não encontrado. Contacte o administrador.');
+            }
+
+            // Check if client is blocked (admin is never blocked)
+            if (profile.bloqueado && profile.role !== 'admin') {
+                await supabase.auth.signOut();
+                return { success: false, error: '__BLOQUEADO__' };
             }
             
             Auth.redirectByRole(profile.role);
