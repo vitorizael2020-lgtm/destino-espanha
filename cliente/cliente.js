@@ -1232,6 +1232,31 @@ function getDocExplanation(nome, userData) {
         (userData.email && userData.email.toLowerCase() === 'diego.mesquita6@destinoespanhaassessoria.com')
     );
     
+    if (nomeLower.includes('autorização de residência e trabalho') || nomeLower.includes('resolução favorável')) {
+        return {
+            preparar: 'A resolução favorável (concessão) emitida pela Unidade de Grandes Empresas (UGE-CE) ou pela Oficina de Extranjería na Espanha. É o documento em formato PDF com código de verificação digital (CSV) enviado pela empresa contratante.',
+            naoEnviar: 'Não envie solicitações pendentes (solicitud) ou e-mails de comunicação interna da empresa. Deve ser a resolução definitiva de aprovação com o carimbo eletrônico do Ministério.'
+        };
+    }
+    if (nomeLower.includes('contrato de trabalho')) {
+        return {
+            preparar: 'Cópia completa em PDF do Contrato de Trabalho assinado digitalmente ou fisicamente pela empresa espanhola (neste caso, a Universidade Loyola) e pela esposa (Titular). O contrato deve constar o cargo, a remuneração e a data de início (01/09/2026).',
+            naoEnviar: 'Propostas de emprego (job offers) sem assinaturas formais de ambas as partes ou rascunhos sem valores declarados.'
+        };
+    }
+    if (nomeLower.includes('meios econômicos da titular')) {
+        return {
+            preparar: 'O próprio contrato de trabalho espanhol constando a remuneração mensal e anual (salário suficiente para cobrir o casal), acompanhado, se aplicável, de carta oficial da empresa confirmando a contratação e a suficiência de meios econômicos.',
+            naoEnviar: 'Não é necessário enviar extratos bancários brasileiros volumosos ou imposto de renda brasileiro se o salário da contratação na Espanha for suficiente para a subsistência do casal. Evite comprovantes informais.'
+        };
+    }
+    if (nomeLower.includes('alojamento - diego')) {
+        return {
+            preparar: 'Declaração de responsabilidade da esposa (Titular) assumindo todas as despesas do cônjuge na Espanha, acompanhada da resolução do visto dela e do contrato de trabalho espanhol que comprova a suficiência de renda para o casal.',
+            naoEnviar: 'Extratos bancários brasileiros do Diego sem origem declarada, ou declarações simples sem a comprovação da fonte de renda da esposa na Espanha.'
+        };
+    }
+
     if (nomeLower.includes('certidão de nascimento')) {
         return {
             preparar: 'Solicite a certidão de nascimento em Inteiro Teor em cartório no Brasil. Em seguida, ela deve ser apostilada em cartório e traduzida por tradutor juramentado para o espanhol.',
