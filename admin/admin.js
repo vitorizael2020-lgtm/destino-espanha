@@ -445,6 +445,84 @@ async function initClienteDetalhe() {
         }
     });
 
+    // ==============================
+    // ACCESS CONTROL (Block/Unblock)
+    // ==============================
+    const accessBadge = document.getElementById('access-status-badge');
+    const motivoInput = document.getElementById('motivo-bloqueio');
+    const toggleBlockBtn = document.getElementById('btn-toggle-block');
+
+    if (accessBadge && toggleBlockBtn) {
+        const isBloqueado = clientData.bloqueado || false;
+        motivoInput.value = clientData.motivo_bloqueio || '';
+
+        // Set initial state
+        function updateAccessUI(blocked) {
+            if (blocked) {
+                accessBadge.textContent = '🔴 Bloqueado';
+                accessBadge.style.background = 'rgba(192,57,43,0.1)';
+                accessBadge.style.color = '#c0392b';
+                toggleBlockBtn.innerHTML = '<span>🔓</span> Desbloquear Acesso';
+                toggleBlockBtn.className = 'btn-portal btn-small btn-primary';
+                toggleBlockBtn.style.cssText = 'width:100%;justify-content:center;display:flex;align-items:center;gap:6px;';
+            } else {
+                accessBadge.textContent = '🟢 Ativo';
+                accessBadge.style.background = 'rgba(39,174,96,0.1)';
+                accessBadge.style.color = '#27ae60';
+                toggleBlockBtn.innerHTML = '<span>🔒</span> Bloquear Acesso';
+                toggleBlockBtn.className = 'btn-portal btn-small btn-danger';
+                toggleBlockBtn.style.cssText = 'width:100%;justify-content:center;display:flex;align-items:center;gap:6px;';
+            }
+        }
+        updateAccessUI(isBloqueado);
+
+        toggleBlockBtn.addEventListener('click', async () => {
+            const nowBlocked = clientData.bloqueado || false;
+            const newState = !nowBlocked;
+            const motivo = motivoInput.value.trim();
+
+            if (newState && !motivo) {
+                alert('Por favor, informe o motivo do bloqueio antes de bloquear.');
+                motivoInput.focus();
+                return;
+            }
+
+            const acao = newState ? 'bloquear' : 'desbloquear';
+            if (!confirm(`Tem certeza que deseja ${acao} o acesso deste cliente?`)) return;
+
+            try {
+                toggleBlockBtn.disabled = true;
+                toggleBlockBtn.innerHTML = '<span>⏳</span> Processando...';
+
+                const newHistory = [...(clientData.historico || [])];
+                newHistory.push({
+                    data: new Date().toISOString(),
+                    acao: newState
+                        ? `Acesso bloqueado. Motivo: ${motivo}`
+                        : `Acesso desbloqueado.${motivo ? ' Obs: ' + motivo : ''}`,
+                    por: Auth.userData.nome || 'Admin'
+                });
+
+                const { error } = await supabase
+                    .from('users')
+                    .update({
+                        bloqueado: newState,
+                        motivo_bloqueio: motivo,
+                        historico: newHistory
+                    })
+                    .eq('id', clientId);
+
+                if (error) throw error;
+                window.location.reload();
+            } catch (error) {
+                console.error('Error toggling block:', error);
+                alert('Erro ao alterar o acesso do cliente.');
+                toggleBlockBtn.disabled = false;
+                updateAccessUI(nowBlocked);
+            }
+        });
+    }
+
     // Save payment / financial info
     document.getElementById('btn-save-financeiro').addEventListener('click', async () => {
         const valorTotal = parseFloat(document.getElementById('fin-valor-total').value) || 0;

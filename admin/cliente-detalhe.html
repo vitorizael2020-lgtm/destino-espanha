@@ -302,6 +302,19 @@
                             <button class="btn-portal btn-secondary btn-small" id="btn-save-notes" style="margin-top: 8px;">Salvar Notas</button>
                         </div>
 
+                        <!-- Controle de Acesso do Cliente -->
+                        <div class="info-card" style="margin-bottom: 20px;" id="access-control-card">
+                            <h3 style="font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span>🔒</span> Controle de Acesso
+                                <span id="access-status-badge" style="font-size: 0.75rem; padding: 3px 10px; border-radius: 12px; font-weight: 600; margin-left: auto;"></span>
+                            </h3>
+                            <div class="form-group" style="margin-bottom: 12px;">
+                                <label for="motivo-bloqueio" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main);">Motivo do Bloqueio (só admin vê)</label>
+                                <textarea id="motivo-bloqueio" rows="2" style="width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-family: var(--font-sans); font-size: 0.85rem; resize: vertical; outline: none;" placeholder="Ex: Pagamento pendente, Contrato encerrado..."></textarea>
+                            </div>
+                            <button class="btn-portal btn-small" id="btn-toggle-block" style="width: 100%; justify-content: center; display: flex; align-items: center; gap: 6px;"></button>
+                        </div>
+
                         <!-- Controle Financeiro / Pagamento -->
                         <div class="info-card" style="margin-bottom: 20px;">
                             <h3 style="font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
