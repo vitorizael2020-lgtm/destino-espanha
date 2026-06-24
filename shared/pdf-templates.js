@@ -11,7 +11,7 @@
 const PDFTemplates = {
 
     precosFamiliares: {
-        diagnostico: { 1: 150, 2: 150, 3: 150, 4: 150, 5: 150, 6: 150 },
+        diagnostico: { 1: 50, 2: 50, 3: 50, 4: 50, 5: 50, 6: 50 },
         documentacao: { 1: 350, 2: 500, 3: 600, 4: 700, 5: 800, 6: 900 },
         vistos: { 1: 750, 2: 1100, 3: 1350, 4: 1600, 5: 1850, 6: 2100 },
         aterragem: { 1: 600, 2: 800, 3: 1000, 4: 1150, 5: 1300, 6: 1450 },
@@ -68,7 +68,7 @@ const PDFTemplates = {
         const planos = {
             diagnostico: {
                 nome: 'Diagnóstico Estratégico',
-                valor: 150,
+                valor: 50,
                 itens: [
                     'Videochamada de 60 a 90 minutos de sessão estratégica',
                     'Análise completa de perfil migratório familiar',
@@ -557,7 +557,7 @@ const PDFTemplates = {
         const planos = {
             diagnostico: {
                 nome: 'Diagnóstico Estratégico',
-                valor: 150,
+                valor: 50,
                 itens: [
                     'Videochamada de 60 a 90 minutos de sessão estratégica',
                     'Análise completa de perfil migratório familiar',

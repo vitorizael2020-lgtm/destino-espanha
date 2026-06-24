@@ -225,7 +225,7 @@ async function initDashboard() {
     // Auto-fill valor based on plano
     const planoSelect = document.getElementById('nc-plano');
     const valorInput = document.getElementById('nc-valor');
-    const planoValores = { diagnostico: 150, documentacao: 350, vistos: 750, aterragem: 600, premium: 2000, avulso: 0 };
+    const planoValores = { diagnostico: 50, documentacao: 350, vistos: 750, aterragem: 600, premium: 2000, avulso: 0 };
     if (planoSelect && valorInput) {
         planoSelect.addEventListener('change', () => {
             valorInput.value = planoValores[planoSelect.value] || '';

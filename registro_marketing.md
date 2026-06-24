@@ -2,7 +2,7 @@
 
 **Para que serve:** histórico único de tudo que fazemos em marketing (anúncios, site, rastreamento), com **data e hora**, pra não perdermos o fio. **Sempre que falarmos de marketing, este documento deve ser consultado e atualizado.**
 
-> Última atualização: **2026-06-16 22:50**
+> Última atualização: **2026-06-23**
 
 ---
 
@@ -13,21 +13,42 @@
 - **Tag global Google Ads:** `AW-18239034284`
 - **Conversão principal:** clique no WhatsApp (ação "Enviar formulário de lead", origem Site)
 - **Site:** https://destinoespanhaassessoria.com (deploy via Netlify)
-- **WhatsApp:** +34 642 87 41 97
+- **WhatsApp:** +34 624 15 98 70
 - **Bônus Google:** gastar € 400 até **13/08/2026** para ganhar € 400 de crédito.
 
 ---
 
-## ✅ Estado atual (2026-06-15)
+## ✅ Estado atual (2026-06-23)
 
-- **Campanha ativa:** "Pesquisa - Espanha (Leads WhatsApp)" — Rede de Pesquisa — **status: Qualificada (aprendizado) = NO AR** 🟢
+- **Campanha ativa:** "Pesquisa - Espanha (Leads WhatsApp)" — Rede de Pesquisa — **NO AR** 🟢 · lance **Maximizar conversões**.
 - **Performance Max:** ⏸️ pausado.
 - **Verificação do anunciante:** ✅ concluída (identidade verificada) — conta saiu da pausa.
-- **Orçamento ativo:** € 4,82/dia.
+- **Orçamento ativo:** **€ 17,00/dia** (subiu de € 4,82 em 23/06 — campanha estava limitada por orçamento com CPA ótimo).
+- **CPA atual:** ~€ 1,47/lead (Maximizar conversões, sem tCPA). tCPA a definir após ~1-2 semanas no novo orçamento.
 
 ---
 
 ## 🗓️ Linha do tempo (mais recente primeiro)
+
+### 2026-06-23
+- 💸 **Promoção do Diagnóstico: ~~€150~~ → ~~R$ 885~~ por R$ 295** (≈ €50). Diagnóstico Estratégico vira **porta de entrada barata** pro cliente BR (facilita o 1º sim → upsell pros pacotes maiores, onde está o lucro). **Site + checkout em R$** (link Stripe novo `buy.stripe.com/3cIeVg4DM5d32b853fgEg01`, cobra R$ 295,11; redireciona p/ Google Calendar). **Admin, métricas e PDFs seguem em € (€50)** pra não bagunçar o faturamento (que soma em €). Ancoragem "De R$ 885 por R$ 295" no card. *(Pendência: rastrear o checkout Stripe como conversão no Ads — tarefa já listada.)*
+- 💰 **Orçamento: € 4,82 → € 17,00/dia.** Motivo: Search **limitada por orçamento** (gastava 100% todo dia) com CPA ótimo. Vitor confirmou a **verificação de identidade do Google** (Claude NÃO faz essa etapa — só o Vitor).
+- 📊 **Resultados Search (14–22/jun, ~8 dias):** 5.383 impr · 129 cliques · CTR **2,40%** · CPC **€ 0,31** · custo **€ 39,72** · **27 leads (WhatsApp)** · taxa conv **20,93%** · **CPA € 1,47** (vs € 2,58 em 18/06 — melhorou muito). Lance: Maximizar conversões.
+- 🧠 **CPA desejado (tCPA) — decisão: ESPERAR.** Google recomendou tCPA **€ 1,70** (+ aumentar orçamento). **Não aplicado** porque: (1) não mexer em orçamento E lance juntos (aprendizado duplo); (2) € 1,70 está colado no piso (CPA obtido com orçamento pequeno) e travaria o volume que o € 17 deve destravar; (3) pouco dado. **Plano:** ~1–2 semanas no € 17 em Maximizar conversões, medir o CPA real, e só então definir o tCPA (provável > € 1,70). **Checkpoint ~30/06–06/07.**
+- 🔎 **Recomendações revisadas (score 71,9%): NENHUMA aplicada.** "Remover keywords redundantes" foi **rejeitada** após abrir a lista — ela **MANTÉM as AMPLAS e remove as FRASES** (contrário da nossa estratégia ampla→frase; risco de tráfego pior justo na escala pra € 17). A limpeza **certa** (remover as AMPLAS, manter as FRASES) fica pro **checkpoint**, fora da fase de reaprendizado. Também **NÃO**: correspondência ampla, recursos de **preço** (não publicamos preço), **lista de clientes**/Customer Match (**LGPD**), **logo** (removido de propósito). ⚠️ **Lição:** sempre abrir a lista da recomendação antes de aplicar — o Google "limpa" consolidando em ampla. Auto-aplicação confirmada **OFF** (resíduo: 3 recs auto-aplicadas 15–21/06, antes de desligar em 21/06).
+- 📱 **WhatsApp: +34 642874197 → +34 624159870** no site todo. **Centralizado** na rota `/whatsapp` (edge function `geo-block.js`, lista `ATENDENTES_WHATSAPP` + sorteio) — **rodízio de atendentes pronto** (só adicionar o 2º número). Área do cliente + schema atualizados. Deploy + master. Geo-block testado (ES = 403 ✅). Ver memória `whatsapp-config-rota`.
+- 🧹 **Sitelinks:** removidos 3 duplicados (Visto Nômade nível campanha, Pacotes "Conheça nossos planos", 1 "Fale comigo!") + "Histórias de Clientes" (reprovado gov-docs). Restam **11 sitelinks, todos Qualificada**.
+
+### 2026-06-19
+- **Pesquisa de concorrentes feita** (`analise_concorrentes_2026-06.md`): Espanha Fácil = gigante (desde 2007, +150 mil clientes), roda **~200 anúncios** em 3 frentes (vistos/confiança + **curso de espanhol como porta de entrada** + imóveis). Brecha = somos **especialistas + pessoais + nichos** que eles tratam no genérico.
+- **Kit de conteúdo criado** (a partir da análise): (1) `novos_anuncios_google_2026-06.md` — sitelinks, callouts e **novo RSA** (ângulos pessoal/especialista/nichos CAP·nômade·não-lucrativa); (2) `guia_morar_espanha_isca.md` — **isca digital** (guia grátis → WhatsApp); (3) `legendas_reels_2026-06.md` — 8 legendas + banco de hashtags pros roteiros. **A aplicar:** subir sitelinks/callouts/RSA no Ads (via Chrome, **sem custo extra**); virar o guia em PDF/landing; gravar Reels. Orçamento mantido em **€ 4,82/dia** (decisão do Vitor).
+- **Aplicado no Ads (via Chrome):** 5 callouts + 2 sitelinks de nicho (Nômade Digital, Motorista/CAP) + 1 RSA novo. Lance da campanha agora = **Maximizar conversões** (fase de aprendizado). Guia da isca exportado em **PDF** (`Guia_Morar_na_Espanha.pdf`, fora do repo).
+- ⚠️🔧 **Política "Serviços oficiais e documentos do governo":** anúncios da nossa categoria (visto/documento) são **restritos** e exigem certificação (reservada a governo/concessionária). Caímos nisso: 1 sitelink reprovado (CAP "Dirija e trabalhe legal na UE") + 2 títulos limitados ("Do Brasil até a Espanha", "Visto 100% Legal e Seguro"). **Corrigido pra linguagem de consultoria** → "Assessoria Motorista CAP / Orientação no processo", "Mudança com Quem Vive Lá", "Imigração Legal e Segura". Resultado: anúncios voltaram a **Qualificada**. *(Importante: "limitado" ≠ bloqueio; strikes/suspensão só valem p/ violações graves — doc falso, drogas, armas, fraude. Nunca houve risco de suspensão por isso.)*
+- 🔒 **Verificação de identidade do anunciante concluída** (resolve o prazo 28/06 — ESSE, sim, era o real risco de a conta ter os anúncios pausados).
+- 📌 **REGRA FIXA (aprendizado):** (1) **toda copy de anúncio/sitelink/callout = consultoria/orientação**, NUNCA "tirar/fornecer/garantir o visto ou documento"; (2) **revisar as políticas do Google ANTES de subir** qualquer anúncio no nosso nicho (imigração = categoria restrita).
+
+### 2026-06-18
+- **Checkpoint Search (14–18/06):** 1.414 impr · CTR **3,82%** · 54 cliques · CPC **€ 0,38** · **8 conversões (cliques WhatsApp)** · taxa de conv. **14,81%** · custo **€ 20,61** → **€ 2,58 por lead**. ✅ Rastreamento de conversão confirmado funcionando. Campanha **limitada por orçamento** (€ 4,82/dia) e ainda em **aprendizado de lances** (Maximizar cliques). **PMax desconsiderada** (Vitor criou antes da estratégia; queima verba em Display — foco 100% na Search). Optimization score: campanha 86,1% / conta 91,1%. **Pendências priorizadas:** escalar orçamento (aguarda OK do Vitor), adicionar sitelinks/callouts, trocar amplas→frase, negativar termos, grupos próprios (nômade/aposentado/CAP), e ao chegar ~15–30 conv. trocar p/ Maximizar conversões. **Pesquisa de concorrentes** (Espanha Fácil etc.) a iniciar via Insights de leilão + Centro de Transparência de Anúncios.
 
 ### 2026-06-16
 - **22:50** — 🎉🎉 **PRIMEIRA VENDA FECHADA + 3 leads!** Origem confirmada pelo Vitor: **Anúncio do Google (Search)**. A campanha de Pesquisa (criada em 15/06) converteu em **~1 dia**, com só **€ 4,82/dia**. **Valida a virada PMax → Search** — primeiro ROI real. ✅
@@ -72,6 +93,7 @@
 | Data | Impressões | Cliques | CTR | CPC méd. | Conv. WhatsApp | Custo | Observações |
 |---|---|---|---|---|---|---|---|
 | 2026-06-15 | 22,2 mil* | 302* | — | € 0,05* | 0 | € 13,65* | *Números acumulados, quase tudo do **PMax** (agora pausado). Search recém no ar (aprendizado). |
+| 2026-06-22 | 5.383 | 129 | 2,40% | € 0,31 | **27** | € 39,72 | **Só Search** (14–22/jun). **CPA € 1,47** · taxa conv 20,93%. Orçamento subiu p/ **€ 17** em 23/06 → próximo checkpoint medir CPA no novo patamar. |
 
 > Próximo checkpoint sugerido: **~2026-06-18 a 19** (após 3-5 dias da Search rodando), já com dados só da Search.
 
