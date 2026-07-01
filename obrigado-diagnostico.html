@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18239034284"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-18239034284');
+
+      // Conversão de COMPRA do Diagnóstico (Stripe redireciona pra cá após o pagamento)
+      gtag('event', 'conversion', {
+          'send_to': 'AW-18239034284/UBLICL7ql8kcEKynhvlD',
+          'value': 50.0,
+          'currency': 'EUR',
+          'transaction_id': ''
+      });
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Pagamento confirmado | Destino Espanha</title>
+    <link rel="icon" type="image/jpeg" href="/logo.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Redireciona pro agendamento após alguns segundos (fallback: botão) -->
+    <meta http-equiv="refresh" content="4;url=https://calendar.app.google/bitLhAYFwSpKMW1f7">
+    <style>
+        .obrigado-wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            padding: 24px;
+            text-align: center;
+        }
+        .obrigado-card {
+            max-width: 560px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: var(--radius-lg);
+            padding: 56px 40px;
+            backdrop-filter: blur(20px);
+        }
+        .obrigado-card .check {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 18px;
+        }
+        .obrigado-card h1 {
+            color: #fff;
+            font-size: 1.9rem;
+            margin-bottom: 14px;
+        }
+        .obrigado-card p {
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 26px;
+            line-height: 1.7;
+        }
+        .obrigado-card .aguarde {
+            color: rgba(255,255,255,0.45);
+            font-size: 0.85rem;
+            margin-top: 18px;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="obrigado-wrap">
+        <div class="obrigado-card">
+            <span class="check">✅</span>
+            <h1>Pagamento confirmado.<br><span class="text-gradient">Bem-vindo a bordo!</span></h1>
+            <p>Seu Diagnóstico Estratégico está garantido. Agora só falta <strong>escolher o melhor dia e horário</strong> para a sua videochamada.</p>
+            <a href="https://calendar.app.google/bitLhAYFwSpKMW1f7" class="btn btn-glow btn-large">Agendar minha consultoria →</a>
+            <p class="aguarde">Você será redirecionado automaticamente em instantes…</p>
+        </div>
+    </div>
+</body>
+</html>

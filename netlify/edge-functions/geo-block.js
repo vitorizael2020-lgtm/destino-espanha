@@ -63,6 +63,12 @@ export default async (request, context) => {
   const url = new URL(request.url);
   const caminho = url.pathname.toLowerCase();
 
+  // Documentos internos de trabalho (.md) fazem parte do repositório mas NÃO são
+  // páginas do site — sem este bloqueio ficariam acessíveis por URL direta.
+  if (caminho.endsWith(".md")) {
+    return new Response("Not Found", { status: 404 });
+  }
+
   // Aplica o bloqueio geográfico APENAS no redirecionamento do WhatsApp
   if (caminho === "/whatsapp" || caminho === "/whatsapp/") {
     const pais = context.geo && context.geo.country ? context.geo.country.code : null;
