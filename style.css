@@ -11,6 +11,7 @@
     --gold: #d4a853;
     --gold-light: #f0d68a;
     --gold-dark: #b8912e;
+    --gold-text: #8a6a1d; /* dourado legível p/ TEXTO sobre fundo claro (WCAG); o --gold vivo fica p/ fundos escuros e decoração */
     --accent-blue: #4a7cff;
     --accent-teal: #2dd4bf;
     --text-main: #1a1a2e;
@@ -86,7 +87,7 @@ img { max-width: 100%; display: block; }
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: var(--gold);
+    color: var(--gold-text);
     margin-bottom: 16px;
     position: relative;
     padding-left: 30px;
@@ -358,7 +359,6 @@ img { max-width: 100%; display: block; }
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     background: var(--primary);
     color: #fff;
     overflow: hidden;
@@ -402,9 +402,13 @@ img { max-width: 100%; display: block; }
 }
 .hero-content {
     position: relative;
-    z-index: 10;
+    z-index: 20;
     max-width: 750px;
-    padding-bottom: 120px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 40px;
 }
 .hero-badge {
     display: inline-flex;
@@ -449,9 +453,7 @@ img { max-width: 100%; display: block; }
 
 /* Stats Bar */
 .stats-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    position: relative;
     width: 100%;
     background: rgba(255,255,255,0.05);
     backdrop-filter: blur(20px);
@@ -554,7 +556,7 @@ img { max-width: 100%; display: block; }
     font-family: var(--font-serif);
     font-weight: 700;
     font-size: 1.1rem;
-    color: var(--gold-dark);
+    color: var(--gold-text);
     min-width: 60px;
     padding-top: 2px;
 }
@@ -755,11 +757,12 @@ img { max-width: 100%; display: block; }
     color: rgba(255,255,255,0.8);
     border-bottom-color: rgba(255,255,255,0.06);
 }
+.card.popular .features li::before { color: var(--gold-light); } /* card escuro: mantém dourado claro */
 .features li::before {
     content: '✓';
     position: absolute;
     left: 0;
-    color: var(--gold);
+    color: var(--gold-text);
     font-weight: 700;
     font-size: 0.9rem;
 }
@@ -1370,7 +1373,7 @@ footer {
 .avulso-link {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--gold-dark);
+    color: var(--gold-text);
     display: inline-flex;
     align-items: center;
     transition: var(--transition);

@@ -2,7 +2,7 @@
 
 **Para que serve:** histórico único de tudo que fazemos em marketing (anúncios, site, rastreamento), com **data e hora**, pra não perdermos o fio. **Sempre que falarmos de marketing, este documento deve ser consultado e atualizado.**
 
-> Última atualização: **2026-06-23**
+> Última atualização: **2026-07-01**
 
 ---
 
@@ -18,17 +18,54 @@
 
 ---
 
-## ✅ Estado atual (2026-06-23)
+## ✅ Estado atual (2026-07-01)
 
 - **Campanha ativa:** "Pesquisa - Espanha (Leads WhatsApp)" — Rede de Pesquisa — **NO AR** 🟢 · lance **Maximizar conversões**.
 - **Performance Max:** ⏸️ pausado.
-- **Verificação do anunciante:** ✅ concluída (identidade verificada) — conta saiu da pausa.
-- **Orçamento ativo:** **€ 17,00/dia** (subiu de € 4,82 em 23/06 — campanha estava limitada por orçamento com CPA ótimo).
-- **CPA atual:** ~€ 1,47/lead (Maximizar conversões, sem tCPA). tCPA a definir após ~1-2 semanas no novo orçamento.
+- **Estrutura:** **5 grupos de anúncios** (reestruturado em 01/07): Grupo 1 (morar/imigrar/visto, o original), **Trabalho**, **Motorista CAP**, **Documentos NIE**, **Estudo** — cada um com RSA temático próprio. ⚠️ **Fase de reaprendizado** (mexemos em orçamento + estrutura em 01/07) — não mexer por alguns dias.
+- **Orçamento ativo:** **€ 17,00/dia** (voltou de €10 em 01/07).
+- **CPA atual:** **€ 0,94/lead** (medido 14–30/jun, 122 conv). tCPA ainda NÃO definido — esperar reestabilizar.
+- **Nômade digital:** ⏸️ pausado (0 conversões).
 
 ---
 
 ## 🗓️ Linha do tempo (mais recente primeiro)
+
+### 2026-07-01
+- 🔎 **Auditoria completa da campanha (via Chrome) + pesquisa (concorrentes/tendências), Opus.** Checkpoint da janela 30/06–06/07 feito.
+- 📊 **DESEMPENHO 14–30/jun (só Search):** 28.096 impr · 536 cliques · CTR 1,91% · CPC **€0,21** · custo **€114,86** · **122 conversões** · taxa conv **22,76%** · **CPA €0,94** 🔥 (era €1,47 em 22/jun — melhorou muito ao escalar). Optimization score **92,5%**. Lance: Maximizar conversões. **Escala validada de novo:** 5k→28k impr e 27→122 conv com CPA CAINDO.
+- ⚠️ **Orçamento está em €10/dia** (o registro de 23/06 marcava €17 — foi reduzido depois; confirmar com Vitor). Com CPA €0,94, forte caso pra **subir orçamento** (decisão do Vitor — money guardrail).
+- 🧠 **Palavras que CONVERTEM (nossas keywords, 14–30/jun):** `imigrar para a espanha` (12,5 conv), `como tirar visto para espanha` (10), `como conseguir visto de trabalho na espanha` (9!), `como tirar visto de trabalho para espanha` (5), `como tirar o visto para espanha` (6), `como imigrar para espanha` (4), + `motorista na espanha`, `assessoria de visto espanha`, `visto de residência espanha` (1 cada, 100% conv). **Tema TRABALHO é campeão.**
+- ❌ **Nômade digital = 0 conversões** em TODAS as variações (~15 cliques, ~€6 gastos, nada). Apesar de "quente" no mercado, NOSSO tráfego nômade não vira lead. `nomadespain.com` domina esse leilão (99% topo). → **pausar/reduzir nômade; não é nosso conversor.**
+- 🔴 **Índice de Qualidade baixo** em vários dos NOSSOS melhores conversores (`imigrar para a espanha`, `como conseguir visto de trabalho...`, `como imigrar...`): marcados **"Qualificada (limitada) · Raramente exibido · baixo IQ"**. Causa raiz: **1 só grupo ("Grupo de anúncios 1") com 1 anúncio genérico** servindo tudo → baixa relevância. **Maior alavanca = dividir em grupos temáticos** (Trabalho / Morar-Imigrar / Motorista-CAP / Documentos-NIE) c/ RSA próprio → sobe IQ → destrava impressões e posição.
+- 🕵️ **Insights de leilão (quem disputa nossas buscas):** **zerrahq.com** 44,4% impr share / 84% topo (rival nº1) · **cidadania4u.com.br** 34,2% (ângulo cidadania) · **Nós 30,1%** impr share MAS só **36,7% no topo da página** (posição baixa = reflexo do IQ) · stb.com.br 10,4% · **nomadespain.com** <10% mas **99% topo** (dono do nicho nômade) · movewise.net, onebizspain.eu, hailoes.com, nathaliapradomaia.com (relocation menores). **Espanha Fácil NÃO aparece** no nosso leilão (eles jogam em cidadania/nacionalidade, que negativamos). ✅ Não brigamos de frente com o gigante.
+- 🆕 **Concorrente novo mapeado: España Más** (espanamas.com) — advogados + gestores administrativos. Termo `advogado imigração espanha` aparece nas nossas buscas.
+- 🔀 **Espanha Fácil pivotou a porta de entrada:** curso de espanhol → **visto de estudante**. Long tail nosso tem MUITAS buscas de `bolsa de estudo espanha` (0 conv ainda, mas volume). Estudo = grupo defensivo a testar.
+- 🔥 **Tendências novas (web):** **Motorista/CAP AQUECENDO** — ~30 mil caminhoneiros até fim/2026, €2.800–3.200/mês, Plano Reconduce (subsídio €3.000). Nossos dados **confirmam**: `motorista na espanha` e `como ser motorista na espanha` já converteram. → **grupo próprio prioritário.** · **Visto procura de trabalho (job-seeker)** convertendo (`visto de procura de trabalho espanha`). · **Regularización extraordinaria 2026:** prazo 16/abr–30/jun JÁ ENCERROU e é só p/ quem já está na ES → **não é nosso cliente; negativar se vier lixo.**
+- ✅ **AÇÕES APLICADAS NA CONTA (via Chrome, com OK do Vitor — ele confirmou a identidade no Google):**
+  1. **Orçamento €10 → €17/dia.** (Vitor autorizou subir; CPA €0,94 justifica escala.)
+  2. **Reestruturação em 5 grupos temáticos** (era 1 grupo genérico → destrava Índice de Qualidade). Cada grupo novo com **anúncio RSA próprio** (10–11 títulos, correspondência de FRASE, copy 100% consultoria p/ política gov-docs, sitelinks herdados). Títulos reprovados antes ("Do Brasil até a Espanha") **substituídos** por "Fale com Quem Mora Lá"; títulos fora do tema (nômade/estudante) trocados por temáticos.
+     - **Grupo de anúncios 1** (original, mantido): morar/imigrar/visto — segue com os conversores (122 conv).
+     - **Trabalho** (novo): `visto de trabalho espanha`, `visto de procura de trabalho espanha`, `trabalhar na espanha`, `como conseguir trabalho na espanha`, `visto de trabalho espanha para brasileiros`.
+     - **Motorista CAP** (novo): `motorista na espanha`, `como ser motorista na espanha`, `trabalhar como motorista na espanha`, `cap espanha`, `carteira de motorista espanha para brasileiros`.
+     - **Documentos NIE** (novo): `nie espanha como tirar`, `consulta nie espanha`, `empadronamiento espanha`, `nie espanha`.
+     - **Estudo** (novo, defensivo vs Espanha Fácil): `visto de estudante espanha`, `bolsa de estudo espanha`, `estudar na espanha`, `visto de estudos espanha para brasileiros`.
+  3. **Nômade digital PAUSADO** — 7 keywords (todas variações), 0 conv / €6,31 gastos à toa. Status agora "Pausada".
+- ⏭️ **Deixado de fora de propósito:** `como tirar visto espanha` (ampla, 0 conv) — custo só €0,21 e "raramente exibida" (IQ baixo), risco de pausar por engano os conversores `como tirar visto PARA espanha` (10 conv) não compensa. Negativas (`aupair` etc.) não aplicadas — CPA está ótimo, evitar mexer demais.
+- 📋 **PLANEJAMENTO COMPLETO criado** (`planejamento_melhorias_2026-07.md`) — auditoria site+campanhas+paleta+funil com plano em 4 fases. **Achados críticos do site:** (1) depoimento "Golden Visa 2026" no ar sendo que o programa foi EXTINTO em abr/2025 — corrigir JÁ; (2) 3 de 8 cases são de nacionalidade (território da Espanha Fácil que não disputamos) e NÃO há case de Motorista/Trabalho; (3) anúncios todos apontam pra home genérica — falta landing por nicho; (4) paleta navy+dourado APROVADA (manter), mas dourado #d4a853 sobre branco reprova contraste WCAG (~2,2:1) — criar --gold-text escuro pra textos em fundo claro; (5) próximo upgrade de mídia = conversões de valor (marcar vendas no Ads, não só clique WhatsApp).
+- 🎬 **8 roteiros de Reels do nicho Motorista/CAP criados** (`roteiros_reels_motorista_cap_2026-07.md`) — pra alimentar o orgânico enquanto os grupos novos aquecem. Temas: números (30 mil vagas/€3.200), o que é o CAP, Plano Reconduce (subsídio €3.000), por que falta motorista (70% +50 anos), erro do turista, família, salário real, "3 coisas". Regra de honestidade: orientar, NUNCA garantir vaga/visto. Inclui sequência de postagem sugerida.
+- 🔍 **Checagem de política (a pedido do Vitor):** **Anúncios (RSAs) = TODOS os 6 "Qualificada"** ✅ (inclusive os 4 novos temáticos) — sem reprovação/limitação. Palavras-chave ok. **2 de 11 sitelinks REPROVADOS** sob "Serviços oficiais e documentos do governo": (1) **"Assessoria p/ Motoristas"** (nível conta) e (2) **"Pacotes e Preços"** (nível campanha). ⚠️ **NÃO é risco de conta** — recurso reprovado só deixa de aparecer; strike/suspensão só p/ violação grave (doc falso, fraude etc.). Conta segue "Ativada/Qualificada". **Recomendação:** *Pacotes e Preços* → **remover** (a gente nem publica preço, e "Preços/Planos" é o que dispara o classificador); *Assessoria p/ Motoristas* → **contestar** OU reescrever mais brando e reenviar.
+  - ✅ **APLICADO (com OK do Vitor):** (1) **"Pacotes e Preços" REMOVIDO**. (2) **"Assessoria p/ Motoristas" reescrito → "Motoristas na Espanha / A oportunidade e como vir / Fale com quem mora lá"** (ângulo oportunidade/informação, não serviço de documento) → status agora **"Em análise"**. 💡 **Descoberta:** o gatilho era a palavra **"Motoristas"** (classificador associa a tirar CNH/CAP = documento do governo) — "Assessoria p/ Enfermeiros" com descrição IDÊNTICA passou. Se reprovar de novo, próximo passo = **contestar**. Restam **10 sitelinks** (9 Qualificada + 1 em análise).
+- 👀 **Acompanhar (próximo checkpoint ~7–10 dias):** (1) status de aprovação dos 4 anúncios novos (podem entrar "Em análise"); (2) se o IQ dos conversores sobe de "raramente exibido" com os grupos temáticos; (3) desempenho dos grupos Trabalho/Motorista/Estudo; (4) tCPA — só definir depois de reestabilizar o aprendizado (mexemos em orçamento + estrutura juntos). ⚠️ Fase de reaprendizado: **não mexer por alguns dias.**
+- 🆕 **Concorrente novo mapeado: España Más** (espanamas.com) — equipe de **advogados + gestores administrativos**, foco imigração+nacionalidade, "assessoria personalizada por caso". Some à lista (Espanha Fácil segue gigante).
+- 🔀 **Espanha Fácil pivotou a porta de entrada:** de "curso de espanhol" → **visto de estudante** ("se tornou a principal porta de entrada"). Blog forte em nômade digital 2026 e estudante 2026.
+- 🔥 **Tendências novas (fortes) desde 18/06:**
+  - **Motorista/CAP** confirmado e AQUECENDO: Espanha precisa de **~30 mil caminhoneiros até fim de 2026**, salário **€2.800–3.200/mês**, **Plano Reconduce** (subsídio até €3.000 p/ habilitação C/D + €2.000 taxas). 70% dos motoristas ES têm +50 anos. → **nosso nicho mais quente; merece grupo próprio.**
+  - **Visto de procura de trabalho (job-seeker):** 12 meses sem contrato prévio; restrito a 3 grupos (descendentes, quem estudou na ES, qualificados em setores em falta). Em alta.
+  - **Regularización extraordinaria 2026:** ~500 mil migrantes; **prazo 16/abr–30/jun/2026 (JÁ ENCERROU)** e é só p/ quem **já está** na ES irregular → **NÃO é nosso cliente** (vem direto do BR). Alto volume de busca, mas tratar com cuidado/negativar se vier lixo. Arraigo segue valendo.
+  - **Nômade digital:** em alta sustentada (mantido).
+- ✅ **Palavras a ADICIONAR (provisório, dedupe c/ live pendente):** grupo **CAP/Motorista** (novo), grupo **Procura de Trabalho** (novo), grupo **Estudo** (Espanha Fácil está forte aí), **reagrupamento familiar / arraigo social**, **troca de CNH**, **NIE/empadronamiento** (long-tail barato). Detalhe no fim desta entrada / e em `pesquisa_palavras_chave_2026-06.md`.
+- ⏭️ **Próximo passo obrigatório:** conectar Chrome → puxar (1) desempenho 23/06–01/07 no €17, (2) **Termos de pesquisa** (negativas + novas keywords reais), (3) **Insights de leilão** (quem disputa), (4) por palavra-chave: quais convertem / quais gastam à toa. Só então fechar tCPA e a limpeza ampla→frase.
 
 ### 2026-06-23
 - 💸 **Promoção do Diagnóstico: ~~€150~~ → ~~R$ 885~~ por R$ 295** (≈ €50). Diagnóstico Estratégico vira **porta de entrada barata** pro cliente BR (facilita o 1º sim → upsell pros pacotes maiores, onde está o lucro). **Site + checkout em R$** (link Stripe novo `buy.stripe.com/3cIeVg4DM5d32b853fgEg01`, cobra R$ 295,11; redireciona p/ Google Calendar). **Admin, métricas e PDFs seguem em € (€50)** pra não bagunçar o faturamento (que soma em €). Ancoragem "De R$ 885 por R$ 295" no card. *(Pendência: rastrear o checkout Stripe como conversão no Ads — tarefa já listada.)*
@@ -94,6 +131,7 @@
 |---|---|---|---|---|---|---|---|
 | 2026-06-15 | 22,2 mil* | 302* | — | € 0,05* | 0 | € 13,65* | *Números acumulados, quase tudo do **PMax** (agora pausado). Search recém no ar (aprendizado). |
 | 2026-06-22 | 5.383 | 129 | 2,40% | € 0,31 | **27** | € 39,72 | **Só Search** (14–22/jun). **CPA € 1,47** · taxa conv 20,93%. Orçamento subiu p/ **€ 17** em 23/06 → próximo checkpoint medir CPA no novo patamar. |
+| 2026-06-30 | 28.096 | 536 | 1,91% | € 0,21 | **122** | € 114,86 | **Checkpoint 14–30/jun.** **CPA € 0,94** 🔥 · taxa conv **22,76%** · Opt. score 92,5%. Orçamento **€10/dia** agora (era €17). Tema **Trabalho** = campeão; **nômade digital 0 conv**; nossos melhores conversores com **IQ baixo** (grupo único genérico). Leilão: zerrahq 44% / nós 30% mas só 36,7% no topo. |
 
 > Próximo checkpoint sugerido: **~2026-06-18 a 19** (após 3-5 dias da Search rodando), já com dados só da Search.
 
