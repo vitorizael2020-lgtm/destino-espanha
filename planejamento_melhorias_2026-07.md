@@ -48,7 +48,8 @@
 
 ## 🗺️ PLANO DE AÇÃO (priorizado por impacto ÷ esforço)
 
-### 🔴 SEMANA 1 — Credibilidade e correções rápidas (1–2 dias de trabalho)
+### 🔴 SEMANA 1 — Credibilidade e correções rápidas ✅ **CONCLUÍDA em 01/07 (deploy 6a45a24f)**
+> Itens 1–5 todos aplicados e em produção. Novo item descoberto na execução: **criar .netlifyignore/pasta publish** — o deploy atual publica os .md internos do repo (acessíveis por URL direta). → movido pra Semana 2.
 | # | Ação | Impacto | Esforço |
 |---|---|---|---|
 | 1 | **Trocar os cases problemáticos:** remover "Golden Visa 2026" (programa extinto!) e os 2 de nacionalidade → substituir por **Motorista/CAP, Visto de Trabalho e Estudo-família** (temas que vendemos e anunciamos) | 🔥 Alto (credibilidade + alinhamento) | Baixo |
