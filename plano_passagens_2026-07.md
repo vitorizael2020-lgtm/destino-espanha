@@ -43,12 +43,13 @@ Item novo a construir: **gerador interno de card de cotação** (página no admi
 **Importante (descoberto na auditoria):** a campanha atual tem **"passagem/passagens" como palavra NEGATIVA** (proteção contra turista). Ou seja, keywords de passagem **não podem entrar na campanha atual** — e nem devem (intenção diferente, CPA diferente).
 
 **Recomendação: campanha separada "Passagens - Mudança Espanha"**, orçamento-teste **€5/dia** (~R$180/mês) — *aguarda OK do Vitor (regra: verba só com confirmação)*:
-- **Keywords (frase) — intenção de mudança, NUNCA turismo genérico:**
+- **🎯 PERSONA (definição do Vitor, 02/07):** caminhoneiro, enfermeira, família trabalhadora — **não pesquisa "hacks de viagem"**; vai na CVC do shopping, recebe 1–2 cotações caras e compara. Nós entramos como "a cotação melhor". **NUNCA usar keywords de mecânica** (`onward ticket`, `comprovante de volta`, `reserva de voo para imigração`) — atraem o nômade/TI que faz sozinho E ensinam o método ao cliente. O cliente ouve só o resultado: *"emito a sua só de ida com a volta cancelada — sai mais barato que ida-e-volta"*.
+- **Keywords (frase) — como a NOSSA persona busca:**
   - `passagem só de ida para espanha` · `passagem de ida para a espanha`
-  - `posso viajar só com passagem de ida` · `passagem de volta imigração espanha`
-  - `comprovante de passagem de volta` · `reserva de voo para imigração` · `onward ticket`
-  - `passagem para morar na espanha` · `mudança para espanha passagem`
-- **Negativas da nova campanha:** milhas, promoção, decolar, 123milhas, latam pass, smiles, feriado, réveillon, pacote turístico, hotel.
+  - `passagem barata para espanha` · `quanto custa passagem para espanha`
+  - `passagem para espanha parcelada` · `passagem parcelada internacional`
+  - `passagem para morar na espanha` · `agência de passagens para espanha`
+- **Negativas da nova campanha:** onward ticket, milhas, decolar, 123milhas, maxmilhas, latam pass, smiles, feriado, réveillon, pacote turístico, hotel, resort.
 - **Copy (sem restrição gov-docs! aqui pode ser mais agressivo):** "Passagem de Mudança p/ Espanha" · "Só Ida + Reserva de Retorno" · "Sem Risco na Imigração" · "Cotação Grátis no WhatsApp" · "Preço Final p/ Toda a Família".
 - Landing: `/passagens`. Conversão: mesmo clique WhatsApp.
 - **Bônus:** anúncio de passagens não cai na categoria restrita de imigração → sem "limitado", CTR melhor.
@@ -56,8 +57,8 @@ Item novo a construir: **gerador interno de card de cotação** (página no admi
 ## 5. Blog — passagens é O tema perfeito pra estrear (Tarefa #5)
 
 Alto volume de busca, zero restrição de política, dor real, e **cada artigo termina no WhatsApp**. 4 artigos-pilar:
-1. **"Passagem só de ida para a Espanha: como não ser barrado na imigração (2026)"** — a dor nº1; explica regra Schengen + comprovante de saída + CTA "a gente resolve a passagem + reserva de retorno".
-2. **"Onward Ticket: o que é, se é seguro e como usar na mudança"** — desmistifica; CTA.
+1. **"Passagem só de ida para a Espanha: como não ser barrado na imigração (2026)"** — a dor nº1; explica que a imigração costuma exigir prova de retorno e que **nós emitimos a só-ida já com isso resolvido** (SEM explicar a mecânica). CTA cotação.
+2. **"Ida-e-volta ou só de ida: qual comprar quando você vai MORAR fora (e por que a só-ida sai mais barato)"** — ataca direto a comparação com a cotação cara da agência de shopping; nossa persona se vê nesse texto. *(substituiu o artigo sobre Onward Ticket — não ensinar o método, decisão do Vitor 02/07)*.
 3. **"Quanto custa a passagem de mudança para a Espanha (família, datas, bagagem)"** — capta busca de preço; mostra faixas reais e o que encarece; CTA cotação.
 4. **"Bagagem de mudança: quantas malas dá pra levar e quanto custa"** — 23kg/158cm, taxa por cia, dicas; CTA.
 > Interlinkar os 4 + linkar da /passagens. Estrutura de blog nasce aqui (`/blog/` simples, mesmo visual).
