@@ -31,6 +31,10 @@
 
 ## 🗓️ Linha do tempo (mais recente primeiro)
 
+### 2026-07-02
+- ✅ **Semana 2 FECHADA:** anúncio Motorista CAP salvo com URL final → **/motorista** (Vitor confirmou identidade). Sinal positivo: anúncio "Trabalho" apareceu SEM a marca "limitada" na lista (contestação possivelmente aceita — confirmar no checkpoint). Dados de ONTEM (01/07): 20 conv · €16,74 · CPA €0,84.
+- ✈️ **PLANO DA FRENTE DE PASSAGENS criado** (`plano_passagens_2026-07.md`), a pedido do Vitor (vende passagens informalmente no fechamento: cota → compra otimizada + Onward Ticket → margem). **Tese: nicho "passagem de MUDANÇA"** (só ida + reserva de retorno + família/bagagem) — não brigar com OTA por "passagem barata". Decisões: renomear seção da home p/ "Passagens de Mudança para a Espanha" + landing **/passagens** + **gerador de card de cotação** no admin (padroniza o fechamento no WhatsApp) + blog estreia com 4 artigos de passagem (sem restrição de política!) + upsell no script da atendente. ⚠️ **Keywords de passagem exigem CAMPANHA SEPARADA** ("passagem/passagens" são negativas da campanha atual, de propósito) — sugerido €5/dia teste, **aguarda OK do Vitor (verba)**. Funil: clique → WhatsApp etiquetado ("cotação de passagens para minha mudança") → atendente → Vitor cota → card.
+
 ### 2026-07-01
 - 🔎 **Auditoria completa da campanha (via Chrome) + pesquisa (concorrentes/tendências), Opus.** Checkpoint da janela 30/06–06/07 feito.
 - 📊 **DESEMPENHO 14–30/jun (só Search):** 28.096 impr · 536 cliques · CTR 1,91% · CPC **€0,21** · custo **€114,86** · **122 conversões** · taxa conv **22,76%** · **CPA €0,94** 🔥 (era €1,47 em 22/jun — melhorou muito ao escalar). Optimization score **92,5%**. Lance: Maximizar conversões. **Escala validada de novo:** 5k→28k impr e 27→122 conv com CPA CAINDO.
