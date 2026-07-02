@@ -31,6 +31,9 @@
 
 ## 🗓️ Linha do tempo (mais recente primeiro)
 
+### 2026-07-02 (parte 3 — inclusos da oferta de passagens)
+- 🎁 **Inclusos padrão definidos pelo Vitor (modelo do card da concorrente Guia&Rota):** ✓ Reserva de retorno · ✓ **Seguro viagem incluso** · ✓ **Guia turístico GRATUITO personalizado do destino** (reaproveita os roteiros PDF que já geramos p/ clientes — ex.: Granada do Marcos — custo zero, percepção de valor alta) · ✓ bagagem conforme tarifa · ✓ suporte até embarque. **Aplicado e NO AR:** landing /passagens (stats bar + passo 03) e banner da home (3 feats: retorno/seguro/guia). Plano atualizado (seção do card de cotação).
+
 ### 2026-07-02 (parte 2 — execução do plano de passagens)
 - 🎯 **Persona refinada pelo Vitor:** caminhoneiro/enfermeira/família trabalhadora — compara com a cotação cara da agência de shopping; NÃO pesquisa mecânica de viagem. **Keywords de mecânica (onward ticket etc.) REMOVIDAS do plano** — atraem DIYer de TI e ensinam o método. Discurso ao cliente: só o resultado ("só de ida com a volta cancelada, mais barato que ida-e-volta").
 - 🧹 **Termo "Onward Ticket" REMOVIDO do site inteiro** (case da Família B., FAQ visível e schema FAQ) → substituído por "reserva/comprovante de retorno oficial e verificável". O método é segredo comercial.
