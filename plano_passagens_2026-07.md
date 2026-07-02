@@ -33,7 +33,8 @@ Anúncio/Blog/Reel → /passagens → WhatsApp (texto etiquetado) → atendente 
 
 ### 🃏 Card de Cotação padronizado (o "print 2")
 Item novo a construir: **gerador interno de card de cotação** (página no admin, uso só nosso):
-- Formulário: nome do cliente, rota, data, direto/escala, cia, tarifa final (R$), o que está incluso (reserva de retorno ✓, bagagem 23kg ✓, seguro ✗/✓, suporte ✓), validade da proposta.
+- Formulário: nome do cliente, rota, data, direto/escala, cia, tarifa final (R$), validade da proposta.
+- **Inclusos padrão do card (definição do Vitor, 02/07):** ✓ Reserva de retorno · ✓ **Seguro viagem incluso** · ✓ **Guia turístico gratuito personalizado do destino** (o mesmo roteiro PDF com fotos/preços/restaurantes que já geramos p/ clientes — custo zero, valor alto) · ✓ Bagagem conforme tarifa · ✓ Suporte até o embarque.
 - Gera **imagem PNG vertical** (boa pra WhatsApp) com a identidade Destino Espanha (navy+dourado, não o estilo "agência genérica" do exemplo Guia&Rota).
 - Ganho: fechamento com cara profissional em 30 segundos, padronizado, sem depender de arte manual.
 - Regra de copy no card: mostrar **"Tarifa final — tudo incluso"** (serviço embutido). Nunca rotular como "preço da companhia".
