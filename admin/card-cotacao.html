@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Gerador de Card de Cotação | Destino Espanha (interno)</title>
+<link rel="icon" type="image/jpeg" href="/logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0a0f1a; --navy2:#141c2e; --navy3:#1a2744;
+    --gold:#d4a853; --gold-l:#f0d68a; --gold-d:#b8912e;
+    --ok:#1a7a4a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:Inter,sans-serif;background:#f1f5f9;color:#1a1a2e;padding:24px}
+  h1{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:4px}
+  .sub{color:#667;font-size:.85rem;margin-bottom:20px}
+  .wrap{display:grid;grid-template-columns:340px 1fr;gap:24px;max-width:1600px;margin:0 auto}
+  @media(max-width:1100px){.wrap{grid-template-columns:1fr}}
+  /* ------- FORM ------- */
+  .form{background:#fff;border-radius:14px;padding:20px;box-shadow:0 4px 18px rgba(0,0,0,.06);align-self:start}
+  .form label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#556;margin:12px 0 4px}
+  .form input[type=text],.form select{width:100%;padding:9px 10px;border:1px solid #d5dbe3;border-radius:8px;font-size:.9rem;font-family:Inter}
+  .form input:focus,.form select:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+  .checks{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+  .checks label{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;text-transform:none;letter-spacing:0;margin:0;color:#334}
+  .btn{width:100%;margin-top:18px;padding:13px;border:0;border-radius:10px;background:linear-gradient(135deg,var(--gold-d),var(--gold));color:var(--navy);font-weight:800;font-size:1rem;cursor:pointer;font-family:Inter}
+  .btn:hover{filter:brightness(1.08)}
+  .hint{font-size:.75rem;color:#889;margin-top:10px;line-height:1.5}
+  /* ------- CARD ------- */
+  .stage{overflow:auto}
+  #card{width:1280px;height:720px;position:relative;color:#fff;border-radius:18px;overflow:hidden;
+    background:
+      radial-gradient(ellipse 900px 500px at 85% -10%, rgba(212,168,83,.28), transparent 60%),
+      radial-gradient(ellipse 700px 420px at -10% 110%, rgba(74,124,255,.16), transparent 60%),
+      linear-gradient(150deg, #0a0f1a 0%, #141c2e 45%, #1a2744 100%);
+    font-family:Inter,sans-serif;flex-shrink:0}
+  #card .orn{position:absolute;inset:14px;border:1.5px solid rgba(212,168,83,.35);border-radius:12px;pointer-events:none}
+  #card .orn::after{content:'';position:absolute;inset:5px;border:1px solid rgba(212,168,83,.15);border-radius:9px}
+  .c-head{display:flex;align-items:center;gap:22px;padding:38px 54px 10px}
+  .c-head img{height:74px;width:74px;border-radius:50%;object-fit:cover;border:2.5px solid var(--gold)}
+  .c-brand{font-family:'Playfair Display',serif;font-weight:800;font-size:1.05rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold-l);margin-top:5px}
+  .c-title{font-family:'Playfair Display',serif;font-size:2.35rem;line-height:1.18;font-weight:800}
+  .c-title .g{background:linear-gradient(135deg,var(--gold) 0%,var(--gold-l) 55%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .c-body{display:grid;grid-template-columns:1.02fr .98fr;gap:26px;padding:20px 54px 0}
+  .box{background:rgba(255,255,255,.055);border:1px solid rgba(212,168,83,.35);border-radius:14px;padding:20px 24px;backdrop-filter:blur(6px)}
+  .box-tag{display:inline-block;background:linear-gradient(135deg,var(--gold-d),var(--gold));color:var(--navy);font-weight:800;font-size:.78rem;letter-spacing:.6px;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:14px}
+  .fitem{display:flex;gap:12px;align-items:flex-start;margin-bottom:11px}
+  .fitem .ic{font-size:1.25rem;line-height:1.3;width:30px;text-align:center;flex-shrink:0}
+  .fitem b{display:block;font-size:1.02rem}
+  .fitem span{font-size:.85rem;color:rgba(255,255,255,.62);line-height:1.35}
+  .rota{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:800;color:var(--gold-l);letter-spacing:1px;margin-bottom:12px}
+  .rota small{font-size:.95rem;color:rgba(255,255,255,.7);font-family:Inter;font-weight:600;letter-spacing:0}
+  .inclusos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .inc{background:rgba(212,168,83,.1);border:1px solid rgba(212,168,83,.3);border-radius:10px;padding:10px 12px;font-size:.82rem;font-weight:700;display:flex;gap:8px;align-items:center;line-height:1.25}
+  .inc .ck{color:var(--gold-l);font-size:1rem}
+  .tarifa{background:linear-gradient(135deg,rgba(212,168,83,.16),rgba(212,168,83,.05));border:1.5px solid var(--gold);border-radius:14px;padding:14px 20px;text-align:center}
+  .tarifa .lbl{font-size:.8rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-l)}
+  .tarifa .val{font-family:'Playfair Display',serif;font-size:2.9rem;font-weight:800;color:#fff;line-height:1.15}
+  .tarifa .val small{font-size:1.3rem;color:var(--gold-l)}
+  .tarifa .vld{font-size:.8rem;color:rgba(255,255,255,.65);font-weight:600;margin-top:2px}
+  .c-foot{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:16px 54px;background:rgba(212,168,83,.1);border-top:1px solid rgba(212,168,83,.3);font-size:.88rem;font-weight:600}
+  .c-foot .cta{background:linear-gradient(135deg,var(--gold-d),var(--gold));color:var(--navy);font-weight:800;padding:9px 20px;border-radius:100px;font-size:.9rem}
+  .c-foot .cts{display:flex;gap:22px;color:rgba(255,255,255,.85)}
+</style>
+</head>
+<body>
+<h1>🃏 Gerador de Card de Cotação <span style="color:#b8912e">— uso interno</span></h1>
+<p class="sub">Preencha, clique em <b>Baixar PNG</b> e envie no WhatsApp do cliente. Nada é salvo — LGPD ok.</p>
+<div class="wrap">
+  <div class="form">
+    <label>Nome do cliente</label>
+    <input type="text" id="f-nome" value="Cliente" maxlength="30">
+    <label>Destino (título)</label>
+    <input type="text" id="f-dest" value="MADRI" maxlength="20">
+    <label>Rota (ex.: GRU → MAD)</label>
+    <input type="text" id="f-rota" value="GRU → MAD" maxlength="24">
+    <label>Companhia / tipo de voo</label>
+    <input type="text" id="f-cia" value="Voo Direto · IBERIA" maxlength="34">
+    <label>Detalhe do voo 1</label>
+    <input type="text" id="f-d1" value="🌙|Voo noturno (10h)|Descanse e aproveite o dia" maxlength="70">
+    <label>Detalhe do voo 2</label>
+    <input type="text" id="f-d2" value="💺|Conforto premium|Espaço para as pernas e entretenimento" maxlength="70">
+    <label>Detalhe do voo 3</label>
+    <input type="text" id="f-d3" value="🧳|Bagagem incluída|Despacho conforme tarifa da família" maxlength="70">
+    <p class="hint">Formato dos detalhes: <b>emoji|título|descrição</b> (separado por barra vertical). Deixe vazio pra ocultar.</p>
+    <label>Inclusos (marque)</label>
+    <div class="checks">
+      <label><input type="checkbox" id="i-ret" checked> Reserva de retorno</label>
+      <label><input type="checkbox" id="i-seg" checked> Seguro viagem</label>
+      <label><input type="checkbox" id="i-guia" checked> Guia turístico grátis</label>
+      <label><input type="checkbox" id="i-sup" checked> Suporte até embarcar</label>
+    </div>
+    <label>Rótulo da tarifa</label>
+    <select id="f-lbl">
+      <option>SUA TARIFA DE IDA + VOLTA</option>
+      <option>SUA TARIFA — SÓ IDA</option>
+      <option selected>TARIFA FINAL — TUDO INCLUSO</option>
+    </select>
+    <label>Valor (só números e vírgula)</label>
+    <input type="text" id="f-val" value="4.200,78" maxlength="12">
+    <label>Validade</label>
+    <input type="text" id="f-vld" value="Válido para saída em 05/AGO" maxlength="40">
+    <button class="btn" id="btn-dl">⬇️ Baixar PNG para WhatsApp</button>
+    <p class="hint">Contatos do rodapé são fixos (site + WhatsApp oficiais) pra nunca sair errado.</p>
+  </div>
+
+  <div class="stage">
+    <div id="card">
+      <div class="orn"></div>
+      <div class="c-head">
+        <img src="/logo.jpg" alt="">
+        <div>
+          <div class="c-title"><span id="c-nome">Cliente</span>, sua experiência<br>PREMIUM em <span class="g" id="c-dest">MADRI</span>!</div>
+          <div class="c-brand">Destino Espanha · Passagens de Mudança</div>
+        </div>
+      </div>
+      <div class="c-body">
+        <div class="box">
+          <span class="box-tag" id="c-cia">Voo Direto · IBERIA</span>
+          <div class="rota" id="c-rota">GRU → MAD</div>
+          <div id="c-dets"></div>
+        </div>
+        <div class="box">
+          <span class="box-tag">O valor exclusivo pra você</span>
+          <div class="inclusos" id="c-inc"></div>
+          <div class="tarifa">
+            <div class="lbl" id="c-lbl">TARIFA FINAL — TUDO INCLUSO</div>
+            <div class="val"><small>R$</small> <span id="c-val">4.200,78</span></div>
+            <div class="vld" id="c-vld">Válido para saída em 05/AGO</div>
+          </div>
+        </div>
+      </div>
+      <div class="c-foot">
+        <div class="cts">
+          <span>🌐 destinoespanhaassessoria.com</span>
+          <span>📱 WhatsApp +34 624 15 98 70</span>
+        </div>
+        <span class="cta">Vamos reservar? Me chama! →</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  const $=id=>document.getElementById(id);
+  const bind=(inp,out,fn)=>{const f=()=>{$(out).textContent=fn?fn($(inp).value):$(inp).value};$(inp).addEventListener('input',f);f();};
+  bind('f-nome','c-nome');bind('f-dest','c-dest');bind('f-rota','c-rota');
+  bind('f-cia','c-cia');bind('f-lbl','c-lbl');bind('f-val','c-val');bind('f-vld','c-vld');
+  $('f-lbl').addEventListener('change',()=>{$('c-lbl').textContent=$('f-lbl').value});
+
+  function dets(){
+    const html=['f-d1','f-d2','f-d3'].map(id=>{
+      const v=$(id).value.trim(); if(!v) return '';
+      const [ic,t,d]=v.split('|');
+      return `<div class="fitem"><div class="ic">${ic||'✔️'}</div><div><b>${t||''}</b><span>${d||''}</span></div></div>`;
+    }).join('');
+    $('c-dets').innerHTML=html;
+  }
+  ['f-d1','f-d2','f-d3'].forEach(id=>$(id).addEventListener('input',dets));dets();
+
+  function incs(){
+    const list=[
+      ['i-ret','🎫 Reserva de retorno inclusa'],
+      ['i-seg','🏥 Seguro viagem completo'],
+      ['i-guia','🗺️ Guia turístico grátis do destino'],
+      ['i-sup','🤝 Suporte até o embarque'],
+    ].filter(([id])=>$(id).checked)
+     .map(([,txt])=>`<div class="inc"><span class="ck">✓</span>${txt}</div>`).join('');
+    $('c-inc').innerHTML=list;
+  }
+  ['i-ret','i-seg','i-guia','i-sup'].forEach(id=>$(id).addEventListener('change',incs));incs();
+
+  $('btn-dl').addEventListener('click',async()=>{
+    const nome=$('f-nome').value.replace(/\s+/g,'_')||'cliente';
+    const canvas=await html2canvas($('card'),{scale:2,useCORS:true,backgroundColor:null});
+    const a=document.createElement('a');
+    a.download=`cotacao_${nome}.png`;
+    a.href=canvas.toDataURL('image/png');
+    a.click();
+  });
+</script>
+</body>
+</html>
