@@ -31,6 +31,11 @@
 
 ## 🗓️ Linha do tempo (mais recente primeiro)
 
+### 2026-07-04
+- 🎯 **DECISÃO ESTRATÉGICA DO VITOR: campanha principal (vistos) PAUSADA POR ELE, de propósito.** Motivo: já tem **4 clientes certos de vistos (~€3.000)** no pipeline — capacidade de atendimento cheia. Foco de mídia agora = **PASSAGENS** (ciclo de venda mais rápido). Quando terminar os vistos atuais, volta o marketing de vistos. ⚠️ NÃO "corrigir"/reativar a campanha principal sem ordem dele.
+- 📄 **2 contratos de Intermediação de Serviços de Turismo (passagens) gerados** (PDFs em `Contratos_Clientes\`, FORA do repo — LGPD): estrutura aprovada na conversa c/ Gemini + cláusula de emissão antecipada sem passaporte + inclusos da oferta (reserva de retorno, seguro viagem, guia turístico, suporte) + aceite eletrônico + foro do contratante. Assinatura do Vitor aplicada. **Pendências:** valor de 1 dos contratos em branco (aguarda cotação) e chave PIX (cláusula referencia "informada no envio").
+- ⏸️ **Campanha "Passagens - Mudanca Espanha" continua em criação** (autorizada €5/dia; wizard parado na etapa de tipo/lances — retomar ou concluir manualmente via checklist).
+
 ### 2026-07-02 (parte 3 — inclusos da oferta de passagens)
 - 🎁 **Inclusos padrão definidos pelo Vitor (modelo do card da concorrente Guia&Rota):** ✓ Reserva de retorno · ✓ **Seguro viagem incluso** · ✓ **Guia turístico GRATUITO personalizado do destino** (reaproveita os roteiros PDF que já geramos p/ clientes — ex.: Granada do Marcos — custo zero, percepção de valor alta) · ✓ bagagem conforme tarifa · ✓ suporte até embarque. **Aplicado e NO AR:** landing /passagens (stats bar + passo 03) e banner da home (3 feats: retorno/seguro/guia). Plano atualizado (seção do card de cotação).
 
