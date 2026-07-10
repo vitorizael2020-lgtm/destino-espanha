@@ -33,6 +33,7 @@
 
 ### 2026-07-11
 - 💰 **3 PASSAGENS VENDIDAS — margem total ≈ R$ 7.400:** Marcos (R$5.500, custo R$2.300 → R$3.200) · Daniel (R$4.200,78, custo R$2.100 c/ seguro → R$2.100) · Richard (R$4.200,78, custo R$2.100 c/ seguro → R$2.100). **A estratégia de passagens validada com caixa real na 1ª semana.**
+- ✍️ **Contratos de passagem ASSINADOS via DocuSign (status Completed):** Richard (~05/07) e Daniel (11/07). Fluxo contrato digital → pagamento → emissão funcionando de ponta a ponta.
 - 🤝 **Canal de SEGURO resolvido: cadastro APROVADO no Parceiros Promo (Seguros Promo)** em 08/07. Modelo = afiliação/indicação: a plataforma emite a apólice (MEI não pode ser corretor SUSEP) e a comissão volta pro Vitor. Operação: link salvo por canal (WhatsApp/Site) no painel → emissões para clientes pelo próprio link → comissão + rastreio. Regra Schengen: plano com cobertura médica mínima de €30.000. Emissão do seguro do Daniel em andamento.
 
 ### 2026-07-10
