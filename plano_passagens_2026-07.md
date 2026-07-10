@@ -5,6 +5,9 @@
 
 ---
 
+## 0. ⚡ ESTRATÉGIA 2.0 (10/07/2026) — Passagens viram o FOCO
+> Decisão do Vitor: passagens = negócio principal (ciclo rápido, margem ~R$1.8–2.6k/venda, 2 vendas já fechadas); vistos = backend premium (mantidos, 4 no pipeline). Infra BR: MEI regularizado → CNAE 7911-2/00 → Cadastur → acesso a consolidadoras (margem sobe). **Trava a resolver antes de escalar: teto do MEI (R$81k/ano ≈ 19 vendas se o bruto transitar na PJ)** — modelo de faturamento é decisão do contador (comissão vs. bruto vs. Driveconnect PT). Funil duplo: passagem = porta de entrada rápida → visto = upsell de LTV alto; e todo cliente de visto recebe oferta de passagem. Janela de arbitragem fecha com o tempo → volume agora + base própria (WhatsApp) + marca.
+
 ## 1. A tese (o que descobri na pesquisa)
 
 **Não vamos brigar com Decolar/123milhas/MaxMilhas por "passagem barata"** — eles têm escala infinita, margem de centavos e dominam esse leilão. **Vamos ser donos de um nicho que NINGUÉM atende: a "passagem de MUDANÇA".**
