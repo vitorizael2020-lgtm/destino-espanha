@@ -13,7 +13,8 @@
 - **Tag global Google Ads:** `AW-18239034284`
 - **Conversão principal:** clique no WhatsApp (ação "Enviar formulário de lead", origem Site)
 - **Site:** https://destinoespanhaassessoria.com (deploy via Netlify)
-- **WhatsApp:** +34 624 15 98 70
+- **WhatsApp público atual:** +34 642 87 41 97 (Vitor)
+- **Regra do funil:** todos os leads chegam diretamente ao Vitor enquanto o roteiro de atendimento e qualificação é validado. O número +34 624 15 98 70, usado pela sogra no atendimento inicial, fica fora da captação pública até nova autorização do CEO.
 - **Bônus Google:** gastar € 400 até **13/08/2026** para ganhar € 400 de crédito.
 
 ---

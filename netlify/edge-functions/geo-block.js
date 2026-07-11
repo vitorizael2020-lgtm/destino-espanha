@@ -51,7 +51,7 @@ const BOTS_PERMITIDOS = [
 //    a cada acesso (a edge function não guarda estado, então o sorteio aleatório
 //    é o que melhor equilibra o volume sem precisar de banco de dados).
 const ATENDENTES_WHATSAPP = [
-  "34624159870", // Vitor
+  "34642874197", // Vitor — atendimento direto enquanto o funil é validado
   // "34XXXXXXXXX", // Atendente 2 — descomente e troque p/ entrar no rodízio
 ];
 

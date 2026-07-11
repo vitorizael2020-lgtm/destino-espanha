@@ -1034,7 +1034,7 @@ async function initServicos(userData) {
     // --- Render avulso cards ---
     const avulsosGrid = document.getElementById('avulsos-grid');
     avulsosGrid.innerHTML = avulsos.map(svc => {
-        const waLink = `https://wa.me/34624159870?text=${encodeURIComponent(`Olá! Sou cliente e gostaria de contratar o serviço de ${svc.wa}.`)}`;
+        const waLink = `https://wa.me/34642874197?text=${encodeURIComponent(`Olá! Sou cliente e gostaria de contratar o serviço de ${svc.wa}.`)}`;
         return `
             <div class="svc-avulso-card">
                 <div class="svc-avulso-icon">${svc.icon}</div>
