@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /cliente/
+Disallow: /acompanhar/
 
 Sitemap: https://destinoespanhaassessoria.com/sitemap.xml
