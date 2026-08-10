@@ -177,6 +177,12 @@ type TrackingRecord = {
   dueShort: string;
 };
 
+type TrackingConfig = {
+  password: string;
+  sessionSecret: string;
+  record: TrackingRecord;
+};
+
 function escapeHtml(value: string): string {
   return value.replace(/[&<>"']/g, (character) => ({
     "&": "&amp;",
@@ -187,12 +193,14 @@ function escapeHtml(value: string): string {
   })[character] ?? character);
 }
 
-function trackingRecord(): TrackingRecord | null {
-  const raw = Netlify.env.get("TRACKING_V4_CLIENT_DATA");
+function trackingConfig(): TrackingConfig | null {
+  const raw = Netlify.env.get("TRACKING_A3796_CONFIG");
   if (!raw) return null;
 
   try {
-    const record = JSON.parse(raw) as Partial<TrackingRecord>;
+    const decoded = Buffer.from(raw, "base64").toString("utf8");
+    const config = JSON.parse(decoded) as Partial<TrackingConfig>;
+    const record = config.record as Partial<TrackingRecord> | undefined;
     const requiredFields: Array<keyof TrackingRecord> = [
       "title", "recipient", "content", "origin", "destination",
       "destinationShort", "reference", "sentIso", "sentLong",
@@ -200,11 +208,20 @@ function trackingRecord(): TrackingRecord | null {
       "dueShort",
     ];
 
-    if (requiredFields.some((field) => typeof record[field] !== "string" || !record[field])) {
+    if (
+      typeof config.password !== "string" || !config.password ||
+      typeof config.sessionSecret !== "string" || !config.sessionSecret ||
+      !record ||
+      requiredFields.some((field) => typeof record[field] !== "string" || !record[field])
+    ) {
       return null;
     }
 
-    return record as TrackingRecord;
+    return {
+      password: config.password,
+      sessionSecret: config.sessionSecret,
+      record: record as TrackingRecord,
+    };
   } catch (error) {
     console.error("Configuração do acompanhamento inválida.", error);
     return null;
@@ -241,13 +258,13 @@ async function trackingPage(record: TrackingRecord): Promise<string> {
 }
 
 export default async (request: Request) => {
-  const configuredPassword = Netlify.env.get("TRACKING_V4_PASSWORD");
-  const sessionSecret = Netlify.env.get("TRACKING_V4_SESSION_SECRET");
-  const record = trackingRecord();
+  const config = trackingConfig();
 
-  if (!configuredPassword || !sessionSecret || !record) {
+  if (!config) {
     return htmlResponse("<h1>Acompanhamento temporariamente indisponível</h1>", 503);
   }
+
+  const { password: configuredPassword, sessionSecret, record } = config;
 
   if (await validSession(request, sessionSecret)) {
     try {
