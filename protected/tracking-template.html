@@ -474,7 +474,7 @@
 
   <main data-sent-date="{{SENT_ISO}}" data-due-date="{{DUE_ISO}}">
     <section class="hero-card" aria-labelledby="tracking-title">
-      <div class="status-pill" id="status-pill">Em trânsito</div>
+      <div class="status-pill">{{STATUS_TEXT}}</div>
       <h1 id="tracking-title">{{TITLE}}</h1>
       <p class="intro">Acompanhe aqui as informações do envio internacional preparado pela Destino Espanha Assessoria.</p>
       <div class="updated-at">Última atualização: {{UPDATED_LONG}}</div>
@@ -497,10 +497,17 @@
           <small>Previsão de chegada</small>
           <strong>Até {{DUE_LONG}}</strong>
         </div>
-        <div class="day-count" id="day-count">3 de 18 dias decorridos</div>
+        <div class="day-count">{{DAY_COUNT}}</div>
       </div>
       <div class="progress-track" aria-label="Progresso estimado do prazo">
-        <div class="progress-bar" id="progress-bar"></div>
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="{{PROGRESS_PERCENTAGE}}"
+          style="width: {{PROGRESS_PERCENTAGE}}%"
+        ></div>
       </div>
     </section>
 
@@ -590,24 +597,5 @@
     </footer>
   </main>
 
-  <script>
-    (() => {
-      const page = document.querySelector('main');
-      const sentAt = new Date(`${page.dataset.sentDate}T00:00:00Z`);
-      const dueAt = new Date(`${page.dataset.dueDate}T23:59:59Z`);
-      const now = new Date();
-      const totalDays = Math.max(1, Math.round((dueAt - sentAt) / 86400000));
-      const elapsedDays = Math.max(0, Math.min(totalDays, Math.floor((now - sentAt) / 86400000)));
-      const percentage = Math.max(2, Math.round((elapsedDays / totalDays) * 100));
-
-      document.getElementById('progress-bar').style.width = `${percentage}%`;
-      document.getElementById('day-count').textContent = `${elapsedDays} de ${totalDays} dias decorridos`;
-
-      if (now > dueAt) {
-        document.getElementById('status-pill').textContent = 'Prazo em verificação';
-        document.getElementById('day-count').textContent = 'Confirme a entrega com nossa equipe';
-      }
-    })();
-  </script>
 </body>
 </html>

@@ -2,8 +2,9 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 const COOKIE_NAME = "de_tracking_session";
-const COOKIE_PATH = "/acompanhar/a3796d37a845fdf9";
+const COOKIE_PATH = "/acompanhar/3903444641a3371ce99f2b56";
 const SESSION_SECONDS = 12 * 60 * 60;
+const DISPLAY_TIME_ZONE = "Europe/Madrid";
 
 function encodeBase64Url(bytes: Uint8Array): string {
   return Buffer.from(bytes).toString("base64url");
@@ -193,6 +194,43 @@ function escapeHtml(value: string): string {
   })[character] ?? character);
 }
 
+function currentDateIso(timeZone = DISPLAY_TIME_ZONE): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function calendarDaysBetween(startIso: string, endIso: string): number {
+  const start = Date.parse(`${startIso}T00:00:00Z`);
+  const end = Date.parse(`${endIso}T00:00:00Z`);
+
+  return Math.floor((end - start) / 86_400_000);
+}
+
+function trackingProgress(record: TrackingRecord) {
+  const totalDays = Math.max(1, calendarDaysBetween(record.sentIso, record.dueIso));
+  const elapsedDays = Math.max(
+    0,
+    Math.min(totalDays, calendarDaysBetween(record.sentIso, currentDateIso())),
+  );
+  const percentage = Math.max(2, Math.round((elapsedDays / totalDays) * 100));
+  const overdue = calendarDaysBetween(record.dueIso, currentDateIso()) > 0;
+
+  return {
+    statusText: overdue ? "Prazo em verificação" : "Em trânsito",
+    dayCount: overdue
+      ? "Confirme a entrega com nossa equipe"
+      : `${elapsedDays} de ${totalDays} dias decorridos`,
+    percentage,
+  };
+}
+
 function trackingConfig(): TrackingConfig | null {
   const raw = Netlify.env.get("TRACKING_A3796_CONFIG");
   if (!raw) return null;
@@ -232,6 +270,7 @@ async function trackingPage(record: TrackingRecord): Promise<string> {
   const filePath = join(process.cwd(), "protected", "tracking-template.html");
   const template = await readFile(filePath, "utf8");
   const whatsappMessage = `Olá! Gostaria de uma atualização sobre o envio ${record.reference}.`;
+  const progress = trackingProgress(record);
   const replacements: Record<string, string> = {
     TITLE: record.title,
     RECIPIENT: record.recipient,
@@ -248,6 +287,9 @@ async function trackingPage(record: TrackingRecord): Promise<string> {
     DUE_ISO: record.dueIso,
     DUE_LONG: record.dueLong,
     DUE_SHORT: record.dueShort,
+    STATUS_TEXT: progress.statusText,
+    DAY_COUNT: progress.dayCount,
+    PROGRESS_PERCENTAGE: String(progress.percentage),
     WHATSAPP_HREF: `https://wa.me/34642874197?text=${encodeURIComponent(whatsappMessage)}`,
   };
 
@@ -309,7 +351,7 @@ export default async (request: Request) => {
 
 export const config = {
   path: [
-    "/acompanhar/a3796d37a845fdf9",
-    "/acompanhar/a3796d37a845fdf9/",
+    "/acompanhar/3903444641a3371ce99f2b56",
+    "/acompanhar/3903444641a3371ce99f2b56/",
   ],
 };
