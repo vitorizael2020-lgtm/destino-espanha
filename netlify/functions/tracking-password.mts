@@ -5,6 +5,9 @@ const COOKIE_NAME = "de_tracking_session";
 const COOKIE_PATH = "/acompanhar/3903444641a3371ce99f2b56";
 const SESSION_SECONDS = 12 * 60 * 60;
 const DISPLAY_TIME_ZONE = "Europe/Madrid";
+const LEGACY_TRACKING_URL = "https://6a7a1214343aaaf8fc5b2ae6--destino-espanha-vitor.netlify.app/acompanhar/3903444641a3371ce99f2b56/";
+const TRACKING_SENT_ISO = "2026-08-07";
+const TRACKING_DUE_ISO = "2026-08-25";
 
 function encodeBase64Url(bytes: Uint8Array): string {
   return Buffer.from(bytes).toString("base64url");
@@ -213,14 +216,15 @@ function calendarDaysBetween(startIso: string, endIso: string): number {
   return Math.floor((end - start) / 86_400_000);
 }
 
-function trackingProgress(record: TrackingRecord) {
-  const totalDays = Math.max(1, calendarDaysBetween(record.sentIso, record.dueIso));
+function calculateProgress(sentIso: string, dueIso: string) {
+  const todayIso = currentDateIso();
+  const totalDays = Math.max(1, calendarDaysBetween(sentIso, dueIso));
   const elapsedDays = Math.max(
     0,
-    Math.min(totalDays, calendarDaysBetween(record.sentIso, currentDateIso())),
+    Math.min(totalDays, calendarDaysBetween(sentIso, todayIso)),
   );
   const percentage = Math.max(2, Math.round((elapsedDays / totalDays) * 100));
-  const overdue = calendarDaysBetween(record.dueIso, currentDateIso()) > 0;
+  const overdue = calendarDaysBetween(dueIso, todayIso) > 0;
 
   return {
     statusText: overdue ? "Prazo em verificação" : "Em trânsito",
@@ -231,8 +235,81 @@ function trackingProgress(record: TrackingRecord) {
   };
 }
 
+function trackingProgress(record: TrackingRecord) {
+  return calculateProgress(record.sentIso, record.dueIso);
+}
+
+function updateTrackingProgress(html: string): string {
+  const progress = calculateProgress(TRACKING_SENT_ISO, TRACKING_DUE_ISO);
+
+  return html
+    .replace(
+      /(<div class="status-pill" id="status-pill">)[^<]*(<\/div>)/,
+      `$1${progress.statusText}$2`,
+    )
+    .replace(
+      /(<div class="day-count" id="day-count">)[^<]*(<\/div>)/,
+      `$1${progress.dayCount}$2`,
+    )
+    .replace(
+      '<div class="progress-bar" id="progress-bar"></div>',
+      `<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress.percentage}" style="width: ${progress.percentage}%"></div>`,
+    )
+    .replace(/\s*<script>[\s\S]*?<\/script>\s*<\/body>/, "\n</body>");
+}
+
+async function legacyTrackingResponse(request: Request): Promise<Response> {
+  const requestUrl = new URL(request.url);
+  const upstreamUrl = new URL(LEGACY_TRACKING_URL);
+  upstreamUrl.search = requestUrl.search;
+
+  const forwardedHeaders = new Headers();
+  for (const name of ["accept", "accept-language", "content-type", "cookie", "user-agent"]) {
+    const value = request.headers.get(name);
+    if (value) forwardedHeaders.set(name, value);
+  }
+
+  try {
+    const upstream = await fetch(upstreamUrl, {
+      method: request.method,
+      headers: forwardedHeaders,
+      body: request.method === "GET" || request.method === "HEAD"
+        ? undefined
+        : await request.arrayBuffer(),
+      redirect: "manual",
+    });
+    const headers = new Headers(upstream.headers);
+    for (const name of ["connection", "content-encoding", "content-length", "transfer-encoding"]) {
+      headers.delete(name);
+    }
+    headers.set("cache-control", "private, no-store, max-age=0");
+    headers.set("vary", "Cookie");
+
+    if (request.method === "HEAD") {
+      return new Response(null, { status: upstream.status, headers });
+    }
+
+    const contentType = headers.get("content-type") ?? "";
+    if (contentType.includes("text/html")) {
+      return new Response(updateTrackingProgress(await upstream.text()), {
+        status: upstream.status,
+        headers,
+      });
+    }
+
+    return new Response(await upstream.arrayBuffer(), {
+      status: upstream.status,
+      headers,
+    });
+  } catch (error) {
+    console.error("Não foi possível consultar o acompanhamento protegido.", error);
+    return htmlResponse("<h1>Acompanhamento temporariamente indisponível</h1>", 503);
+  }
+}
+
 function trackingConfig(): TrackingConfig | null {
-  const raw = Netlify.env.get("TRACKING_A3796_CONFIG");
+  const raw = Netlify.env.get("TRACKING_390344_CONFIG")
+    ?? Netlify.env.get("TRACKING_A3796_CONFIG");
   if (!raw) return null;
 
   try {
@@ -303,7 +380,7 @@ export default async (request: Request) => {
   const config = trackingConfig();
 
   if (!config) {
-    return htmlResponse("<h1>Acompanhamento temporariamente indisponível</h1>", 503);
+    return legacyTrackingResponse(request);
   }
 
   const { password: configuredPassword, sessionSecret, record } = config;
