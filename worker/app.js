@@ -4,6 +4,8 @@ const SESSION_SECONDS = 12 * 60 * 60;
 const DISPLAY_TIME_ZONE = "Europe/Madrid";
 const MAX_LOGIN_BODY_BYTES = 1024;
 const MAX_PASSWORD_LENGTH = 256;
+const MIN_PASSWORD_LENGTH = 12;
+const MIN_SESSION_SECRET_BYTES = 32;
 
 const TRACKING_PATHS = new Set([
   "/acompanhar/3903444641a3371ce99f2b56",
@@ -305,9 +307,9 @@ function trackingConfig(env) {
 
     if (
       typeof config.password !== "string"
-      || !config.password
+      || config.password.length < MIN_PASSWORD_LENGTH
       || typeof config.sessionSecret !== "string"
-      || !config.sessionSecret
+      || new TextEncoder().encode(config.sessionSecret).byteLength < MIN_SESSION_SECRET_BYTES
       || !record
       || TRACKING_FIELDS.some((field) => typeof record[field] !== "string" || !record[field])
       || !validIsoDate(record.sentIso)
@@ -481,10 +483,11 @@ async function checkLoginRateLimit(request, env) {
   }
 
   const clientAddress = request.headers.get("cf-connecting-ip")?.trim() || "unknown";
+  const path = new URL(request.url).pathname.toLowerCase();
 
   try {
     const result = await limiter.limit({
-      key: `tracking-login:${clientAddress}`,
+      key: `tracking-login:${clientAddress}:${path}`,
     });
     return { available: true, success: result?.success === true };
   } catch (error) {
