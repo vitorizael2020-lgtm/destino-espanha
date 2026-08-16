@@ -82,6 +82,20 @@ if (violations.length) {
   throw new Error(`Arquivos privados no bundle público: ${violations.join(", ")}`);
 }
 
+const fixedPasswordAssignments = [];
+for (const file of files.filter((path) => path.endsWith(".js"))) {
+  const source = await readFile(join(output, file), "utf8");
+  if (/\btempPassword\s*=\s*["'`]/u.test(source)) {
+    fixedPasswordAssignments.push(file);
+  }
+}
+
+if (fixedPasswordAssignments.length) {
+  throw new Error(
+    `Senha temporária fixa no bundle público: ${fixedPasswordAssignments.join(", ")}`,
+  );
+}
+
 const dynamicPaths = new Set([
   "/whatsapp",
   "/acompanhar/3903444641a3371ce99f2b56",

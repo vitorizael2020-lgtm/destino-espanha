@@ -4,8 +4,12 @@
   // O build copia somente os arquivos públicos para .cloudflare-dist.
   "name": "destino-espanha",
   "compatibility_date": "2026-08-16",
+  "compatibility_flags": ["nodejs_compat"],
   "main": "./worker/index.js",
   "workers_dev": true,
+  "secrets": {
+    "required": ["TRACKING_390344_CONFIG"]
+  },
   "assets": {
     "directory": "./.cloudflare-dist",
     "binding": "ASSETS",

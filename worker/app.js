@@ -92,28 +92,37 @@ async function hmac(value, secret) {
   return bytesToBase64Url(new Uint8Array(signature));
 }
 
-function constantTimeEqual(left, right) {
-  const maxLength = Math.max(left.length, right.length);
-  let difference = left.length ^ right.length;
+function timingSafeEqualBytes(left, right) {
+  if (typeof crypto.subtle.timingSafeEqual === "function") {
+    return crypto.subtle.timingSafeEqual(left, right);
+  }
+
+  // Node.js ainda não expõe timingSafeEqual em SubtleCrypto. Este fallback é
+  // usado somente pelos testes locais e recebe hashes SHA-256 de tamanho fixo.
+  const leftBytes = new Uint8Array(left);
+  const rightBytes = new Uint8Array(right);
+  let difference = leftBytes.length ^ rightBytes.length;
+  const maxLength = Math.max(leftBytes.length, rightBytes.length);
 
   for (let index = 0; index < maxLength; index += 1) {
-    difference |= (left.charCodeAt(index) || 0) ^ (right.charCodeAt(index) || 0);
+    difference |= (leftBytes[index] || 0) ^ (rightBytes[index] || 0);
   }
 
   return difference === 0;
 }
 
-async function validPassword(submitted, configured) {
+async function constantTimeEqual(left, right) {
   const encoder = new TextEncoder();
-  const [submittedHash, configuredHash] = await Promise.all([
-    crypto.subtle.digest("SHA-256", encoder.encode(submitted)),
-    crypto.subtle.digest("SHA-256", encoder.encode(configured)),
+  const [leftHash, rightHash] = await Promise.all([
+    crypto.subtle.digest("SHA-256", encoder.encode(left)),
+    crypto.subtle.digest("SHA-256", encoder.encode(right)),
   ]);
 
-  return constantTimeEqual(
-    bytesToBase64Url(new Uint8Array(submittedHash)),
-    bytesToBase64Url(new Uint8Array(configuredHash)),
-  );
+  return timingSafeEqualBytes(leftHash, rightHash);
+}
+
+async function validPassword(submitted, configured) {
+  return constantTimeEqual(submitted, configured);
 }
 
 async function validSession(request, secret) {
@@ -312,7 +321,10 @@ function trackingConfig(env) {
       record,
     };
   } catch (error) {
-    console.error("Configuração do acompanhamento inválida.", error);
+    console.error(JSON.stringify({
+      message: "Configuração do acompanhamento inválida.",
+      error: error instanceof Error ? error.message : String(error),
+    }));
     return null;
   }
 }
