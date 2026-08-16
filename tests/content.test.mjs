@@ -24,13 +24,21 @@ test("publica identidade empresarial e base de confiança verificável", async (
     assert.match(source, /Cadastur/u);
   }
   assert.match(home, /Empresa formal desde 2021/u);
-  assert.match(home, /não são depoimentos nem promessas de resultado/u);
+  assert.match(home, /Cenários ilustrativos que mostram como a assessoria é organizada/u);
 });
 
 test("não publica antigos argumentos comerciais enganosos", async () => {
   const content = (await Promise.all(marketingFiles.map(read))).join("\n");
   assert.doesNotMatch(content, /30 mil caminhoneiros|€2\.800|70% dos caminhoneiros|Só ida com retorno resolvido|usada por viajantes do mundo todo/u);
   assert.doesNotMatch(content, /<div class="faq-question"/u);
+});
+
+test("não antecipa objeções comerciais sobre aprovação nas páginas públicas", async () => {
+  const content = (await Promise.all(marketingFiles.map(read))).join("\n");
+  assert.doesNotMatch(
+    content,
+    /sem promessa de aprovação|garante que meu visto|garantem visto ou emprego|não garantimos vistos|não há garantia de aprovação|ausência de garantia|sem prometer resultado|promessas? de resultado|sem promessa de emprego|sem vender emprego nem aprovação/iu,
+  );
 });
 
 test("carrega medição opcional somente pelo gerenciador de consentimento", async () => {
