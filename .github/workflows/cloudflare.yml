@@ -19,12 +19,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "24"
           package-manager-cache: false
@@ -35,25 +35,25 @@ jobs:
       - name: Validate public bundle and Worker
         run: npm run check
 
-      - name: Verify deployment secrets
+      - name: Validate Wrangler bundle and configuration
+        env:
+          TRACKING_390344_CONFIG: ci-only-placeholder
+        run: npm run deploy:dry-run
+
+      - name: Verify deployment token
         if: github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          TRACKING_390344_CONFIG: ${{ secrets.TRACKING_390344_CONFIG }}
         run: |
-          if [[ -z "$CLOUDFLARE_API_TOKEN" || -z "$TRACKING_390344_CONFIG" ]]; then
-            echo "::error::Configure CLOUDFLARE_API_TOKEN e TRACKING_390344_CONFIG nos segredos do repositório."
+          if [[ -z "$CLOUDFLARE_API_TOKEN" ]]; then
+            echo "::error::Configure CLOUDFLARE_API_TOKEN nos segredos do repositório."
             exit 1
           fi
 
       - name: Deploy Worker
         if: github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch
-        uses: cloudflare/wrangler-action@v4
+        uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           wranglerVersion: "4.123.0"
           command: deploy
-          secrets: |
-            TRACKING_390344_CONFIG
-        env:
-          TRACKING_390344_CONFIG: ${{ secrets.TRACKING_390344_CONFIG }}
