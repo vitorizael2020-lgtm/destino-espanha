@@ -3,6 +3,7 @@
   // Cloudflare Worker + Static Assets.
   // O build copia somente os arquivos públicos para .cloudflare-dist.
   "name": "destino-espanha",
+  "account_id": "55057a6f624af0b23eefddb19302e757",
   "compatibility_date": "2026-08-16",
   "compatibility_flags": ["nodejs_compat"],
   "main": "./worker/index.js",

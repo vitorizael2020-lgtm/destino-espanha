@@ -47,8 +47,9 @@ git push -u origin minha-alteracao
 Depois de revisar e integrar o pull request, cadastre estes segredos em **Settings > Secrets and variables > Actions** no GitHub:
 
 - `CLOUDFLARE_API_TOKEN`: token com permissão mínima para publicar Workers;
-- `CLOUDFLARE_ACCOUNT_ID`: identificador da conta Cloudflare;
 - `TRACKING_390344_CONFIG`: configuração protegida do acompanhamento.
+
+O Account ID `55057a6f624af0b23eefddb19302e757` está fixado no `wrangler.jsonc`, evitando publicação acidental em outra conta. Ele é um identificador, não uma credencial.
 
 Não envie os valores por chat, issue, pull request ou log. Em seguida, abra **Actions > Cloudflare > Run workflow**. O workflow executa todas as validações e só publica quando iniciado manualmente.
 
