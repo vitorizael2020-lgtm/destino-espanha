@@ -206,7 +206,7 @@ const Auth = {
         }
 
         try {
-            const tempPassword = 'Destino2026!'; // senha padrão fixa para novos clientes (cliente troca no 1º acesso via "Esqueci a senha")
+            const tempPassword = Auth.generateTempPassword();
             
             // Invoke the SECURE postgres function we created
             const { data: newUserId, error } = await supabase.rpc('admin_create_user', {
@@ -353,10 +353,17 @@ const Auth = {
 
     generateTempPassword() {
         const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+        const unbiasedLimit = 256 - (256 % chars.length);
         let password = '';
-        for (let i = 0; i < 10; i++) {
-            password += chars.charAt(Math.floor(Math.random() * chars.length));
+
+        while (password.length < 16) {
+            const randomBytes = crypto.getRandomValues(new Uint8Array(16));
+            for (const byte of randomBytes) {
+                if (byte < unbiasedLimit) password += chars[byte % chars.length];
+                if (password.length === 16) break;
+            }
         }
+
         return password;
     },
 

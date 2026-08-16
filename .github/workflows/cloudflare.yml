@@ -1,0 +1,101 @@
+name: Cloudflare
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate-and-deploy:
+    name: Validate and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate public bundle and Worker
+        run: npm run check
+
+      - name: Validate Wrangler bundle and configuration
+        env:
+          TRACKING_390344_CONFIG: ci-only-placeholder
+        run: npm run deploy:dry-run
+
+      - name: Verify deployment secrets
+        if: github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TRACKING_390344_CONFIG: ${{ secrets.TRACKING_390344_CONFIG }}
+        run: |
+          if [[ -z "$CLOUDFLARE_API_TOKEN" || -z "$TRACKING_390344_CONFIG" ]]; then
+            echo "::error::Configure CLOUDFLARE_API_TOKEN e TRACKING_390344_CONFIG nos segredos do repositório."
+            exit 1
+          fi
+
+      - name: Prepare atomic deployment secrets
+        if: github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch
+        env:
+          TRACKING_390344_CONFIG: ${{ secrets.TRACKING_390344_CONFIG }}
+        run: |
+          umask 077
+          node --input-type=module <<'NODE'
+          import { writeFileSync } from "node:fs";
+
+          const secret = process.env.TRACKING_390344_CONFIG ?? "";
+          if (Buffer.byteLength(secret, "utf8") > 5 * 1024) {
+            throw new Error("TRACKING_390344_CONFIG excede o limite de 5 KB da Cloudflare.");
+          }
+
+          let config;
+          try {
+            config = JSON.parse(Buffer.from(secret, "base64url").toString("utf8"));
+          } catch {
+            throw new Error("TRACKING_390344_CONFIG não é um JSON base64url válido.");
+          }
+
+          if (
+            typeof config.password !== "string"
+            || config.password.length < 12
+            || typeof config.sessionSecret !== "string"
+            || Buffer.byteLength(config.sessionSecret, "utf8") < 32
+          ) {
+            throw new Error("A configuração exige senha com 12+ caracteres e sessionSecret com 32+ bytes.");
+          }
+
+          writeFileSync(
+            ".cloudflare-deploy-secrets.json",
+            JSON.stringify({ TRACKING_390344_CONFIG: secret }),
+            { mode: 0o600 },
+          );
+          NODE
+
+      - name: Deploy Worker
+        if: github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch
+        uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          wranglerVersion: "4.123.0"
+          command: deploy --secrets-file .cloudflare-deploy-secrets.json
+
+      - name: Remove temporary deployment secrets
+        if: always() && github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch
+        run: rm -f -- .cloudflare-deploy-secrets.json

@@ -1,48 +1,125 @@
-# Como Atualizar e Publicar o Site (Deploy)
+# Como Atualizar e Publicar o Site
 
-Sempre que fizermos alterações no site (como mudar textos, imagens ou adicionar tags de rastreamento), precisamos garantir que as alterações sejam **salvas**, **enviadas para o GitHub** (Git Commit & Push) e **publicadas na Netlify** (Deploy).
+O destino da migração é **Cloudflare Workers + Static Assets**. Integrar o pull request, por si só, não altera DNS nem publica o site: o deploy continua sendo manual.
 
-Siga os passos abaixo no terminal do projeto para garantir que tudo atualize corretamente.
+> Estado operacional verificado em 16/08/2026: o domínio e a URL da Netlify retornavam `Site not found`. Por isso, a primeira prioridade é publicar e homologar a URL `workers.dev`; o DNS só deve mudar depois que essa versão estiver aprovada.
 
----
+## Estado da migração
 
-## Passo 1: Salvar e Enviar para o GitHub (Git)
+- [x] Worker, pacote público e testes preparados;
+- [x] validação `wrangler deploy --dry-run` incluída no CI;
+- [x] login protegido por limite de tentativas e de corpo;
+- [ ] credenciais de deploy cadastradas de forma segura;
+- [ ] URL temporária `workers.dev` publicada e homologada;
+- [ ] registros DNS preservados e domínio conectado;
+- [ ] `workers.dev` desativado ou protegido após o domínio entrar;
+- [ ] Netlify removida somente após a validação final e o período de observação.
 
-Para registrar as alterações no histórico e atualizar o repositório online:
+## 1. Instalar e validar
 
 ```bash
-# 1. Adicionar todos os arquivos modificados
+npm ci
+npm run check
+npm run deploy:dry-run
+```
+
+Esses comandos:
+
+1. criam `.cloudflare-dist` somente com os arquivos autorizados;
+2. verificam referências locais e impedem a publicação de código, documentos internos e templates protegidos;
+3. executam os testes do site, WhatsApp e acompanhamento;
+4. fazem o Wrangler montar o Worker e validar a configuração e os Static Assets sem publicar.
+
+## 2. Testar localmente
+
+```bash
+npm run dev
+```
+
+Abra a URL informada pelo Wrangler e confira a página inicial, o login, o portal do cliente, `/whatsapp` e o acompanhamento protegido.
+
+## 3. Salvar no GitHub
+
+Trabalhe em uma branch e abra um pull request antes de alterar a produção:
+
+```bash
+git switch -c minha-alteracao
 git add .
-
-# 2. Criar o commit com uma mensagem descritiva
-git commit -m "feat: atualizacao do site e tags"
-
-# 3. Enviar para o GitHub
-git push origin master
+git commit -m "feat: descreva a alteracao"
+git push -u origin minha-alteracao
 ```
 
----
+## 4. Publicar pelo GitHub Actions
 
-## Passo 2: Publicar na Netlify (Deploy)
+Depois de revisar e integrar o pull request, cadastre em **Settings > Secrets and variables > Actions**:
 
-Como o site às vezes não atualiza automaticamente apenas com o `git push` devido a configurações do servidor, a forma mais segura e garantida de publicar é rodando o comando da Netlify direto do seu terminal local:
+- `CLOUDFLARE_API_TOKEN`: token com permissão mínima para publicar Workers;
+- `TRACKING_390344_CONFIG`: configuração protegida do acompanhamento.
+
+O Account ID `55057a6f624af0b23eefddb19302e757` está fixado no `wrangler.jsonc`. Ele é um identificador, não uma credencial.
+
+Não envie os valores por chat, issue, pull request ou log. Abra **Actions > Cloudflare > Run workflow** somente depois de cadastrar os dois segredos.
+
+O workflow:
+
+1. executa testes e o dry-run antes de receber credenciais;
+2. valida tamanho e requisitos mínimos da configuração sem imprimi-la;
+3. cria um arquivo temporário com permissão restrita;
+4. executa `wrangler deploy --secrets-file`, enviando código e secret na mesma versão;
+5. apaga o arquivo temporário mesmo se o deploy falhar.
+
+Isso evita o estado intermediário de código antigo com secret novo. Os pull requests não recebem segredos e nunca publicam.
+
+Em deploys posteriores, o Wrangler preserva os secrets existentes. Para um primeiro deploy local, use um arquivo JSON ou `.env` temporário fora do repositório:
 
 ```bash
-# Publicar a versão atual da pasta diretamente em produção
-npx netlify deploy --prod --dir=.
+npx wrangler deploy --secrets-file /caminho/segredos-producao.json
 ```
 
-### O que este comando faz?
-1. Ele faz o upload dos arquivos modificados diretamente para os servidores da Netlify.
-2. Limpa o cache antigo do site.
-3. Deixa a nova versão online imediatamente (em menos de 10 segundos).
+Apague esse arquivo imediatamente depois e nunca o adicione ao Git.
 
----
+## Configuração protegida
 
-## Resumo de Comandos Rápidos (Copiar e Colar)
+O Worker exige `TRACKING_390344_CONFIG`. O valor deve:
 
-Se quiser rodar tudo de uma vez só para salvar e publicar, copie e cole esta linha única no seu terminal:
+- ser um JSON codificado integralmente em base64url;
+- ter no máximo 5 KB;
+- conter uma senha com pelo menos 12 caracteres;
+- conter um `sessionSecret` aleatório com pelo menos 32 bytes.
+
+Copie o valor integralmente, sem converter, reformatar ou extrair campos. A confirmação deve verificar apenas formato, tamanho e presença, nunca imprimir o conteúdo.
+
+Se o secret estiver ausente ou inválido, a rota de acompanhamento falha fechada e não revela dados.
+
+## Homologação em `workers.dev`
+
+Antes de conectar o domínio, teste na URL temporária:
+
+- raiz, páginas institucionais, imagens, CSS, JavaScript e URLs `*.html`;
+- `www`, HTTPS e redirecionamentos esperados;
+- login Supabase, áreas de administrador e cliente e redefinição de senha;
+- formulário/entrega de e-mail;
+- `/whatsapp` e `/WHATSAPP/`;
+- acompanhamento: login correto, senha errada, expiração da sessão e limite de tentativas.
+
+Registre o resultado e não avance com falhas críticas.
+
+## DNS, versões e reversão
+
+Antes de alterar nameservers ou registros web, exporte e confira todos os registros atuais, principalmente **MX, SPF, DKIM e DMARC**. A migração da hospedagem não deve interromper o e-mail.
+
+Antes do cutover, liste as versões e guarde o ID estável:
 
 ```bash
-git add .; git commit -m "update: deploy automatico"; git push origin master; npx netlify deploy --prod --dir=.
+npx wrangler versions list
 ```
+
+Depois de conectar o domínio, repita a homologação no domínio raiz e em `www`. Se o Worker falhar, reverta imediatamente para a versão estável:
+
+```bash
+npx wrangler rollback <VERSION_ID_ESTAVEL>
+```
+
+Se a falha for de DNS ou domínio, restaure o apontamento web anterior enquanto corrige a Cloudflare. Não altere os registros de e-mail durante essa reversão.
+
+Depois que o domínio estiver estável, defina `workers_dev` como `false` e publique novamente, a menos que a URL temporária tenha sido deliberadamente protegida. Mantenha os arquivos da Netlify como referência recuperável até concluir o período de observação.
