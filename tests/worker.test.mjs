@@ -43,15 +43,23 @@ function encodeConfig(config) {
   return Buffer.from(JSON.stringify(config), "utf8").toString("base64");
 }
 
-function environment(config = {}) {
+const allowLoginAttempt = {
+  async limit() {
+    return { success: true };
+  },
+};
+
+function environment(config = {}, bindings = {}) {
   return {
     ASSETS: assets,
+    LOGIN_RATE_LIMITER: allowLoginAttempt,
     TRACKING_390344_CONFIG: encodeConfig({
-      password: "senha-certa",
-      sessionSecret: "test-secret",
+      password: "senha-certa-e-forte",
+      sessionSecret: "test-session-secret-at-least-32-bytes",
       record,
       ...config,
     }),
+    ...bindings,
   };
 }
 
@@ -75,7 +83,7 @@ async function authenticatedCookie(worker, env = environment()) {
     {
       method: "POST",
       headers: { "content-type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ password: "senha-certa" }),
+      body: new URLSearchParams({ password: "senha-certa-e-forte" }),
     },
   ), env);
 
@@ -204,6 +212,76 @@ test("recusa senha errada e cria cookie seguro com a senha correta", async () =>
   assert.doesNotMatch(body, /\{\{[A-Z_]+\}\}/u);
 });
 
+test("limita formato, tamanho e frequência das tentativas de login", async () => {
+  const url = "https://example.com/acompanhar/3903444641a3371ce99f2b56";
+
+  const unsupported = await app().fetch(new Request(url, {
+    method: "POST",
+    headers: { "content-type": "text/plain" },
+    body: "password=senha-certa-e-forte",
+  }), environment());
+  assert.equal(unsupported.status, 415);
+
+  const oversized = await app().fetch(new Request(url, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: `password=${"x".repeat(1_100)}`,
+  }), environment());
+  assert.equal(oversized.status, 413);
+
+  const passwordTooLong = await app().fetch(new Request(url, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ password: "x".repeat(257) }),
+  }), environment());
+  assert.equal(passwordTooLong.status, 400);
+
+  let receivedKey = "";
+  const limitedEnv = environment({}, {
+    LOGIN_RATE_LIMITER: {
+      async limit({ key }) {
+        receivedKey = key;
+        return { success: false };
+      },
+    },
+  });
+  const limited = await app().fetch(new Request(url, {
+    method: "POST",
+    headers: {
+      "cf-connecting-ip": "203.0.113.10",
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({ password: "errada" }),
+  }), limitedEnv);
+
+  assert.equal(limited.status, 429);
+  assert.equal(limited.headers.get("retry-after"), "60");
+  assert.equal(
+    receivedKey,
+    "tracking-login:203.0.113.10:/acompanhar/3903444641a3371ce99f2b56",
+  );
+});
+
+test("falha fechado sem rate limit e rejeita POST entre sites", async () => {
+  const url = "https://example.com/acompanhar/3903444641a3371ce99f2b56";
+  const missingLimiter = await app().fetch(new Request(url, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ password: "senha-certa-e-forte" }),
+  }), environment({}, { LOGIN_RATE_LIMITER: undefined }));
+  assert.equal(missingLimiter.status, 503);
+
+  const crossSite = await app().fetch(new Request(url, {
+    method: "POST",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "sec-fetch-site": "cross-site",
+    },
+    body: new URLSearchParams({ password: "senha-certa-e-forte" }),
+  }), environment());
+  assert.equal(crossSite.status, 403);
+});
+
 test("escapa dados do acompanhamento antes de montar o HTML", async () => {
   const unsafeRecord = {
     ...record,
@@ -231,6 +309,16 @@ test("falha fechado quando o segredo está ausente ou inválido", async () => {
     record: { ...record, dueIso: "2026-02-30" },
   }));
   assert.equal(invalid.status, 503);
+
+  const weakPassword = await app().fetch(new Request(url), environment({
+    password: "curta",
+  }));
+  assert.equal(weakPassword.status, 503);
+
+  const weakSessionSecret = await app().fetch(new Request(url), environment({
+    sessionSecret: "segredo-curto",
+  }));
+  assert.equal(weakSessionSecret.status, 503);
 });
 
 test("bloqueia métodos não permitidos mesmo com sessão válida", async () => {
