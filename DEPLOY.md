@@ -53,19 +53,19 @@ git push -u origin minha-alteracao
 
 Depois de revisar e integrar o pull request, cadastre em **Settings > Secrets and variables > Actions**:
 
-- `CLOUDFLARE_API_TOKEN`: token com permissão mínima para publicar Workers;
-- `TRACKING_390344_CONFIG`: configuração protegida do acompanhamento.
+- `CLOUDFLARE_API_TOKEN`: obrigatório; token com permissão mínima para publicar Workers;
+- `TRACKING_390344_CONFIG`: configuração protegida do acompanhamento. Pode ficar ausente apenas no primeiro deploy de recuperação; nesse caso, somente a rota de acompanhamento responde `503`.
 
 O Account ID `55057a6f624af0b23eefddb19302e757` está fixado no `wrangler.jsonc`. Ele é um identificador, não uma credencial.
 
-Não envie os valores por chat, issue, pull request ou log. Abra **Actions > Cloudflare > Run workflow** somente depois de cadastrar os dois segredos.
+Não envie os valores por chat, issue, pull request ou log. Abra **Actions > Cloudflare > Run workflow** depois de cadastrar o token. Cadastre também a configuração antes de homologar a rota de acompanhamento.
 
 O workflow:
 
 1. executa testes e o dry-run antes de receber credenciais;
-2. valida tamanho e requisitos mínimos da configuração sem imprimi-la;
-3. cria um arquivo temporário com permissão restrita;
-4. executa `wrangler deploy --secrets-file`, enviando código e secret na mesma versão;
+2. quando a configuração protegida existe, valida tamanho e requisitos mínimos sem imprimi-la;
+3. cria um arquivo temporário com permissão restrita somente quando necessário;
+4. executa `wrangler deploy --secrets-file`, enviando código e secret na mesma versão, ou `wrangler deploy` quando o acompanhamento ainda não foi configurado;
 5. apaga o arquivo temporário mesmo se o deploy falhar.
 
 Isso evita o estado intermediário de código antigo com secret novo. Os pull requests não recebem segredos e nunca publicam.
@@ -80,7 +80,7 @@ Apague esse arquivo imediatamente depois e nunca o adicione ao Git.
 
 ## Configuração protegida
 
-O Worker exige `TRACKING_390344_CONFIG`. O valor deve:
+O acompanhamento exige `TRACKING_390344_CONFIG`. Sem ele, o restante do site funciona e essa rota falha de forma fechada com `503`. Quando configurado, o valor deve:
 
 - ser um JSON codificado integralmente em base64url;
 - ter no máximo 5 KB;
