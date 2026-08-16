@@ -1,48 +1,61 @@
-# Como Atualizar e Publicar o Site (Deploy)
+# Como Atualizar e Publicar o Site
 
-Sempre que fizermos alterações no site (como mudar textos, imagens ou adicionar tags de rastreamento), precisamos garantir que as alterações sejam **salvas**, **enviadas para o GitHub** (Git Commit & Push) e **publicadas na Netlify** (Deploy).
+O site é publicado no **Cloudflare Workers + Static Assets**. O domínio continua sendo `destinoespanhaassessoria.com`; somente a infraestrutura de hospedagem mudou.
 
-Siga os passos abaixo no terminal do projeto para garantir que tudo atualize corretamente.
-
----
-
-## Passo 1: Salvar e Enviar para o GitHub (Git)
-
-Para registrar as alterações no histórico e atualizar o repositório online:
+## 1. Instalar e validar
 
 ```bash
-# 1. Adicionar todos os arquivos modificados
+npm ci
+npm run check
+```
+
+O comando `check`:
+
+1. cria `.cloudflare-dist` somente com os arquivos autorizados;
+2. verifica referências locais e impede a publicação de código, documentos internos e templates protegidos;
+3. testa o site estático, o redirecionamento do WhatsApp e o acompanhamento com senha.
+
+## 2. Testar localmente
+
+```bash
+npm run dev
+```
+
+Abra a URL informada pelo Wrangler e confira a página inicial, o login, o portal do cliente, `/whatsapp` e o acompanhamento protegido.
+
+## 3. Salvar no GitHub
+
+Trabalhe em uma branch e abra um pull request antes de alterar a produção:
+
+```bash
+git switch -c minha-alteracao
 git add .
-
-# 2. Criar o commit com uma mensagem descritiva
-git commit -m "feat: atualizacao do site e tags"
-
-# 3. Enviar para o GitHub
-git push origin master
+git commit -m "feat: descreva a alteracao"
+git push -u origin minha-alteracao
 ```
 
----
+## 4. Publicar
 
-## Passo 2: Publicar na Netlify (Deploy)
-
-Como o site às vezes não atualiza automaticamente apenas com o `git push` devido a configurações do servidor, a forma mais segura e garantida de publicar é rodando o comando da Netlify direto do seu terminal local:
+Depois da revisão:
 
 ```bash
-# Publicar a versão atual da pasta diretamente em produção
-npx netlify deploy --prod --dir=.
+npm run deploy
 ```
 
-### O que este comando faz?
-1. Ele faz o upload dos arquivos modificados diretamente para os servidores da Netlify.
-2. Limpa o cache antigo do site.
-3. Deixa a nova versão online imediatamente (em menos de 10 segundos).
+O Wrangler executa novamente todas as validações antes do upload.
 
----
+## Configuração protegida
 
-## Resumo de Comandos Rápidos (Copiar e Colar)
-
-Se quiser rodar tudo de uma vez só para salvar e publicar, copie e cole esta linha única no seu terminal:
+O Worker precisa do secret `TRACKING_390344_CONFIG` para gerar o acompanhamento. Configure-o na conta da Cloudflare e nunca grave o valor em arquivos, commits, logs ou variáveis públicas:
 
 ```bash
-git add .; git commit -m "update: deploy automatico"; git push origin master; npx netlify deploy --prod --dir=.
+npx wrangler secret put TRACKING_390344_CONFIG
 ```
+
+Se o secret estiver ausente ou inválido, a rota de acompanhamento retorna indisponível sem revelar dados.
+
+## Troca de DNS
+
+Antes de trocar os nameservers, copie e confira todos os registros atuais, principalmente **MX, SPF, DKIM e DMARC**. A migração da hospedagem não deve interromper o e-mail. Primeiro valide a versão temporária `workers.dev`; conecte o domínio somente depois da homologação.
+
+Os arquivos antigos da Netlify permanecem no repositório temporariamente como referência de reversão e não entram no pacote público da Cloudflare.

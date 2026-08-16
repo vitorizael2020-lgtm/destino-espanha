@@ -4,6 +4,11 @@ Thumbs.db
 node_modules/
 .env
 .env.local
+.dev.vars
+.dev.vars.*
+.cloudflare-dist/
+.wrangler-dist/
+.wrangler/
 
 # Backups e scripts de automação local
 google-apps-script-tasks.js
