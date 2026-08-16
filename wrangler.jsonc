@@ -8,9 +8,6 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "./worker/index.js",
   "workers_dev": true,
-  "secrets": {
-    "required": ["TRACKING_390344_CONFIG"]
-  },
   "ratelimits": [
     {
       "name": "LOGIN_RATE_LIMITER",
