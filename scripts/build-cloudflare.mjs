@@ -9,16 +9,23 @@ const output = join(root, ".cloudflare-dist");
 // Documentos .md, código de infraestrutura, templates protegidos e backups
 // permanecem fora do bundle publicado.
 const publicEntries = [
+  "_headers",
+  "atendimento.html",
+  "aviso-legal.html",
+  "cookies.html",
   "index.html",
   "login.html",
   "motorista.html",
   "obrigado-diagnostico.html",
   "passagens.html",
+  "privacidade.html",
   "robots.txt",
   "sitemap.xml",
   "style.css",
   "script.js",
+  "termos.html",
   "logo.jpg",
+  "hero-bg.png",
   "admin",
   "cliente",
   "css",

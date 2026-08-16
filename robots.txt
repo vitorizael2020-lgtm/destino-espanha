@@ -3,5 +3,7 @@ Allow: /
 Disallow: /admin/
 Disallow: /cliente/
 Disallow: /acompanhar/
+Disallow: /login
+Disallow: /obrigado-diagnostico
 
 Sitemap: https://destinoespanhaassessoria.com/sitemap.xml
