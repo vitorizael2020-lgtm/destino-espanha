@@ -2,6 +2,8 @@ const COOKIE_NAME = "de_tracking_session";
 const COOKIE_PATH = "/acompanhar/3903444641a3371ce99f2b56";
 const SESSION_SECONDS = 12 * 60 * 60;
 const DISPLAY_TIME_ZONE = "Europe/Madrid";
+const MAX_LOGIN_BODY_BYTES = 1024;
+const MAX_PASSWORD_LENGTH = 256;
 
 const TRACKING_PATHS = new Set([
   "/acompanhar/3903444641a3371ce99f2b56",
@@ -425,6 +427,75 @@ async function handleWhatsApp(request, random) {
   });
 }
 
+async function readBoundedLoginBody(request) {
+  const contentLength = request.headers.get("content-length");
+  if (contentLength !== null) {
+    const parsedLength = Number(contentLength);
+    if (!Number.isSafeInteger(parsedLength) || parsedLength < 0) {
+      return { error: "invalid" };
+    }
+    if (parsedLength > MAX_LOGIN_BODY_BYTES) {
+      return { error: "too_large" };
+    }
+  }
+
+  if (!request.body) return { value: "" };
+
+  const reader = request.body.getReader();
+  const decoder = new TextDecoder();
+  let size = 0;
+  let body = "";
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      size += value.byteLength;
+      if (size > MAX_LOGIN_BODY_BYTES) {
+        try {
+          await reader.cancel("login body too large");
+        } catch {
+          // O limite já foi aplicado; a falha ao cancelar não muda a resposta.
+        }
+        return { error: "too_large" };
+      }
+
+      body += decoder.decode(value, { stream: true });
+    }
+
+    body += decoder.decode();
+    return { value: body };
+  } catch {
+    return { error: "invalid" };
+  }
+}
+
+async function checkLoginRateLimit(request, env) {
+  const limiter = env.LOGIN_RATE_LIMITER;
+  if (!limiter || typeof limiter.limit !== "function") {
+    console.error(JSON.stringify({
+      message: "Binding de rate limit do acompanhamento indisponível.",
+    }));
+    return { available: false, success: false };
+  }
+
+  const clientAddress = request.headers.get("cf-connecting-ip")?.trim() || "unknown";
+
+  try {
+    const result = await limiter.limit({
+      key: `tracking-login:${clientAddress}`,
+    });
+    return { available: true, success: result?.success === true };
+  } catch (error) {
+    console.error(JSON.stringify({
+      message: "Falha ao consultar o rate limit do acompanhamento.",
+      error: error instanceof Error ? error.message : String(error),
+    }));
+    return { available: false, success: false };
+  }
+}
+
 async function handleTracking(request, env, trackingTemplate, date) {
   const config = trackingConfig(env);
   if (!config) {
@@ -455,11 +526,44 @@ async function handleTracking(request, env, trackingTemplate, date) {
   }
 
   if (request.method === "POST") {
-    let submittedPassword = "";
-    try {
-      const form = await request.formData();
-      submittedPassword = String(form.get("password") ?? "");
-    } catch {
+    if (request.headers.get("sec-fetch-site") === "cross-site") {
+      return htmlResponse(loginPage("Solicitação não autorizada."), 403);
+    }
+
+    const rateLimit = await checkLoginRateLimit(request, env);
+    if (!rateLimit.available) {
+      return htmlResponse(
+        loginPage("Acompanhamento temporariamente indisponível. Tente novamente em instantes."),
+        503,
+      );
+    }
+    if (!rateLimit.success) {
+      return htmlResponse(
+        loginPage("Muitas tentativas. Aguarde um minuto e tente novamente."),
+        429,
+        { "retry-after": "60" },
+      );
+    }
+
+    const mediaType = (request.headers.get("content-type") ?? "")
+      .split(";", 1)[0]
+      .trim()
+      .toLowerCase();
+    if (mediaType !== "application/x-www-form-urlencoded") {
+      return htmlResponse(loginPage("Formato de solicitação não aceito."), 415);
+    }
+
+    const parsedBody = await readBoundedLoginBody(request);
+    if (parsedBody.error === "too_large") {
+      return htmlResponse(loginPage("Solicitação muito grande."), 413);
+    }
+    if (parsedBody.error) {
+      return htmlResponse(loginPage("Solicitação inválida. Tente novamente."), 400);
+    }
+
+    const submittedPassword = new URLSearchParams(parsedBody.value)
+      .get("password") ?? "";
+    if (submittedPassword.length > MAX_PASSWORD_LENGTH) {
       return htmlResponse(loginPage("Solicitação inválida. Tente novamente."), 400);
     }
 
