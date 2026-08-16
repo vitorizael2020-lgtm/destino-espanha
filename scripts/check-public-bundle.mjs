@@ -6,13 +6,20 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const output = join(root, ".cloudflare-dist");
 
 const requiredPaths = [
+  "_headers",
+  "atendimento.html",
+  "aviso-legal.html",
+  "cookies.html",
   "index.html",
   "login.html",
   "motorista.html",
   "passagens.html",
+  "privacidade.html",
   "style.css",
   "script.js",
   "logo.jpg",
+  "hero-bg.png",
+  "termos.html",
   "admin/dashboard.html",
   "cliente/painel.html",
   "shared/auth.js",
@@ -143,7 +150,11 @@ for (const file of files.filter((path) => path.endsWith(".html"))) {
       const info = await stat(target);
       if (info.isDirectory()) await access(join(target, "index.html"));
     } catch {
-      missingReferences.push(`${file} -> ${reference}`);
+      try {
+        await access(`${target}.html`);
+      } catch {
+        missingReferences.push(`${file} -> ${reference}`);
+      }
     }
   }
 }
