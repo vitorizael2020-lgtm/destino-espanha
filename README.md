@@ -118,7 +118,20 @@ Para logar nos painéis administrativos e do cliente sem precisar configurar ban
 
 ## 🌐 Deploy em Produção
 
-O projeto é hospedado e deploiado de forma contínua através do **Netlify**. Para enviar novas atualizações de layout ou código, utilize a CLI do Netlify no diretório do projeto:
+A hospedagem oficial é exclusivamente **Cloudflare Workers + Static Assets**. A Netlify foi desativada e o projeto antigo foi excluído em 16/08/2026; não recrie nem publique cópias por lá.
+
+Toda alteração deve passar por pull request e pelas validações do GitHub Actions. Depois do merge em `master`, publique manualmente em **Actions > Cloudflare > Run workflow**. Para validar localmente sem publicar:
+
 ```bash
-npx netlify deploy --prod --dir=.
+npm ci
+npm run check
+npm run deploy:dry-run
 ```
+
+Produção:
+
+- `https://destinoespanhaassessoria.com`
+- `https://www.destinoespanhaassessoria.com`
+- Worker: `destino-espanha`
+
+Consulte `DEPLOY.md` para o procedimento completo, gestão de secrets e reversão de versão.

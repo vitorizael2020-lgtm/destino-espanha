@@ -1,19 +1,20 @@
 # Como Atualizar e Publicar o Site
 
-O destino da migração é **Cloudflare Workers + Static Assets**. Integrar o pull request, por si só, não altera DNS nem publica o site: o deploy continua sendo manual.
+A produção oficial usa exclusivamente **Cloudflare Workers + Static Assets**. Integrar o pull request, por si só, não publica o site: o deploy continua sendo manual.
 
-> Estado operacional verificado em 16/08/2026: o domínio e a URL da Netlify retornavam `Site not found`. Por isso, a primeira prioridade é publicar e homologar a URL `workers.dev`; o DNS só deve mudar depois que essa versão estiver aprovada.
+> Estado operacional verificado em 16/08/2026: Worker publicado, domínio raiz e `www` conectados com HTTPS, e projeto da hospedagem anterior excluído. Não recrie deploys fora da Cloudflare nem restaure os antigos registros web.
 
 ## Estado da migração
 
 - [x] Worker, pacote público e testes preparados;
 - [x] validação `wrangler deploy --dry-run` incluída no CI;
 - [x] login protegido por limite de tentativas e de corpo;
-- [ ] credenciais de deploy cadastradas de forma segura;
-- [ ] URL temporária `workers.dev` publicada e homologada;
-- [ ] registros DNS preservados e domínio conectado;
+- [x] credencial de deploy cadastrada no GitHub Actions;
+- [x] URL temporária `workers.dev` publicada e homologada;
+- [x] registros DNS preservados e domínio raiz/`www` conectados;
 - [ ] `workers.dev` desativado ou protegido após o domínio entrar;
-- [ ] Netlify removida somente após a validação final e o período de observação.
+- [x] hospedagem anterior removida após a validação dos domínios oficiais;
+- [ ] configuração protegida do acompanhamento recriada e homologada.
 
 ## 1. Instalar e validar
 
@@ -91,9 +92,9 @@ Copie o valor integralmente, sem converter, reformatar ou extrair campos. A conf
 
 Se o secret estiver ausente ou inválido, a rota de acompanhamento falha fechada e não revela dados.
 
-## Homologação em `workers.dev`
+## Homologação
 
-Antes de conectar o domínio, teste na URL temporária:
+Antes e depois de cada publicação, teste a URL temporária e os dois domínios oficiais:
 
 - raiz, páginas institucionais, imagens, CSS, JavaScript e URLs `*.html`;
 - `www`, HTTPS e redirecionamentos esperados;
@@ -120,6 +121,6 @@ Depois de conectar o domínio, repita a homologação no domínio raiz e em `www
 npx wrangler rollback <VERSION_ID_ESTAVEL>
 ```
 
-Se a falha for de DNS ou domínio, restaure o apontamento web anterior enquanto corrige a Cloudflare. Não altere os registros de e-mail durante essa reversão.
+Se a falha for de DNS ou domínio, corrija os domínios personalizados e os registros atuais na Cloudflare. A hospedagem anterior foi encerrada e não é uma opção de reversão. Não altere os registros de e-mail durante a correção.
 
-Depois que o domínio estiver estável, defina `workers_dev` como `false` e publique novamente, a menos que a URL temporária tenha sido deliberadamente protegida. Mantenha os arquivos da Netlify como referência recuperável até concluir o período de observação.
+Depois que o domínio estiver estável, defina `workers_dev` como `false` e publique novamente, a menos que a URL temporária tenha sido deliberadamente protegida. O histórico anterior permanece recuperável pelo Git, mas nenhum arquivo operacional da plataforma desativada deve voltar ao branch ativo.
