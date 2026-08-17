@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Experiência cinematográfica interativa da rota Brasil–Madrid com fotografias reais da Espanha.">
+    <title>Brasil → Madrid | Experiência 3D Destino Espanha</title>
+    <link rel="canonical" href="https://destinoespanhaassessoria.com/madrid-3d">
+    <link rel="icon" type="image/jpeg" href="/logo.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://destinoespanhaassessoria.com/madrid-3d">
+    <meta property="og:title" content="Brasil → Madrid | Destino Espanha">
+    <meta property="og:description" content="Uma jornada interativa construída com fotografias reais de Madrid.">
+    <meta property="og:image" content="https://destinoespanhaassessoria.com/visuals/madrid-skyline-real.webp">
+    <link rel="preload" as="image" href="/visuals/madrid-skyline-real.webp" type="image/webp">
+    <link rel="preload" as="image" href="/visuals/earth-blue-marble-real.webp" type="image/webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/madrid-3d.css">
+    <script src="/madrid-3d.js" defer></script>
+</head>
+<body>
+    <main class="experience-shell phase-0" id="madrid-experience">
+        <div class="real-photo-stage" id="real-photo-stage" role="img" aria-label="Panorama real de Madrid durante o pôr do sol">
+            <div class="phase-photo phase-photo-0" id="phase-photo" style="background-image: url('/visuals/madrid-skyline-real.webp');"></div>
+            <div class="photo-depth photo-depth-far" aria-hidden="true"></div>
+            <div class="photo-depth photo-depth-near" aria-hidden="true"></div>
+        </div>
+
+        <div class="photo-puzzle" id="photo-puzzle" aria-hidden="true">
+            <div class="puzzle-grid" id="puzzle-grid"></div>
+            <div class="puzzle-shine"></div>
+        </div>
+
+        <div class="flight-globe" id="flight-globe">
+            <div class="earth-canvas" role="img" aria-label="Globo terrestre real com um avião percorrendo a rota do Brasil a Madrid">
+                <div class="earth-sphere" aria-hidden="true">
+                    <div class="earth-texture"></div>
+                    <div class="earth-shade"></div>
+                </div>
+                <svg class="flight-map" viewBox="0 0 520 520" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="flight-route-gold" x1="0" y1="1" x2="1" y2="0">
+                            <stop offset="0" stop-color="#f7d77f" stop-opacity=".56"></stop>
+                            <stop offset=".54" stop-color="#fff4cb"></stop>
+                            <stop offset="1" stop-color="#dca748"></stop>
+                        </linearGradient>
+                        <filter id="flight-glow" x="-120%" y="-120%" width="340%" height="340%">
+                            <feGaussianBlur stdDeviation="2.8" result="blur"></feGaussianBlur>
+                            <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+                        </filter>
+                    </defs>
+                    <path id="brasil-madrid-flight-path" d="M 152 300 C 146 222 203 158 270 150" fill="none"></path>
+                    <path class="flight-route-shadow" d="M 152 300 C 146 222 203 158 270 150"></path>
+                    <path class="flight-route" d="M 152 300 C 146 222 203 158 270 150"></path>
+                    <path class="flight-route-light" d="M 152 300 C 146 222 203 158 270 150"></path>
+                    <g class="flight-city flight-city-brasil" transform="translate(152 300)">
+                        <circle class="flight-city-pulse" r="16"></circle><circle class="flight-city-ring" r="8"></circle><circle class="flight-city-core" r="3.5"></circle>
+                        <text class="flight-map-label" x="-15" y="30" text-anchor="end">BRASIL</text>
+                    </g>
+                    <g class="flight-city flight-city-madrid" transform="translate(270 150)">
+                        <circle class="flight-city-pulse" r="16"></circle><circle class="flight-city-ring" r="8"></circle><circle class="flight-city-core" r="3.5"></circle>
+                        <text class="flight-map-label" x="15" y="-16">MADRID</text>
+                    </g>
+                    <g class="flight-plane-motion" filter="url(#flight-glow)">
+                        <animateMotion id="flight-animation" dur="4.15s" begin="indefinite" fill="freeze" rotate="auto">
+                            <mpath href="#brasil-madrid-flight-path"></mpath>
+                        </animateMotion>
+                        <circle class="flight-plane-halo" r="16"></circle>
+                        <path class="flight-plane-body" d="M 28 0 C 28 -2.5 24 -4 19 -4 L 7 -4 L -3 -19 L -8 -19 L -4 -4 L -18 -4 L -24 -10 L -28 -10 L -25 0 L -28 10 L -24 10 L -18 4 L -4 4 L -8 19 L -3 19 L 7 4 L 19 4 C 24 4 28 2.5 28 0 Z"></path>
+                        <path class="flight-plane-detail" d="M -21 0 L 22 0"></path>
+                    </g>
+                    <g class="flight-plane-static" transform="translate(211 201) rotate(-52)">
+                        <circle class="flight-plane-halo" r="16"></circle>
+                        <path class="flight-plane-body" d="M 28 0 C 28 -2.5 24 -4 19 -4 L 7 -4 L -3 -19 L -8 -19 L -4 -4 L -18 -4 L -24 -10 L -28 -10 L -25 0 L -28 10 L -24 10 L -18 4 L -4 4 L -8 19 L -3 19 L 7 4 L 19 4 C 24 4 28 2.5 28 0 Z"></path>
+                        <path class="flight-plane-detail" d="M -21 0 L 22 0"></path>
+                    </g>
+                </svg>
+            </div>
+            <div class="flight-legend" aria-hidden="true"><span><i></i> América do Sul</span><b>→</b><span><i></i> Europa</span></div>
+            <a class="earth-credit" href="https://svs.gsfc.nasa.gov/2915/" target="_blank" rel="noreferrer">Terra real: NASA/GSFC ↗</a>
+        </div>
+
+        <div class="assembly-sparks" id="assembly-sparks" aria-hidden="true"></div>
+        <div class="cinema-vignette" aria-hidden="true"></div>
+        <div class="cinema-grain" aria-hidden="true"></div>
+
+        <header class="prototype-nav">
+            <a class="brand" href="/" aria-label="Voltar ao site da Destino Espanha">
+                <span class="brand-mark">DE</span><span>Destino <strong>Espanha</strong></span>
+            </a>
+            <div class="prototype-label"><span></span> Madrid real · experiência 3D</div>
+            <nav aria-label="Navegação da experiência"><a href="/">Site completo</a><button type="button" id="restart-experience">Reiniciar</button></nav>
+        </header>
+
+        <section class="story-copy" aria-live="polite">
+            <p class="story-eyebrow" id="story-eyebrow">Brasil → Madrid</p>
+            <h1 id="story-title">Sua jornada começa antes do embarque.</h1>
+            <p class="story-body" id="story-body">Do Brasil ao horizonte real de Madrid, cada decisão entra em uma rota planejada para você.</p>
+            <div class="story-actions">
+                <a class="primary-cta" href="/whatsapp?text=Ol%C3%A1!%20Vi%20a%20experi%C3%AAncia%20Brasil%E2%80%93Madrid%20e%20quero%20planejar%20minha%20jornada." target="_blank" rel="noreferrer">Planejar minha jornada <span aria-hidden="true">↗</span></a>
+                <button class="pause-button" id="pause-experience" type="button"><span id="pause-icon" aria-hidden="true">Ⅱ</span><span class="pause-copy" id="pause-copy">Pausar</span></button>
+            </div>
+        </section>
+
+        <div class="mad-code" id="mad-code" aria-hidden="true"><span>Destino</span>MAD</div>
+        <aside class="service-stack" id="service-stack" aria-label="Etapas da jornada">
+            <div class="service-glass"><span>01</span><strong>Estratégia</strong></div>
+            <div class="service-glass"><span>02</span><strong>Documentos</strong></div>
+            <div class="service-glass"><span>03</span><strong>Passagens</strong></div>
+            <div class="service-glass"><span>04</span><strong>Chegada</strong></div>
+        </aside>
+
+        <a class="photo-credit" id="photo-credit" href="https://unsplash.com/photos/city-with-high-rise-buildings-under-orange-and-gray-skies-during-sunset-_SWgYuWS9wY" target="_blank" rel="noreferrer">Foto real: Andres Garcia · Unsplash ↗</a>
+
+        <footer class="experience-progress">
+            <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
+            <div class="chapter-controls">
+                <button type="button" id="previous-phase" aria-label="Cena anterior">←</button>
+                <div class="phase-dots" id="phase-dots" aria-label="Cena 1 de 5"></div>
+                <button type="button" id="next-phase" aria-label="Próxima cena">→</button>
+            </div>
+            <p><span class="desktop-hint">Role para dirigir a história</span><span class="mobile-hint">Deslize para dirigir a jornada</span></p>
+        </footer>
+    </main>
+</body>
+</html>

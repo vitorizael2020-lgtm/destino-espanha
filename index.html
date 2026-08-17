@@ -124,7 +124,7 @@
                 <a href="#como-funciona">Como Funciona</a>
                 <a href="#servicos">Pacotes</a>
                 <a href="#guias">Guias</a>
-                <a href="#cases">Perfis</a>
+                <a href="/madrid-3d">Madrid 3D</a>
                 <a href="#faq">Dúvidas</a>
                 <a href="/login" class="client-link">Área do Cliente</a>
             </div>
@@ -151,7 +151,7 @@
         <a href="#como-funciona" class="mobile-link">Como Funciona</a>
         <a href="#servicos" class="mobile-link">Pacotes</a>
         <a href="#guias" class="mobile-link">Guias</a>
-        <a href="#cases" class="mobile-link">Perfis</a>
+        <a href="/madrid-3d" class="mobile-link">Madrid 3D</a>
         <a href="#faq" class="mobile-link">Dúvidas</a>
         <a href="/login" class="mobile-link">Área do Cliente</a>
         <a href="/whatsapp?text=Ol%C3%A1!%20Estava%20no%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20a%20assessoria%20para%20a%20Espanha." class="btn btn-glow mobile-cta" target="_blank">Falar no WhatsApp</a>
@@ -180,28 +180,39 @@
                         Quero uma análise gratuita
                         <span class="btn-arrow" aria-hidden="true">→</span>
                     </a>
-                    <a href="#servicos" class="btn btn-glass btn-large">Explorar soluções</a>
+                    <a href="/madrid-3d" class="btn btn-glass btn-large">Viver Madrid em 3D</a>
                 </div>
                 <p class="hero-note fade-in delay-4">Atendimento online · Brasil → Espanha · Estratégia e documentação personalizada</p>
             </div>
 
-            <figure class="spain-puzzle fade-in delay-2" id="spain-puzzle" aria-labelledby="puzzle-title puzzle-caption">
-                <span class="sr-only" id="puzzle-title">Basílica modernista interativa montada como um quebra-cabeça</span>
-                <div class="puzzle-orbit" aria-hidden="true"></div>
-                <div class="puzzle-scene">
-                    <span class="puzzle-sun" aria-hidden="true"></span>
-                    <div class="puzzle-monument">
-                        <button class="puzzle-piece tower tower-one" type="button" data-label="1. Diagnóstico: entender o seu perfil" aria-label="Diagnóstico"></button>
-                        <button class="puzzle-piece tower tower-two" type="button" data-label="2. Documentos: reunir, conferir e organizar" aria-label="Documentos"></button>
-                        <button class="puzzle-piece tower tower-main" type="button" data-label="3. Estratégia: escolher a rota adequada" aria-label="Estratégia"></button>
-                        <button class="puzzle-piece tower tower-four" type="button" data-label="4. Protocolo: preparar cada etapa administrativa" aria-label="Protocolo"></button>
-                        <button class="puzzle-piece tower tower-five" type="button" data-label="5. Viagem: cotar e emitir com condições claras" aria-label="Viagem"></button>
-                        <button class="puzzle-piece basilica-mid" type="button" data-label="6. Chegada: organizar instalação e trâmites" aria-label="Chegada"></button>
-                        <button class="puzzle-piece basilica-base" type="button" data-label="Um caminho completo, sem atalhos enganosos" aria-label="Caminho completo"></button>
-                    </div>
-                    <div class="puzzle-floor" aria-hidden="true"></div>
+            <figure class="madrid-flight-preview fade-in delay-2" aria-labelledby="flight-preview-title flight-preview-caption">
+                <span class="sr-only" id="flight-preview-title">Rota aérea interativa do Brasil a Madrid sobre uma imagem real da Terra</span>
+                <div class="home-earth-canvas" role="img" aria-label="Avião viajando do Brasil a Madrid sobre o globo terrestre">
+                    <div class="home-earth-sphere" aria-hidden="true"><div class="home-earth-texture"></div><div class="home-earth-shade"></div></div>
+                    <svg class="home-flight-map" viewBox="0 0 520 520" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="home-flight-route-gold" x1="0" y1="1" x2="1" y2="0">
+                                <stop offset="0" stop-color="#f7d77f" stop-opacity=".56"></stop><stop offset=".54" stop-color="#fff4cb"></stop><stop offset="1" stop-color="#dca748"></stop>
+                            </linearGradient>
+                            <filter id="home-flight-glow" x="-120%" y="-120%" width="340%" height="340%"><feGaussianBlur stdDeviation="2.8" result="blur"></feGaussianBlur><feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter>
+                        </defs>
+                        <path id="home-brasil-madrid-path" d="M 152 300 C 146 222 203 158 270 150" fill="none"></path>
+                        <path class="home-flight-route-shadow" d="M 152 300 C 146 222 203 158 270 150"></path>
+                        <path class="home-flight-route" d="M 152 300 C 146 222 203 158 270 150"></path>
+                        <g class="home-flight-city" transform="translate(152 300)"><circle class="home-city-pulse" r="16"></circle><circle class="home-city-ring" r="8"></circle><circle class="home-city-core" r="3.5"></circle><text class="home-map-label" x="-15" y="30" text-anchor="end">BRASIL</text></g>
+                        <g class="home-flight-city" transform="translate(270 150)"><circle class="home-city-pulse" r="16"></circle><circle class="home-city-ring" r="8"></circle><circle class="home-city-core" r="3.5"></circle><text class="home-map-label" x="15" y="-16">MADRID</text></g>
+                        <g class="home-plane-motion" filter="url(#home-flight-glow)">
+                            <animateMotion dur="4.15s" begin=".45s" repeatCount="indefinite" rotate="auto"><mpath href="#home-brasil-madrid-path"></mpath></animateMotion>
+                            <circle class="home-plane-halo" r="16"></circle>
+                            <path class="home-plane-body" d="M 28 0 C 28 -2.5 24 -4 19 -4 L 7 -4 L -3 -19 L -8 -19 L -4 -4 L -18 -4 L -24 -10 L -28 -10 L -25 0 L -28 10 L -24 10 L -18 4 L -4 4 L -8 19 L -3 19 L 7 4 L 19 4 C 24 4 28 2.5 28 0 Z"></path>
+                        </g>
+                        <g class="home-plane-static" transform="translate(211 201) rotate(-52)" filter="url(#home-flight-glow)"><circle class="home-plane-halo" r="16"></circle><path class="home-plane-body" d="M 28 0 C 28 -2.5 24 -4 19 -4 L 7 -4 L -3 -19 L -8 -19 L -4 -4 L -18 -4 L -24 -10 L -28 -10 L -25 0 L -28 10 L -24 10 L -18 4 L -4 4 L -8 19 L -3 19 L 7 4 L 19 4 C 24 4 28 2.5 28 0 Z"></path></g>
+                    </svg>
                 </div>
-                <figcaption id="puzzle-caption">Passe o cursor ou toque nas peças para explorar a jornada.</figcaption>
+                <figcaption class="home-flight-caption" id="flight-preview-caption">
+                    <span>Brasil → Madrid · Terra e fotografias reais</span>
+                    <a href="/madrid-3d">Explorar a experiência completa <b aria-hidden="true">→</b></a>
+                </figcaption>
             </figure>
         </div>
 

@@ -1893,6 +1893,82 @@ button { font: inherit; }
     text-align: center;
 }
 
+/* Prévia real da experiência Brasil–Madrid. */
+.madrid-flight-preview {
+    position: relative;
+    width: min(100%, 520px);
+    min-height: 535px;
+    margin: 0 auto;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    isolation: isolate;
+}
+.home-earth-canvas {
+    position: relative;
+    width: min(100%, 480px);
+    aspect-ratio: 1;
+    filter: drop-shadow(0 38px 58px rgba(0,0,0,0.48));
+}
+.home-earth-canvas::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 9%;
+    border-radius: 50%;
+    background: rgba(63,145,220,0.28);
+    filter: blur(32px);
+}
+.home-earth-canvas::after {
+    content: '';
+    position: absolute;
+    z-index: 3;
+    inset: 2.2%;
+    border: 1px solid rgba(181,221,255,0.27);
+    border-radius: 50%;
+    box-shadow: 0 0 22px rgba(103,181,255,0.19), inset 0 0 26px rgba(137,204,255,0.11);
+}
+.home-earth-sphere {
+    position: absolute;
+    inset: 3%;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #040b20;
+    box-shadow: inset -42px -22px 78px rgba(0,0,0,0.78), inset 19px 12px 36px rgba(172,216,255,0.14), 0 0 0 1px rgba(177,219,255,0.18);
+}
+.home-earth-texture {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: url('/visuals/earth-blue-marble-real.webp') 46% center / 200% 100% no-repeat;
+    filter: saturate(1.18) contrast(1.06) brightness(0.9);
+    animation: home-earth-breathe 6s ease-in-out infinite alternate;
+}
+.home-earth-shade {
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(circle at 37% 30%, rgba(209,234,255,0.14), transparent 31%), radial-gradient(circle at 45% 42%, transparent 37%, rgba(1,5,16,0.18) 62%, rgba(0,2,10,0.88) 100%);
+}
+.home-flight-map { position: absolute; z-index: 4; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.home-flight-route-shadow,
+.home-flight-route { fill: none; stroke-linecap: round; }
+.home-flight-route-shadow { stroke: rgba(1,4,10,0.58); stroke-width: 9; }
+.home-flight-route { stroke: url(#home-flight-route-gold); stroke-width: 2.3; stroke-dasharray: 8 7; filter: drop-shadow(0 0 7px rgba(247,216,137,0.76)); animation: home-route-dash 1.9s linear infinite; }
+.home-city-pulse { fill: rgba(247,216,137,0.14); stroke: rgba(247,216,137,0.24); transform-box: fill-box; transform-origin: center; animation: home-city-pulse 2s ease-out infinite; }
+.home-city-ring { fill: rgba(4,9,21,0.64); stroke: #f8d98a; stroke-width: 1.4; }
+.home-city-core { fill: #fff9e8; filter: drop-shadow(0 0 6px #f8d98a); }
+.home-map-label { fill: rgba(255,249,229,0.96); paint-order: stroke; stroke: rgba(2,5,12,0.88); stroke-width: 3px; font: 800 13px/1 Inter, sans-serif; letter-spacing: 2.2px; }
+.home-plane-halo { fill: rgba(247,216,137,0.15); }
+.home-plane-body { fill: #fff8df; stroke: #dca748; stroke-width: 1.4; paint-order: stroke; }
+.home-plane-static { display: none; }
+.home-flight-caption { display: grid; justify-items: center; gap: 9px; margin-top: -6px; color: rgba(255,255,255,0.52); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em; text-align: center; text-transform: uppercase; }
+.home-flight-caption a { display: inline-flex; align-items: center; gap: 12px; padding: 11px 18px; border: 1px solid rgba(240,214,138,0.34); border-radius: 999px; color: var(--gold-light); background: rgba(7,18,37,0.62); text-decoration: none; transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease; }
+.home-flight-caption a:hover { transform: translateY(-2px); border-color: rgba(240,214,138,0.72); background: rgba(15,35,58,0.86); }
+@keyframes home-earth-breathe { from { transform: scale(1.015); filter: saturate(1.14) contrast(1.06) brightness(0.84); } to { transform: scale(1.035); filter: saturate(1.22) contrast(1.08) brightness(0.94); } }
+@keyframes home-route-dash { to { stroke-dashoffset: -30; } }
+@keyframes home-city-pulse { 0% { opacity: 1; transform: scale(0.45); } 75%, 100% { opacity: 0; transform: scale(1.4); } }
+
 .trust-section {
     padding: 0 0 90px;
     background: var(--bg-white);
@@ -2148,6 +2224,8 @@ button { font: inherit; }
     .hero-stage { display: flex; flex-direction: column; padding-top: 86px; padding-bottom: 12px; }
     .hero-stage .hero-content { padding: 0; }
     .spain-puzzle { width: min(100%, 430px); height: 440px; transform: none; }
+    .madrid-flight-preview { width: min(100%, 430px); min-height: 450px; }
+    .home-earth-canvas { width: min(92vw, 365px); }
     .puzzle-scene { inset: 0 5px 56px; }
     .puzzle-monument { bottom: 30px; transform: translateX(-50%) translateZ(34px) scale(0.86); transform-origin: bottom center; }
     .puzzle-sun { top: 42px; right: 44px; }
@@ -2165,6 +2243,10 @@ button { font: inherit; }
 
 @media (max-width: 430px) {
     .spain-puzzle { height: 400px; }
+    .madrid-flight-preview { min-height: 410px; }
+    .home-earth-canvas { width: min(86vw, 330px); }
+    .home-map-label { font-size: 14px; letter-spacing: 2.5px; }
+    .home-flight-caption { font-size: 0.58rem; }
     .puzzle-monument { transform: translateX(-50%) translateZ(34px) scale(0.74); }
     .cookie-actions { grid-template-columns: 1fr; }
 }
@@ -2179,4 +2261,9 @@ button { font: inherit; }
     }
     .puzzle-piece,
     .spain-puzzle.is-assembled .puzzle-piece { opacity: 1; transform: none; }
+    .home-earth-texture,
+    .home-flight-route,
+    .home-city-pulse { animation: none; }
+    .home-plane-motion { display: none; }
+    .home-plane-static { display: block; }
 }
