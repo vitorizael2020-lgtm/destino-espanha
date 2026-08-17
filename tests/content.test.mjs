@@ -33,6 +33,23 @@ test("não publica antigos argumentos comerciais enganosos", async () => {
   assert.doesNotMatch(content, /<div class="faq-question"/u);
 });
 
+test("publica a experiência Madrid 3D com imagens reais e rota Brasil–Madrid", async () => {
+  const [home, experience, css, script] = await Promise.all([
+    read("index.html"),
+    read("madrid-3d.html"),
+    read("madrid-3d.css"),
+    read("madrid-3d.js"),
+  ]);
+  assert.match(home, /Viver Madrid em 3D/u);
+  assert.match(home, /home-brasil-madrid-path/u);
+  assert.doesNotMatch(home, /spain-puzzle|puzzle-monument/u);
+  assert.match(experience, /Globo terrestre real com um avião percorrendo a rota do Brasil a Madrid/u);
+  assert.match(experience, /NASA\/GSFC/u);
+  assert.match(css, /earth-blue-marble-real\.webp/u);
+  assert.match(script, /madrid-puerta-alcala-real\.webp/u);
+  assert.match(script, /madrid-gran-via-real\.webp/u);
+});
+
 test("não antecipa objeções comerciais sobre aprovação nas páginas públicas", async () => {
   const content = (await Promise.all(marketingFiles.map(read))).join("\n");
   assert.doesNotMatch(

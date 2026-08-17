@@ -4,7 +4,8 @@ Site institucional e portal operacional da **Destino Espanha Assessoria**, empre
 
 ## Site público
 
-- Landing page responsiva com experiência arquitetônica 3D em CSS e interações progressivas.
+- Landing page responsiva com uma rota real Brasil–Madrid e acesso à experiência cinematográfica em cinco capítulos.
+- Experiência Madrid 3D com fotografias reais, globo terrestre da NASA/GSFC, montagem fragmentada e navegação por rolagem, toque ou controles.
 - Páginas específicas de motorista e passagens.
 - Perfis comerciais claramente identificados como ilustrativos; não há depoimentos ou resultados inventados.
 - Identificação empresarial, termos, privacidade, cookies e canal de atendimento/reclamações.
