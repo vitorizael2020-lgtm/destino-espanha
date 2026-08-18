@@ -48,7 +48,7 @@ jobs:
             exit 1
           fi
 
-      - name: Prepare optional tracking secret
+      - name: Prepare optional tracking override
         if: github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch
         env:
           TRACKING_390344_CONFIG: ${{ secrets.TRACKING_390344_CONFIG }}
@@ -59,7 +59,7 @@ jobs:
 
           const secret = process.env.TRACKING_390344_CONFIG ?? "";
           if (!secret) {
-            console.log("::warning::TRACKING_390344_CONFIG ausente; o site será publicado, mas o acompanhamento permanecerá indisponível.");
+            console.log("::notice::TRACKING_390344_CONFIG ausente; o acompanhamento usará o pacote selado versionado.");
             process.exit(0);
           }
 
@@ -100,6 +100,20 @@ jobs:
           else
             ./node_modules/.bin/wrangler deploy
           fi
+
+      - name: Verify protected tracking route
+        if: github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch
+        run: |
+          curl \
+            --fail \
+            --silent \
+            --show-error \
+            --location \
+            --retry 5 \
+            --retry-delay 2 \
+            --retry-all-errors \
+            --output /dev/null \
+            https://destinoespanhaassessoria.com/acompanhar/3903444641a3371ce99f2b56/
 
       - name: Remove temporary deployment secrets
         if: always() && github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch

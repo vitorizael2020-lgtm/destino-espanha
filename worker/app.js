@@ -6,6 +6,11 @@ const MAX_LOGIN_BODY_BYTES = 1024;
 const MAX_PASSWORD_LENGTH = 256;
 const MIN_PASSWORD_LENGTH = 12;
 const MIN_SESSION_SECRET_BYTES = 32;
+const MAX_SEALED_CIPHERTEXT_BYTES = 8 * 1024;
+const SEALED_TRACKING_VERSION = 1;
+const SEALED_TRACKING_KDF = "HKDF-SHA256";
+const SEALED_TRACKING_CIPHER = "AES-256-GCM";
+const SEALED_TRACKING_CONTEXT = "destino-espanha:tracking:3903444641a3371ce99f2b56:v1";
 
 const TRACKING_PATHS = new Set([
   "/acompanhar/3903444641a3371ce99f2b56",
@@ -63,12 +68,29 @@ function bytesToBase64Url(bytes) {
 }
 
 function decodeBase64Utf8(value) {
-  const normalized = value.replaceAll("-", "+").replaceAll("_", "/");
-  const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
-  const binary = atob(padded);
-  const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+  const bytes = decodeBase64UrlBytes(value);
+  if (!bytes) throw new Error("Base64url inválido.");
 
   return new TextDecoder().decode(bytes);
+}
+
+function decodeBase64UrlBytes(value) {
+  if (
+    typeof value !== "string"
+    || !value
+    || !/^[A-Za-z0-9+/_-]+={0,2}$/u.test(value)
+  ) {
+    return null;
+  }
+
+  try {
+    const normalized = value.replaceAll("-", "+").replaceAll("_", "/");
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+    const binary = atob(padded);
+    return Uint8Array.from(binary, (character) => character.charCodeAt(0));
+  } catch {
+    return null;
+  }
 }
 
 function readCookie(request, name) {
@@ -297,11 +319,28 @@ export function calculateProgress(sentIso, dueIso, date = new Date()) {
   };
 }
 
+function validTrackingRecord(record) {
+  return Boolean(
+    record
+    && typeof record === "object"
+    && TRACKING_FIELDS.every(
+      (field) => typeof record[field] === "string" && record[field],
+    )
+    && validIsoDate(record.sentIso)
+    && validIsoDate(record.dueIso)
+    && calendarDaysBetween(record.sentIso, record.dueIso) >= 1,
+  );
+}
+
 function trackingConfig(env) {
-  const raw = env.TRACKING_390344_CONFIG ?? env.TRACKING_A3796_CONFIG;
-  if (!raw) return null;
+  const raw = env?.TRACKING_390344_CONFIG ?? env?.TRACKING_A3796_CONFIG;
+  if (raw === undefined || raw === null || raw === "") {
+    return { present: false, config: null };
+  }
 
   try {
+    if (typeof raw !== "string") throw new Error("O secret deve ser texto.");
+
     const config = JSON.parse(decodeBase64Utf8(raw));
     const record = config.record;
 
@@ -310,25 +349,92 @@ function trackingConfig(env) {
       || config.password.length < MIN_PASSWORD_LENGTH
       || typeof config.sessionSecret !== "string"
       || new TextEncoder().encode(config.sessionSecret).byteLength < MIN_SESSION_SECRET_BYTES
-      || !record
-      || TRACKING_FIELDS.some((field) => typeof record[field] !== "string" || !record[field])
-      || !validIsoDate(record.sentIso)
-      || !validIsoDate(record.dueIso)
-      || calendarDaysBetween(record.sentIso, record.dueIso) < 1
+      || !validTrackingRecord(record)
     ) {
-      return null;
+      throw new Error("Campos obrigatórios ausentes ou inválidos.");
     }
 
     return {
-      password: config.password,
-      sessionSecret: config.sessionSecret,
-      record,
+      present: true,
+      config: {
+        password: config.password,
+        sessionSecret: config.sessionSecret,
+        record,
+      },
     };
   } catch (error) {
     console.error(JSON.stringify({
       message: "Configuração do acompanhamento inválida.",
       error: error instanceof Error ? error.message : String(error),
     }));
+    return { present: true, config: null };
+  }
+}
+
+function normalizeSealedTrackingConfig(config) {
+  if (config === null || config === undefined) return null;
+
+  const salt = decodeBase64UrlBytes(config.salt);
+  const iv = decodeBase64UrlBytes(config.iv);
+  const ciphertext = decodeBase64UrlBytes(config.ciphertext);
+  const valid = config.version === SEALED_TRACKING_VERSION
+    && config.kdf === SEALED_TRACKING_KDF
+    && config.cipher === SEALED_TRACKING_CIPHER
+    && config.context === SEALED_TRACKING_CONTEXT
+    && salt?.byteLength === 16
+    && iv?.byteLength === 12
+    && ciphertext
+    && ciphertext.byteLength > 16
+    && ciphertext.byteLength <= MAX_SEALED_CIPHERTEXT_BYTES;
+
+  if (!valid) {
+    throw new Error("Pacote selado de acompanhamento ausente ou inválido.");
+  }
+
+  return Object.freeze({ salt, iv, ciphertext });
+}
+
+async function decryptSealedTrackingRecord(password, config) {
+  if (typeof password !== "string" || password.length < MIN_PASSWORD_LENGTH) {
+    return null;
+  }
+
+  const encoder = new TextEncoder();
+
+  try {
+    const keyMaterial = await crypto.subtle.importKey(
+      "raw",
+      encoder.encode(password),
+      "HKDF",
+      false,
+      ["deriveKey"],
+    );
+    const key = await crypto.subtle.deriveKey(
+      {
+        name: "HKDF",
+        hash: "SHA-256",
+        salt: config.salt,
+        info: encoder.encode(SEALED_TRACKING_CONTEXT),
+      },
+      keyMaterial,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["decrypt"],
+    );
+    const plaintext = await crypto.subtle.decrypt(
+      {
+        name: "AES-GCM",
+        iv: config.iv,
+        additionalData: encoder.encode(SEALED_TRACKING_CONTEXT),
+      },
+      key,
+      config.ciphertext,
+    );
+    const record = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(plaintext));
+
+    return validTrackingRecord(record) ? record : null;
+  } catch {
+    // Senha incorreta e pacote adulterado produzem a mesma resposta genérica.
     return null;
   }
 }
@@ -499,9 +605,16 @@ async function checkLoginRateLimit(request, env) {
   }
 }
 
-async function handleTracking(request, env, trackingTemplate, date) {
-  const config = trackingConfig(env);
-  if (!config) {
+async function handleTracking(request, env, trackingTemplate, sealedConfig, date) {
+  if (request.method !== "GET" && request.method !== "HEAD" && request.method !== "POST") {
+    return new Response("Método não permitido", {
+      status: 405,
+      headers: { ...securityHeaders(), allow: "GET, HEAD, POST" },
+    });
+  }
+
+  const environmentConfig = trackingConfig(env);
+  if (environmentConfig.present && !environmentConfig.config && !sealedConfig) {
     return htmlResponse(
       "<h1>Acompanhamento temporariamente indisponível</h1><p>Entre em contato com a Destino Espanha.</p>",
       503,
@@ -510,18 +623,19 @@ async function handleTracking(request, env, trackingTemplate, date) {
     );
   }
 
-  const { password, sessionSecret, record } = config;
-
-  if (request.method !== "GET" && request.method !== "HEAD" && request.method !== "POST") {
-    return new Response("Método não permitido", {
-      status: 405,
-      headers: { ...securityHeaders(), allow: "GET, HEAD, POST" },
-    });
+  const config = environmentConfig.config;
+  if (!config && !sealedConfig) {
+    return htmlResponse(
+      "<h1>Acompanhamento temporariamente indisponível</h1><p>Entre em contato com a Destino Espanha.</p>",
+      503,
+      {},
+      request.method === "HEAD",
+    );
   }
 
-  if (await validSession(request, sessionSecret)) {
+  if (config && await validSession(request, config.sessionSecret)) {
     return htmlResponse(
-      trackingPage(record, trackingTemplate, date),
+      trackingPage(config.record, trackingTemplate, date),
       200,
       { vary: "Cookie" },
       request.method === "HEAD",
@@ -570,9 +684,9 @@ async function handleTracking(request, env, trackingTemplate, date) {
       return htmlResponse(loginPage("Solicitação inválida. Tente novamente."), 400);
     }
 
-    if (await validPassword(submittedPassword, password)) {
+    if (config && await validPassword(submittedPassword, config.password)) {
       const expiresAt = Math.floor(Date.now() / 1000) + SESSION_SECONDS;
-      const signature = await hmac(`tracking:${expiresAt}`, sessionSecret);
+      const signature = await hmac(`tracking:${expiresAt}`, config.sessionSecret);
       const url = new URL(request.url);
 
       return new Response(null, {
@@ -585,16 +699,30 @@ async function handleTracking(request, env, trackingTemplate, date) {
       });
     }
 
+    if (!config) {
+      const record = await decryptSealedTrackingRecord(submittedPassword, sealedConfig);
+      if (record) {
+        return htmlResponse(trackingPage(record, trackingTemplate, date));
+      }
+    }
+
     return htmlResponse(loginPage("Senha incorreta. Verifique e tente novamente."), 401);
   }
 
   return htmlResponse(loginPage(), 200, {}, request.method === "HEAD");
 }
 
-export function createWorkerApp({ trackingTemplate, now = () => new Date(), random = Math.random }) {
+export function createWorkerApp({
+  trackingTemplate,
+  sealedTrackingConfig = null,
+  now = () => new Date(),
+  random = Math.random,
+}) {
   if (typeof trackingTemplate !== "string" || !trackingTemplate.includes("{{TITLE}}")) {
     throw new Error("Template protegido de acompanhamento ausente ou inválido.");
   }
+
+  const sealedConfig = normalizeSealedTrackingConfig(sealedTrackingConfig);
 
   return {
     async fetch(request, env) {
@@ -606,7 +734,7 @@ export function createWorkerApp({ trackingTemplate, now = () => new Date(), rand
       }
 
       if (TRACKING_PATHS.has(path)) {
-        return handleTracking(request, env, trackingTemplate, now());
+        return handleTracking(request, env, trackingTemplate, sealedConfig, now());
       }
 
       if (!env.ASSETS || typeof env.ASSETS.fetch !== "function") {
