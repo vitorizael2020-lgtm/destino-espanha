@@ -12,6 +12,7 @@ const trackingTemplate = await readFile(
   "utf8",
 );
 const fixedNow = new Date("2026-08-16T10:00:00Z");
+const sealedContext = "destino-espanha:tracking:3903444641a3371ce99f2b56:v1";
 
 const record = {
   title: "Acompanhamento internacional",
@@ -43,6 +44,50 @@ function encodeConfig(config) {
   return Buffer.from(JSON.stringify(config), "utf8").toString("base64");
 }
 
+async function sealRecord(password, value = record) {
+  const encoder = new TextEncoder();
+  const salt = Uint8Array.from({ length: 16 }, (_, index) => index + 1);
+  const iv = Uint8Array.from({ length: 12 }, (_, index) => 32 + index);
+  const keyMaterial = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(password),
+    "HKDF",
+    false,
+    ["deriveKey"],
+  );
+  const key = await crypto.subtle.deriveKey(
+    {
+      name: "HKDF",
+      hash: "SHA-256",
+      salt,
+      info: encoder.encode(sealedContext),
+    },
+    keyMaterial,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt"],
+  );
+  const ciphertext = await crypto.subtle.encrypt(
+    {
+      name: "AES-GCM",
+      iv,
+      additionalData: encoder.encode(sealedContext),
+    },
+    key,
+    encoder.encode(JSON.stringify(value)),
+  );
+
+  return {
+    version: 1,
+    kdf: "HKDF-SHA256",
+    cipher: "AES-256-GCM",
+    context: sealedContext,
+    salt: Buffer.from(salt).toString("base64url"),
+    iv: Buffer.from(iv).toString("base64url"),
+    ciphertext: Buffer.from(ciphertext).toString("base64url"),
+  };
+}
+
 const allowLoginAttempt = {
   async limit() {
     return { success: true };
@@ -72,6 +117,15 @@ function requestWithCountry(url, country, init = {}) {
 function app() {
   return createWorkerApp({
     trackingTemplate,
+    now: () => fixedNow,
+    random: () => 0,
+  });
+}
+
+function sealedApp(sealedTrackingConfig) {
+  return createWorkerApp({
+    trackingTemplate,
+    sealedTrackingConfig,
     now: () => fixedNow,
     random: () => 0,
   });
@@ -210,6 +264,78 @@ test("recusa senha errada e cria cookie seguro com a senha correta", async () =>
   assert.match(body, /Cálculo atualizado em: 16 de agosto de 2026/u);
   assert.match(body, /aria-valuenow="50"/u);
   assert.doesNotMatch(body, /\{\{[A-Z_]+\}\}/u);
+});
+
+test("abre o pacote selado sem secret e não mantém dados após atualizar", async () => {
+  const password = "senha-selada-de-teste";
+  const worker = sealedApp(await sealRecord(password));
+  const env = { ASSETS: assets, LOGIN_RATE_LIMITER: allowLoginAttempt };
+  const url = "https://example.com/acompanhar/3903444641a3371ce99f2b56";
+
+  const login = await worker.fetch(new Request(url), env);
+  assert.equal(login.status, 200);
+  assert.doesNotMatch(await login.text(), /DE-TESTE-001/u);
+
+  const wrong = await worker.fetch(new Request(url, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ password: "senha-incorreta" }),
+  }), env);
+  assert.equal(wrong.status, 401);
+
+  const correct = await worker.fetch(new Request(url, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ password }),
+  }), env);
+  const tracking = await correct.text();
+  assert.equal(correct.status, 200);
+  assert.equal(correct.headers.get("set-cookie"), null);
+  assert.match(tracking, /DE-TESTE-001/u);
+  assert.match(tracking, /Cliente Teste/u);
+  assert.doesNotMatch(tracking, /\{\{[A-Z_]+\}\}/u);
+
+  const refreshed = await worker.fetch(new Request(url), env);
+  assert.equal(refreshed.status, 200);
+  assert.doesNotMatch(await refreshed.text(), /DE-TESTE-001/u);
+});
+
+test("recusa pacote selado adulterado e configuração selada inválida", async () => {
+  const sealed = await sealRecord("senha-selada-de-teste");
+  const corrupted = sealedApp({
+    ...sealed,
+    ciphertext: `${sealed.ciphertext[0] === "A" ? "B" : "A"}${sealed.ciphertext.slice(1)}`,
+  });
+  const url = "https://example.com/acompanhar/3903444641a3371ce99f2b56";
+  const response = await corrupted.fetch(new Request(url, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ password: "senha-selada-de-teste" }),
+  }), { ASSETS: assets, LOGIN_RATE_LIMITER: allowLoginAttempt });
+  assert.equal(response.status, 401);
+
+  assert.throws(
+    () => sealedApp({ ...sealed, iv: "invalido" }),
+    /Pacote selado de acompanhamento ausente ou inválido/u,
+  );
+});
+
+test("usa o pacote selado quando o secret legado está inválido", async () => {
+  const password = "senha-selada-de-teste";
+  const worker = sealedApp(await sealRecord(password));
+  const url = "https://example.com/acompanhar/3903444641a3371ce99f2b56";
+  const response = await worker.fetch(new Request(url, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ password }),
+  }), {
+    ASSETS: assets,
+    LOGIN_RATE_LIMITER: allowLoginAttempt,
+    TRACKING_390344_CONFIG: "configuracao-invalida",
+  });
+
+  assert.equal(response.status, 200);
+  assert.match(await response.text(), /DE-TESTE-001/u);
 });
 
 test("limita formato, tamanho e frequência das tentativas de login", async () => {

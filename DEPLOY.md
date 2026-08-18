@@ -14,7 +14,8 @@ A produção oficial usa exclusivamente **Cloudflare Workers + Static Assets**. 
 - [x] registros DNS preservados e domínio raiz/`www` conectados;
 - [ ] `workers.dev` desativado ou protegido após o domínio entrar;
 - [x] hospedagem anterior removida após a validação dos domínios oficiais;
-- [ ] configuração protegida do acompanhamento recriada e homologada.
+- [x] configuração protegida do acompanhamento recuperada em pacote selado;
+- [ ] rota protegida homologada em produção após o próximo deploy manual.
 
 ## 1. Instalar e validar
 
@@ -52,22 +53,23 @@ git push -u origin minha-alteracao
 
 ## 4. Publicar pelo GitHub Actions
 
-Depois de revisar e integrar o pull request, cadastre em **Settings > Secrets and variables > Actions**:
+Depois de revisar e integrar o pull request, confira em **Settings > Secrets and variables > Actions**:
 
 - `CLOUDFLARE_API_TOKEN`: obrigatório; token com permissão mínima para publicar Workers;
-- `TRACKING_390344_CONFIG`: configuração protegida do acompanhamento. Pode ficar ausente apenas no primeiro deploy de recuperação; nesse caso, somente a rota de acompanhamento responde `503`.
+- `TRACKING_390344_CONFIG`: opcional; quando presente, substitui o pacote selado versionado.
 
 O Account ID `55057a6f624af0b23eefddb19302e757` está fixado no `wrangler.jsonc`. Ele é um identificador, não uma credencial.
 
-Não envie os valores por chat, issue, pull request ou log. Abra **Actions > Cloudflare > Run workflow** depois de cadastrar o token. Cadastre também a configuração antes de homologar a rota de acompanhamento.
+Não envie credenciais por issue, pull request ou log. Abra **Actions > Cloudflare > Run workflow**; não é necessário criar um novo secret para restaurar o acompanhamento atual.
 
 O workflow:
 
 1. executa testes e o dry-run antes de receber credenciais;
-2. quando a configuração protegida existe, valida tamanho e requisitos mínimos sem imprimi-la;
+2. usa o pacote selado por padrão e, quando um secret de substituição existe, valida tamanho e requisitos mínimos sem imprimi-lo;
 3. cria um arquivo temporário com permissão restrita somente quando necessário;
-4. executa `wrangler deploy --secrets-file`, enviando código e secret na mesma versão, ou `wrangler deploy` quando o acompanhamento ainda não foi configurado;
-5. apaga o arquivo temporário mesmo se o deploy falhar.
+4. executa `wrangler deploy --secrets-file`, enviando código e secret na mesma versão, ou `wrangler deploy` com o pacote selado;
+5. confirma que a URL protegida voltou a responder após o deploy;
+6. apaga o arquivo temporário mesmo se o deploy falhar.
 
 Isso evita o estado intermediário de código antigo com secret novo. Os pull requests não recebem segredos e nunca publicam.
 
@@ -81,7 +83,9 @@ Apague esse arquivo imediatamente depois e nunca o adicione ao Git.
 
 ## Configuração protegida
 
-O acompanhamento exige `TRACKING_390344_CONFIG`. Sem ele, o restante do site funciona e essa rota falha de forma fechada com `503`. Quando configurado, o valor deve:
+O acompanhamento atual fica em `worker/tracking-sealed.js` como conteúdo cifrado e autenticado por AES-GCM. O arquivo não contém senha, nome do cliente, conteúdo, rota ou datas em texto legível. A senha fornecida ao cliente abre os dados somente durante a requisição e nenhuma sessão é preservada; ao atualizar a página, o login volta a ser solicitado.
+
+O secret `TRACKING_390344_CONFIG` continua aceito como substituição operacional. Quando configurado, o valor deve:
 
 - ser um JSON codificado integralmente em base64url;
 - ter no máximo 5 KB;
@@ -90,7 +94,7 @@ O acompanhamento exige `TRACKING_390344_CONFIG`. Sem ele, o restante do site fun
 
 Copie o valor integralmente, sem converter, reformatar ou extrair campos. A confirmação deve verificar apenas formato, tamanho e presença, nunca imprimir o conteúdo.
 
-Se o secret estiver ausente ou inválido, a rota de acompanhamento falha fechada e não revela dados.
+Se o secret estiver ausente ou inválido, o pacote selado válido é usado; sem nenhuma das duas configurações válidas, a rota falha fechada e não revela dados. Para trocar dados ou senha, gere um novo pacote selado com salt e IV aleatórios; nunca edite o texto cifrado manualmente nem registre os dados legíveis no Git.
 
 ## Homologação
 
