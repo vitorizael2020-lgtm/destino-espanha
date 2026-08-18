@@ -198,14 +198,27 @@ function loginPage(errorMessage = "") {
   <title>Acesso protegido | Destino Espanha</title>
   <link rel="icon" type="image/jpeg" href="/logo.jpg">
   <style>
-    :root { --navy:#071225; --navy-soft:#112442; --gold:#d4a82f; --ink:#172033; --muted:#68758b; }
+    :root { --navy:#071225; --navy-soft:#112442; --gold:#d4a82f; --gold-light:#f4df9e; --ink:#172033; --muted:#68758b; }
     * { box-sizing:border-box; }
     body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; color:var(--ink); background:radial-gradient(circle at 18% 8%, rgba(212,168,47,.18), transparent 25rem), linear-gradient(145deg, #071225, #112442 55%, #1b3153); font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-    .card { width:min(100%, 430px); overflow:hidden; border:1px solid rgba(255,255,255,.14); border-radius:26px; background:#fff; box-shadow:0 28px 80px rgba(0,0,0,.3); }
-    .brand { padding:28px 30px 23px; display:flex; align-items:center; gap:14px; color:#fff; background:var(--navy); border-bottom:3px solid var(--gold); }
+    .card { width:min(100%, 470px); overflow:hidden; border:1px solid rgba(255,255,255,.14); border-radius:26px; background:#fff; box-shadow:0 28px 80px rgba(0,0,0,.3); }
+    .brand { padding:25px 30px 15px; display:flex; align-items:center; gap:14px; color:#fff; background:var(--navy); }
     .brand img { width:58px; height:58px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.28); }
     .brand strong { display:block; font-family:Georgia,serif; font-size:22px; }
     .brand span { display:block; margin-top:4px; color:#b9c6d9; font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
+    .login-scene { position:relative; height:158px; overflow:hidden; color:#fff; background:radial-gradient(circle at 72% 50%, rgba(63,145,220,.28), transparent 30%), linear-gradient(145deg, #071225, #10294a); border-bottom:3px solid var(--gold); perspective:800px; isolation:isolate; }
+    .login-scene::before { content:""; position:absolute; inset:0; z-index:-1; opacity:.48; background-image:radial-gradient(circle at 12% 21%, rgba(255,255,255,.8) 0 1px, transparent 1.5px),radial-gradient(circle at 82% 31%, rgba(244,223,158,.7) 0 1px, transparent 1.5px),radial-gradient(circle at 57% 75%, rgba(255,255,255,.55) 0 1px, transparent 1.5px); background-size:150px 130px,210px 170px,180px 190px; animation:login-stars 14s linear infinite alternate; }
+    .login-scene-copy { position:absolute; z-index:4; left:30px; bottom:29px; width:46%; }
+    .login-scene-copy small { display:block; margin-bottom:6px; color:var(--gold-light); font-size:9px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    .login-scene-copy strong { display:block; font-family:Georgia,serif; font-size:18px; line-height:1.18; }
+    .login-globe { position:absolute; z-index:2; top:7px; right:30px; width:143px; aspect-ratio:1; transform-style:preserve-3d; filter:drop-shadow(0 18px 26px rgba(0,0,0,.46)); animation:login-globe-float 5.5s ease-in-out infinite alternate; }
+    .login-globe::before { content:""; position:absolute; inset:7%; border-radius:50%; background:rgba(70,151,219,.3); filter:blur(18px); transform:scale(1.08); }
+    .login-earth { position:absolute; inset:8%; overflow:hidden; border:1px solid rgba(190,225,255,.25); border-radius:50%; background:#031027; box-shadow:inset -24px -15px 38px rgba(0,0,0,.8),inset 11px 7px 20px rgba(205,234,255,.15),0 0 22px rgba(86,166,227,.22); }
+    .login-earth::before { content:""; position:absolute; inset:0; border-radius:inherit; background:url('/visuals/earth-blue-marble-real.webp') 46% center/200% 100% no-repeat; filter:saturate(1.16) contrast(1.08) brightness(.9); animation:login-earth-turn 12s ease-in-out infinite alternate; }
+    .login-earth::after { content:""; position:absolute; inset:-1px; border-radius:inherit; background:radial-gradient(circle at 35% 27%,rgba(221,239,255,.17),transparent 29%),radial-gradient(circle at 43% 43%,transparent 35%,rgba(0,4,14,.2) 62%,rgba(0,2,9,.88) 100%); }
+    .login-orbit { position:absolute; inset:0; border:1px solid rgba(244,223,158,.3); border-radius:50%; transform:rotateX(67deg) rotateZ(-13deg) scale(1.12); box-shadow:0 0 12px rgba(212,168,47,.12); animation:login-orbit-turn 9s linear infinite; }
+    .login-chip { position:absolute; top:-10px; left:50%; width:17px; height:23px; border:1px solid #fff1bd; border-radius:3px; background:linear-gradient(135deg,#f6d778,#bd8d24); box-shadow:0 0 13px rgba(244,223,158,.75); clip-path:polygon(0 0,68% 0,100% 23%,100% 100%,0 100%); }
+    .login-chip::after { content:""; position:absolute; inset:8px 4px 4px; border-radius:1px; background:linear-gradient(90deg,transparent 45%,#805b13 46% 54%,transparent 55%),linear-gradient(0deg,transparent 45%,#805b13 46% 54%,transparent 55%),#9b721d; }
     .content { padding:30px; }
     .lock { width:46px; height:46px; display:grid; place-items:center; border-radius:14px; color:#72570a; background:#fff5d7; font-size:22px; }
     h1 { margin:18px 0 8px; color:var(--navy); font-family:Georgia,serif; font-size:29px; line-height:1.1; }
@@ -216,6 +229,12 @@ function loginPage(errorMessage = "") {
     button { width:100%; min-height:50px; margin-top:14px; border:0; border-radius:12px; color:var(--navy); background:var(--gold); font:800 14px/1 Inter,system-ui,sans-serif; cursor:pointer; }
     .error { margin-bottom:16px; padding:12px 14px; border:1px solid #f0b9b9; border-radius:10px; color:#8b2020; background:#fff0f0; font-size:13px; }
     .foot { padding:0 30px 25px; color:#8190a4; text-align:center; font-size:11px; line-height:1.5; }
+    @keyframes login-stars { to { background-position:14px 8px,-12px 13px,9px -11px; } }
+    @keyframes login-globe-float { from { transform:translateY(2px) rotateY(-2deg); } to { transform:translateY(-4px) rotateY(3deg); } }
+    @keyframes login-earth-turn { from { background-position:42% center; transform:scale(1.02); } to { background-position:51% center; transform:scale(1.045); } }
+    @keyframes login-orbit-turn { to { transform:rotateX(67deg) rotateZ(347deg) scale(1.12); } }
+    @media (max-width:420px) { body{padding:12px}.card{border-radius:22px}.brand{padding:20px 22px 12px}.brand img{width:50px;height:50px}.login-scene{height:138px}.login-scene-copy{left:22px;bottom:22px}.login-scene-copy strong{font-size:16px}.login-globe{top:8px;right:16px;width:122px}.content{padding:25px 22px}.foot{padding:0 22px 21px} }
+    @media (prefers-reduced-motion:reduce) { .login-scene::before,.login-globe,.login-earth::before,.login-orbit{animation:none} }
   </style>
 </head>
 <body>
@@ -224,6 +243,13 @@ function loginPage(errorMessage = "") {
       <img src="/logo.jpg" alt="Destino Espanha">
       <div><strong>Destino Espanha</strong><span>Assessoria</span></div>
     </header>
+    <div class="login-scene" aria-hidden="true">
+      <div class="login-scene-copy"><small>Acompanhamento visual</small><strong>Seu envio em uma jornada internacional.</strong></div>
+      <div class="login-globe">
+        <div class="login-earth"></div>
+        <div class="login-orbit"><span class="login-chip"></span></div>
+      </div>
+    </div>
     <section class="content">
       <div class="lock" aria-hidden="true">🔒</div>
       <h1>Acompanhamento protegido</h1>

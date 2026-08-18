@@ -228,6 +228,8 @@ test("mostra o login protegido sem revelar o acompanhamento", async () => {
 
   assert.equal(response.status, 200);
   assert.match(body, /Acompanhamento protegido/u);
+  assert.match(body, /class="login-scene"/u);
+  assert.match(body, /earth-blue-marble-real\.webp/u);
   assert.doesNotMatch(body, /DE-TESTE-001/u);
   assert.equal(response.headers.get("cache-control"), "private, no-store, max-age=0");
   assert.match(response.headers.get("x-robots-tag"), /noindex/u);
@@ -263,6 +265,11 @@ test("recusa senha errada e cria cookie seguro com a senha correta", async () =>
   assert.match(body, /9 de 18 dias decorridos/u);
   assert.match(body, /Cálculo atualizado em: 16 de agosto de 2026/u);
   assert.match(body, /aria-valuenow="50"/u);
+  assert.match(body, /class="route-cinema"/u);
+  assert.match(body, /earth-blue-marble-real\.webp/u);
+  assert.match(body, /id="tracking-shipment-path" d="M 623 117 C 472 48 230 72 137 224"/u);
+  assert.match(body, /class="shipment-motion"/u);
+  assert.match(body, /@media \(prefers-reduced-motion: reduce\)/u);
   assert.doesNotMatch(body, /\{\{[A-Z_]+\}\}/u);
 });
 

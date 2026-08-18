@@ -178,67 +178,290 @@
       box-shadow: 0 0 0 4px var(--green-soft);
     }
 
-    .route {
-      margin: 30px 0 24px;
-      padding: 20px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
-      align-items: center;
-      gap: 14px;
-      border-radius: 18px;
+    .route-cinema {
+      position: relative;
+      min-height: 390px;
+      margin: 30px 0 25px;
+      overflow: hidden;
+      border: 1px solid rgba(244, 223, 158, .2);
+      border-radius: 25px;
       color: #fff;
-      background: linear-gradient(135deg, var(--navy), var(--navy-soft));
+      background:
+        radial-gradient(circle at 50% 54%, rgba(43, 105, 164, .34), transparent 31%),
+        radial-gradient(circle at 74% 12%, rgba(212, 168, 47, .13), transparent 18%),
+        linear-gradient(145deg, #020713 0%, #07162c 52%, #10294a 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 22px 55px rgba(7,18,37,.22);
+      isolation: isolate;
+      perspective: 1100px;
     }
 
-    .place:last-child { text-align: right; }
+    .route-cinema::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .5;
+      background-image:
+        radial-gradient(circle at 12% 21%, rgba(255,255,255,.8) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 82% 31%, rgba(244,223,158,.7) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 65% 72%, rgba(255,255,255,.55) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 29% 78%, rgba(255,255,255,.45) 0 1px, transparent 1.5px);
+      background-size: 170px 150px, 230px 190px, 190px 210px, 260px 180px;
+      animation: stars-drift 18s linear infinite alternate;
+    }
 
-    .place small {
-      display: block;
-      margin-bottom: 5px;
-      color: #b9c6d9;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
+    .route-cinema::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -55% 34%;
+      z-index: -1;
+      height: 78%;
+      border-radius: 50%;
+      background: rgba(58, 128, 187, .16);
+      filter: blur(42px);
+      transform: rotate(-8deg);
+    }
+
+    .route-kicker {
+      position: absolute;
+      z-index: 8;
+      top: 20px;
+      left: 22px;
+      right: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: rgba(255,255,255,.58);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .14em;
       text-transform: uppercase;
     }
 
-    .place strong { font-size: 16px; }
-
-    .route-line {
-      position: relative;
-      height: 2px;
-      background: rgba(255,255,255,.28);
+    .route-kicker b {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--gold-light);
+      font-size: 10px;
     }
 
-    .route-line::before, .route-line::after {
+    .route-kicker b::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #49d79c;
+      box-shadow: 0 0 0 4px rgba(73,215,156,.12), 0 0 15px rgba(73,215,156,.8);
+      animation: status-pulse 2.2s ease-out infinite;
+    }
+
+    .route-stage {
+      position: absolute;
+      inset: 43px 0 50px;
+      transform-style: preserve-3d;
+      transition: transform .65s cubic-bezier(.2,.8,.2,1);
+      animation: stage-breathe 7s ease-in-out infinite alternate;
+    }
+
+    .route-cinema:hover .route-stage {
+      transform: rotateX(2.2deg) rotateY(-2.6deg) translateY(-2px);
+    }
+
+    .earth-shell {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 50%;
+      width: 300px;
+      aspect-ratio: 1;
+      transform: translate3d(-50%, -50%, 28px);
+      filter: drop-shadow(0 34px 42px rgba(0,0,0,.5));
+    }
+
+    .earth-shell::before {
       content: "";
       position: absolute;
-      top: 50%;
+      inset: 5%;
+      border-radius: 50%;
+      background: rgba(75,155,222,.28);
+      filter: blur(28px);
+      transform: scale(1.1);
+    }
+
+    .earth-sphere {
+      position: absolute;
+      inset: 6%;
+      overflow: hidden;
+      border: 1px solid rgba(174,219,255,.24);
+      border-radius: 50%;
+      background: #031027;
+      box-shadow:
+        inset -48px -26px 76px rgba(0,0,0,.82),
+        inset 20px 13px 32px rgba(190,225,255,.17),
+        0 0 34px rgba(86,166,227,.22);
+    }
+
+    .earth-photo {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background-image: url('/visuals/earth-blue-marble-real.webp');
+      background-position: 46% center;
+      background-repeat: no-repeat;
+      background-size: 200% 100%;
+      filter: saturate(1.16) contrast(1.08) brightness(.9);
+      transform: scale(1.02);
+      animation: earth-turn 15s ease-in-out infinite alternate;
+    }
+
+    .earth-shade {
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background:
+        radial-gradient(circle at 35% 27%, rgba(221,239,255,.17), transparent 29%),
+        radial-gradient(circle at 43% 43%, transparent 35%, rgba(0,4,14,.2) 62%, rgba(0,2,9,.9) 100%);
+      box-shadow: inset -44px -22px 64px rgba(0,0,0,.34);
+    }
+
+    .earth-ring {
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(244,223,158,.23);
+      border-radius: 50%;
+      transform: rotateX(69deg) rotateZ(-14deg) scale(1.2);
+      box-shadow: 0 0 18px rgba(212,168,47,.12);
+      animation: orbit-turn 11s linear infinite;
+    }
+
+    .earth-ring::before {
+      content: "";
+      position: absolute;
+      top: 49%;
+      left: -4px;
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--gold);
-      transform: translateY(-50%);
+      background: var(--gold-light);
+      box-shadow: 0 0 15px var(--gold);
     }
 
-    .route-line::before { left: 0; }
-    .route-line::after { right: 0; }
-
-    .plane {
+    .route-map {
       position: absolute;
-      left: 50%;
-      top: 50%;
-      color: var(--gold-light);
-      font-size: 20px;
-      transform: translate(-50%, -55%);
+      z-index: 3;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      transform: translateZ(65px);
+      filter: drop-shadow(0 5px 7px rgba(0,0,0,.34));
+    }
+
+    .route-shadow, .route-arc, .route-light {
+      fill: none;
+      stroke-linecap: round;
+    }
+
+    .route-shadow { stroke: rgba(0,0,0,.56); stroke-width: 9; }
+    .route-arc {
+      stroke: url(#tracking-route-gold);
+      stroke-width: 2.5;
+      stroke-dasharray: 9 8;
+      animation: route-dash 1.8s linear infinite;
+    }
+    .route-light {
+      stroke: rgba(255,255,255,.8);
+      stroke-width: 1;
+      stroke-dasharray: 2 21;
+      animation: route-dash 1s linear infinite reverse;
+    }
+
+    .route-pulse {
+      fill: rgba(244,223,158,.12);
+      stroke: rgba(244,223,158,.34);
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: city-pulse 2.2s ease-out infinite;
+    }
+
+    .route-ring { fill: rgba(4,12,28,.78); stroke: var(--gold-light); stroke-width: 1.7; }
+    .route-core { fill: #fff8dc; filter: drop-shadow(0 0 7px var(--gold-light)); }
+    .shipment-halo { fill: rgba(244,223,158,.16); }
+    .shipment-card { fill: #f6d778; stroke: #fff1bd; stroke-width: 1.2; }
+    .shipment-contact { fill: #8f6816; opacity: .84; }
+    .shipment-static { display: none; }
+
+    .place {
+      position: absolute;
+      z-index: 5;
+      bottom: 12px;
+      width: min(37%, 240px);
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 14px;
+      background: rgba(3,11,25,.66);
+      box-shadow: 0 13px 28px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.06);
+      backdrop-filter: blur(12px);
+      transform: translateZ(82px);
+    }
+
+    .place-origin { right: 22px; text-align: right; }
+    .place-destination { left: 22px; }
+
+    .place small {
+      display: block;
+      margin-bottom: 4px;
+      color: rgba(255,255,255,.52);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .place strong {
+      display: block;
+      overflow: hidden;
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .route-caption {
-      margin: -12px 0 25px;
-      color: var(--muted);
-      font-size: 11px;
+      position: absolute;
+      z-index: 7;
+      right: 22px;
+      bottom: 17px;
+      left: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      color: rgba(255,255,255,.48);
+      font-size: 9px;
+      letter-spacing: .04em;
       text-align: center;
     }
+
+    .route-caption::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 9px var(--gold);
+    }
+
+    @keyframes stars-drift { to { background-position: 18px 9px, -13px 16px, 11px -14px, -17px -8px; } }
+    @keyframes status-pulse { 70%, 100% { box-shadow: 0 0 0 9px rgba(73,215,156,0), 0 0 15px rgba(73,215,156,.65); } }
+    @keyframes stage-breathe { from { translate: 0 1px; } to { translate: 0 -3px; } }
+    @keyframes earth-turn { from { background-position: 42% center; transform: scale(1.02); } to { background-position: 51% center; transform: scale(1.045); } }
+    @keyframes orbit-turn { to { transform: rotateX(69deg) rotateZ(346deg) scale(1.2); } }
+    @keyframes route-dash { to { stroke-dashoffset: -34; } }
+    @keyframes city-pulse { 0% { opacity: 1; transform: scale(.45); } 76%, 100% { opacity: 0; transform: scale(1.45); } }
 
     .estimate {
       display: flex;
@@ -439,8 +662,15 @@
       .hero-card, .content-card { border-radius: 19px; }
       .hero-card { padding: 24px 20px; }
       h1 { font-size: 36px; }
-      .route { grid-template-columns: 1fr 64px 1fr; padding: 17px 14px; }
-      .place strong { font-size: 13px; }
+      .route-cinema { min-height: 350px; margin-top: 25px; border-radius: 20px; }
+      .route-stage { inset: 48px 0 53px; }
+      .route-kicker { top: 17px; right: 16px; left: 16px; }
+      .earth-shell { width: min(68vw, 260px); }
+      .place { bottom: 8px; width: 42%; padding: 10px 11px; }
+      .place-origin { right: 12px; }
+      .place-destination { left: 12px; }
+      .place strong { font-size: 11px; }
+      .route-caption { right: 12px; bottom: 16px; left: 12px; font-size: 8px; }
       .estimate { align-items: start; flex-direction: column; gap: 8px; }
       .estimate strong { font-size: 19px; }
       .grid { grid-template-columns: 1fr; }
@@ -454,7 +684,24 @@
       .topbar { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
       main { margin-top: 18px; }
       .hero-card, .content-card { box-shadow: none; }
+      .route-cinema { break-inside: avoid; }
+      .shipment-motion { display: none; }
+      .shipment-static { display: block; }
       .contact { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .route-cinema::before,
+      .route-kicker b::before,
+      .route-stage,
+      .earth-photo,
+      .earth-ring,
+      .route-arc,
+      .route-light,
+      .route-pulse { animation: none; }
+      .route-cinema:hover .route-stage { transform: none; }
+      .shipment-motion { display: none; }
+      .shipment-static { display: block; }
     }
   </style>
 </head>
@@ -479,18 +726,88 @@
       <p class="intro">Acompanhe aqui as informações do envio internacional preparado pela Destino Espanha Assessoria.</p>
       <div class="updated-at">Cálculo atualizado em: {{UPDATED_LONG}}</div>
 
-      <div class="route" aria-label="Rota do envio de {{ORIGIN}} a {{DESTINATION}}">
-        <div class="place">
-          <small>Origem</small>
-          <strong>{{ORIGIN}}</strong>
+      <figure class="route-cinema" aria-label="Cena tridimensional da rota do envio de {{ORIGIN}} a {{DESTINATION}}">
+        <div class="route-kicker" aria-hidden="true">
+          <span>Rota internacional · {{CONTENT}}</span>
+          <b>{{STATUS_TEXT}}</b>
         </div>
-        <div class="route-line"><span class="plane" aria-hidden="true">✈</span></div>
-        <div class="place">
-          <small>Destino</small>
-          <strong>{{DESTINATION}}</strong>
+
+        <div class="route-stage" aria-hidden="true">
+          <div class="earth-shell">
+            <div class="earth-sphere">
+              <div class="earth-photo"></div>
+              <div class="earth-shade"></div>
+            </div>
+            <div class="earth-ring"></div>
+          </div>
+
+          <svg class="route-map" viewBox="0 0 760 310" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="tracking-route-gold" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0" stop-color="#d4a82f" stop-opacity=".55"></stop>
+                <stop offset=".5" stop-color="#fff0b8"></stop>
+                <stop offset="1" stop-color="#d4a82f"></stop>
+              </linearGradient>
+              <filter id="tracking-shipment-glow" x="-150%" y="-150%" width="400%" height="400%">
+                <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+                <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+              </filter>
+            </defs>
+
+            <path id="tracking-shipment-path" d="M 623 117 C 472 48 230 72 137 224" fill="none"></path>
+            <path class="route-shadow" d="M 623 117 C 472 48 230 72 137 224"></path>
+            <path class="route-arc" d="M 623 117 C 472 48 230 72 137 224"></path>
+            <path class="route-light" d="M 623 117 C 472 48 230 72 137 224"></path>
+
+            <g transform="translate(137 224)">
+              <circle class="route-pulse" r="19"></circle>
+              <circle class="route-ring" r="8"></circle>
+              <circle class="route-core" r="3"></circle>
+            </g>
+            <g transform="translate(623 117)">
+              <circle class="route-pulse" r="19"></circle>
+              <circle class="route-ring" r="8"></circle>
+              <circle class="route-core" r="3"></circle>
+            </g>
+
+            <g class="shipment-motion" filter="url(#tracking-shipment-glow)">
+              <animateMotion dur="5.4s" begin=".35s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#tracking-shipment-path"></mpath>
+              </animateMotion>
+              <circle class="shipment-halo" r="23"></circle>
+              <g transform="translate(-14 -19) scale(.76)">
+                <path class="shipment-card" d="M 4 0 H 27 L 37 10 V 48 H 4 Q 0 48 0 44 V 4 Q 0 0 4 0 Z"></path>
+                <rect class="shipment-contact" x="8" y="17" width="8" height="9" rx="1"></rect>
+                <rect class="shipment-contact" x="19" y="17" width="10" height="9" rx="1"></rect>
+                <rect class="shipment-contact" x="8" y="29" width="8" height="10" rx="1"></rect>
+                <rect class="shipment-contact" x="19" y="29" width="10" height="10" rx="1"></rect>
+              </g>
+            </g>
+
+            <g class="shipment-static" transform="translate(380 91) rotate(-7)" filter="url(#tracking-shipment-glow)">
+              <circle class="shipment-halo" r="23"></circle>
+              <g transform="translate(-14 -19) scale(.76)">
+                <path class="shipment-card" d="M 4 0 H 27 L 37 10 V 48 H 4 Q 0 48 0 44 V 4 Q 0 0 4 0 Z"></path>
+                <rect class="shipment-contact" x="8" y="17" width="8" height="9" rx="1"></rect>
+                <rect class="shipment-contact" x="19" y="17" width="10" height="9" rx="1"></rect>
+                <rect class="shipment-contact" x="8" y="29" width="8" height="10" rx="1"></rect>
+                <rect class="shipment-contact" x="19" y="29" width="10" height="10" rx="1"></rect>
+              </g>
+            </g>
+          </svg>
+
+          <div class="place place-origin">
+            <small>Origem</small>
+            <strong>{{ORIGIN}}</strong>
+          </div>
+          <div class="place place-destination">
+            <small>Destino</small>
+            <strong>{{DESTINATION}}</strong>
+          </div>
         </div>
-      </div>
-      <p class="route-caption">A linha representa a rota prevista do envio e não uma localização por GPS.</p>
+
+        <figcaption class="route-caption">Visualização estimada da rota · não representa localização por GPS</figcaption>
+      </figure>
 
       <div class="estimate">
         <div>

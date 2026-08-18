@@ -17,7 +17,7 @@ Site institucional e portal operacional da **Destino Espanha Assessoria**, empre
 - `admin/`: gestão operacional de clientes e documentos.
 - `cliente/`: portal de acompanhamento do cliente.
 - `shared/`: autenticação e configuração do Supabase.
-- `worker/`: rotas dinâmicas, redirecionamento controlado do WhatsApp e acompanhamento protegido por pacote cifrado.
+- `worker/`: rotas dinâmicas, redirecionamento controlado do WhatsApp e acompanhamento protegido com globo real, rota 3D e pacote cifrado.
 - `protected/`: templates que nunca entram no bundle estático público.
 
 O portal usa Supabase. Não há credenciais de teste documentadas nem senhas fixas no bundle público.
