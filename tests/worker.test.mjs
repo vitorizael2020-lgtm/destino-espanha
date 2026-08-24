@@ -25,6 +25,11 @@ const record = {
   sentIso: "2026-08-07",
   sentLong: "07 de agosto de 2026",
   sentShort: "07/08/2026",
+  arrivalIso: "2026-08-16",
+  arrivalLong: "16 de agosto de 2026",
+  arrivalShort: "16/08/2026",
+  currentStatus: "Aguardando desembaraço aduaneiro",
+  currentDetail: "O envio chegou ao Brasil e aguarda análise e liberação pela alfândega.",
   dueIso: "2026-08-25",
   dueLong: "25 de agosto de 2026",
   dueShort: "25/08/2026",
@@ -170,6 +175,16 @@ test("calcula diariamente o progresso em Europe/Madrid", () => {
   );
   assert.equal(overdue.statusText, "Prazo em verificação");
   assert.equal(overdue.percentage, 100);
+
+  const customs = calculateProgress(
+    "2026-08-07",
+    "2026-09-02",
+    new Date("2026-08-24T10:00:00Z"),
+    "Aguardando desembaraço aduaneiro",
+  );
+  assert.equal(customs.statusText, "Aguardando desembaraço aduaneiro");
+  assert.equal(customs.dayCount, "17 de 26 dias decorridos");
+  assert.equal(customs.percentage, 65);
 });
 
 test("redireciona o WhatsApp para países permitidos", async () => {
@@ -264,6 +279,10 @@ test("recusa senha errada e cria cookie seguro com a senha correta", async () =>
   assert.match(body, /DE-TESTE-001/u);
   assert.match(body, /9 de 18 dias decorridos/u);
   assert.match(body, /Cálculo atualizado em: 16 de agosto de 2026/u);
+  assert.match(body, /Aguardando desembaraço aduaneiro/u);
+  assert.match(body, /Chegada ao Brasil/u);
+  assert.match(body, /16\/08\/2026/u);
+  assert.match(body, /Previsão atualizada/u);
   assert.match(body, /aria-valuenow="50"/u);
   assert.match(body, /class="route-cinema"/u);
   assert.match(body, /earth-blue-marble-real\.webp/u);
@@ -442,6 +461,11 @@ test("falha fechado quando o segredo está ausente ou inválido", async () => {
     record: { ...record, dueIso: "2026-02-30" },
   }));
   assert.equal(invalid.status, 503);
+
+  const arrivalAfterDue = await app().fetch(new Request(url), environment({
+    record: { ...record, arrivalIso: "2026-08-26" },
+  }));
+  assert.equal(arrivalAfterDue.status, 503);
 
   const weakPassword = await app().fetch(new Request(url), environment({
     password: "curta",

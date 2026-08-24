@@ -487,6 +487,16 @@
       line-height: 1.2;
     }
 
+    .estimate-note {
+      display: block;
+      max-width: 520px;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
     .day-count {
       flex: 0 0 auto;
       color: var(--muted);
@@ -719,7 +729,7 @@
     </div>
   </header>
 
-  <main data-sent-date="{{SENT_ISO}}" data-due-date="{{DUE_ISO}}">
+  <main data-sent-date="{{SENT_ISO}}" data-arrival-date="{{ARRIVAL_ISO}}" data-due-date="{{DUE_ISO}}">
     <section class="hero-card" aria-labelledby="tracking-title">
       <div class="status-pill">{{STATUS_TEXT}}</div>
       <h1 id="tracking-title">{{TITLE}}</h1>
@@ -811,8 +821,9 @@
 
       <div class="estimate">
         <div>
-          <small>Previsão de chegada</small>
+          <small>Previsão atualizada de chegada</small>
           <strong>Até {{DUE_LONG}}</strong>
+          <span class="estimate-note">Prazo revisado após a chegada ao Brasil e o encaminhamento para processamento aduaneiro.</span>
         </div>
         <div class="day-count">{{DAY_COUNT}}</div>
       </div>
@@ -838,17 +849,17 @@
             <strong>Envio confirmado</strong>
             <p>{{CONTENT}} preparado e enviado a partir de {{ORIGIN}}.</p>
           </li>
+          <li class="event done">
+            <span class="event-dot" aria-hidden="true"></span>
+            <time>Etapa concluída</time>
+            <strong>Em trânsito internacional</strong>
+            <p>Deslocamento internacional concluído entre {{ORIGIN}} e o Brasil.</p>
+          </li>
           <li class="event current">
             <span class="event-dot" aria-hidden="true"></span>
-            <time datetime="{{UPDATED_ISO}}">Cálculo atualizado em {{UPDATED_LONG}}</time>
-            <strong>Em trânsito internacional</strong>
-            <p>O envio segue em deslocamento. Aguardamos a próxima atualização do transporte postal.</p>
-          </li>
-          <li class="event">
-            <span class="event-dot" aria-hidden="true"></span>
-            <time>Etapa prevista</time>
-            <strong>Entrada no Brasil e processamento</strong>
-            <p>Recebimento pela operação postal brasileira e eventual processamento aduaneiro.</p>
+            <time datetime="{{ARRIVAL_ISO}}">{{ARRIVAL_LONG}}</time>
+            <strong>{{STATUS_TEXT}}</strong>
+            <p>{{STATUS_DETAIL}}</p>
           </li>
           <li class="event">
             <span class="event-dot" aria-hidden="true"></span>
@@ -885,6 +896,10 @@
             <dd>{{SENT_SHORT}}</dd>
           </div>
           <div>
+            <dt>Chegada ao Brasil</dt>
+            <dd>{{ARRIVAL_SHORT}}</dd>
+          </div>
+          <div>
             <dt>Destino confirmado</dt>
             <dd>{{DESTINATION}}</dd>
           </div>
@@ -895,8 +910,8 @@
     <aside class="notice">
       <span aria-hidden="true">ℹ️</span>
       <div>
-        <strong>Sobre a previsão</strong>
-        Este é um acompanhamento visual preparado pela Destino Espanha com base no prazo informado ao cliente. Não é rastreamento em tempo real. A entrega está prevista até {{DUE_SHORT}} e pode variar por fiscalização aduaneira, transporte internacional ou distribuição local.
+        <strong>Previsão atualizada</strong>
+        Em {{ARRIVAL_SHORT}}, o envio chegou ao Brasil. Como agora aguarda o processamento aduaneiro, o prazo estimado foi ampliado para até {{DUE_SHORT}}. Este acompanhamento visual não representa rastreamento por GPS.
       </div>
     </aside>
 
