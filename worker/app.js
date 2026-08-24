@@ -52,6 +52,11 @@ const TRACKING_FIELDS = [
   "sentIso",
   "sentLong",
   "sentShort",
+  "arrivalIso",
+  "arrivalLong",
+  "arrivalShort",
+  "currentStatus",
+  "currentDetail",
   "dueIso",
   "dueLong",
   "dueShort",
@@ -324,7 +329,12 @@ function validIsoDate(value) {
     && new Date(timestamp).toISOString().slice(0, 10) === value;
 }
 
-export function calculateProgress(sentIso, dueIso, date = new Date()) {
+export function calculateProgress(
+  sentIso,
+  dueIso,
+  date = new Date(),
+  currentStatus = "Em trânsito",
+) {
   const todayIso = currentDateIso(date);
   const totalDays = Math.max(1, calendarDaysBetween(sentIso, dueIso));
   const elapsedDays = Math.max(
@@ -335,7 +345,7 @@ export function calculateProgress(sentIso, dueIso, date = new Date()) {
   const overdue = calendarDaysBetween(dueIso, todayIso) > 0;
 
   return {
-    statusText: overdue ? "Prazo em verificação" : "Em trânsito",
+    statusText: overdue ? "Prazo em verificação" : currentStatus,
     dayCount: overdue
       ? "Confirme a entrega com nossa equipe"
       : `${elapsedDays} de ${totalDays} dias decorridos`,
@@ -353,8 +363,11 @@ function validTrackingRecord(record) {
       (field) => typeof record[field] === "string" && record[field],
     )
     && validIsoDate(record.sentIso)
+    && validIsoDate(record.arrivalIso)
     && validIsoDate(record.dueIso)
-    && calendarDaysBetween(record.sentIso, record.dueIso) >= 1,
+    && calendarDaysBetween(record.sentIso, record.dueIso) >= 1
+    && calendarDaysBetween(record.sentIso, record.arrivalIso) >= 0
+    && calendarDaysBetween(record.arrivalIso, record.dueIso) >= 0,
   );
 }
 
@@ -466,7 +479,12 @@ async function decryptSealedTrackingRecord(password, config) {
 }
 
 function trackingPage(record, template, date) {
-  const progress = calculateProgress(record.sentIso, record.dueIso, date);
+  const progress = calculateProgress(
+    record.sentIso,
+    record.dueIso,
+    date,
+    record.currentStatus,
+  );
   const whatsappMessage = `Olá! Gostaria de uma atualização sobre o envio ${record.reference}.`;
   const replacements = {
     TITLE: record.title,
@@ -479,12 +497,16 @@ function trackingPage(record, template, date) {
     SENT_ISO: record.sentIso,
     SENT_LONG: record.sentLong,
     SENT_SHORT: record.sentShort,
+    ARRIVAL_ISO: record.arrivalIso,
+    ARRIVAL_LONG: record.arrivalLong,
+    ARRIVAL_SHORT: record.arrivalShort,
     UPDATED_ISO: progress.todayIso,
     UPDATED_LONG: progress.updatedLong,
     DUE_ISO: record.dueIso,
     DUE_LONG: record.dueLong,
     DUE_SHORT: record.dueShort,
     STATUS_TEXT: progress.statusText,
+    STATUS_DETAIL: record.currentDetail,
     DAY_COUNT: progress.dayCount,
     PROGRESS_PERCENTAGE: String(progress.percentage),
     WHATSAPP_HREF: `https://wa.me/34642874197?text=${encodeURIComponent(whatsappMessage)}`,
