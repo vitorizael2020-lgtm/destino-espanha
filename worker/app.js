@@ -529,8 +529,8 @@ function chooseAttendant(random) {
 
 function forbiddenPage() {
   return `<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>403 Forbidden</title></head>
-<body><h1>403 Forbidden</h1><p>Site em manutenção.</p></body></html>`;
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Contato por e-mail | Destino Espanha</title><link rel="stylesheet" href="/public-site.css"></head>
+<body><main class="section"><div class="container"><p class="eyebrow">DESTINO ESPANHA ASSESSORIA</p><h1>Vamos conversar<br>por e-mail.</h1><p class="lead">O acesso ao WhatsApp por este site está disponível para visitantes da América Latina. Para falar com a assessoria de outra região, use nosso e-mail.</p><p><a class="button" href="mailto:vitorlemos@destinoespanhaassessoria.com">Enviar e-mail <span aria-hidden="true">↗</span></a></p><p><a href="/">Voltar ao site →</a></p></div></main></body></html>`;
 }
 
 async function handleWhatsApp(request, random) {

@@ -10,6 +10,12 @@ const marketingFiles = [
   "index.html",
   "motorista.html",
   "passagens.html",
+  "documentacao.html",
+  "estudos.html",
+  "guias.html",
+  "premium-familia.html",
+  "relocation.html",
+  "vistos.html",
   "aviso-legal.html",
   "termos.html",
   "privacidade.html",
@@ -24,7 +30,9 @@ test("publica identidade empresarial e base de confiança verificável", async (
     assert.match(source, /Cadastur/u);
   }
   assert.match(home, /Empresa formal desde 2021/u);
-  assert.match(home, /Cenários ilustrativos que mostram como a assessoria é organizada/u);
+  assert.match(home, /Atendimento reservado/u);
+  assert.match(home, /Diagnóstico Estratégico/u);
+  assert.match(home, /Triagem inicial/u);
 });
 
 test("não publica antigos argumentos comerciais enganosos", async () => {
@@ -33,7 +41,7 @@ test("não publica antigos argumentos comerciais enganosos", async () => {
   assert.doesNotMatch(content, /<div class="faq-question"/u);
 });
 
-test("publica a experiência Madrid 3D com imagens reais e rota Brasil–Madrid", async () => {
+test("mantém a experiência Madrid 3D como conteúdo secundário com imagens reais", async () => {
   const [home, experience, css, script] = await Promise.all([
     read("index.html"),
     read("madrid-3d.html"),
@@ -41,13 +49,20 @@ test("publica a experiência Madrid 3D com imagens reais e rota Brasil–Madrid"
     read("madrid-3d.js"),
   ]);
   assert.match(home, /Viver Madrid em 3D/u);
-  assert.match(home, /home-brasil-madrid-path/u);
+  assert.match(home, /href="\/madrid-3d"/u);
+  assert.doesNotMatch(home, /hero-particles|home-brasil-madrid-path/u);
   assert.doesNotMatch(home, /spain-puzzle|puzzle-monument/u);
   assert.match(experience, /Globo terrestre real com um avião percorrendo a rota do Brasil a Madrid/u);
   assert.match(experience, /NASA\/GSFC/u);
   assert.match(css, /earth-blue-marble-real\.webp/u);
   assert.match(script, /madrid-puerta-alcala-real\.webp/u);
   assert.match(script, /madrid-gran-via-real\.webp/u);
+});
+
+test("não publica seções de clientes ou depoimentos nas páginas reformuladas", async () => {
+  const files = marketingFiles.filter(file => !["aviso-legal.html", "termos.html", "privacidade.html", "cookies.html", "atendimento.html"].includes(file));
+  const content = (await Promise.all(files.map(read))).join("\n");
+  assert.doesNotMatch(content, /testimonial|case-card|case-study|depoimento|Cenários ilustrativos/iu);
 });
 
 test("não antecipa objeções comerciais sobre aprovação nas páginas públicas", async () => {

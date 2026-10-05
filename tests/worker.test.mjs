@@ -200,14 +200,19 @@ test("redireciona o WhatsApp para países permitidos", async () => {
   );
 });
 
-test("bloqueia o WhatsApp fora da América Latina", async () => {
+test("preserva o bloqueio regional do WhatsApp e oferece contato por e-mail", async () => {
   for (const country of ["ES", "PT", "US"]) {
     const response = await app().fetch(
       requestWithCountry("https://example.com/whatsapp", country),
       environment(),
     );
     assert.equal(response.status, 403);
-    assert.match(await response.text(), /403 Forbidden/u);
+    const body = await response.text();
+    assert.match(body, /mailto:vitorlemos@destinoespanhaassessoria\.com/u);
+    assert.match(body, /visitantes da América Latina/u);
+    assert.doesNotMatch(body, /Site em manutenção/u);
+    assert.equal(response.headers.get("location"), null);
+    assert.match(response.headers.get("cache-control"), /no-store/u);
   }
 });
 

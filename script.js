@@ -79,6 +79,8 @@
         banner.setAttribute('role', 'dialog');
         banner.setAttribute('aria-modal', 'false');
         banner.setAttribute('aria-labelledby', 'cookie-title');
+        banner.setAttribute('aria-hidden', 'true');
+        banner.inert = true;
         banner.innerHTML = `
             <div class="cookie-copy">
                 <strong id="cookie-title">Você escolhe os cookies</strong>
@@ -92,13 +94,16 @@
         document.body.appendChild(banner);
 
         const closeBanner = () => {
+            if (banner.contains(document.activeElement)) document.activeElement.blur();
             banner.classList.remove('is-visible');
             banner.setAttribute('aria-hidden', 'true');
+            banner.inert = true;
         };
-        const openBanner = () => {
+        const openBanner = (focus = true) => {
             banner.classList.add('is-visible');
             banner.removeAttribute('aria-hidden');
-            banner.querySelector('button')?.focus({ preventScroll: true });
+            banner.inert = false;
+            if (focus) banner.querySelector('button')?.focus({ preventScroll: true });
         };
 
         banner.addEventListener('click', (event) => {
@@ -116,7 +121,7 @@
         });
 
         if (savedChoice !== 'accepted' && savedChoice !== 'rejected') {
-            window.setTimeout(() => banner.classList.add('is-visible'), 250);
+            window.setTimeout(() => openBanner(false), 250);
         }
     }
 
@@ -163,11 +168,14 @@
         window.addEventListener('scroll', updateNavbar, { passive: true });
 
         if (!toggle || !menu || !overlay || !close) return;
+        menu.inert = !menu.classList.contains('active');
 
         const closeMenu = () => {
+            if (menu.contains(document.activeElement)) toggle.focus();
             menu.classList.remove('active');
             overlay.classList.remove('active');
             menu.setAttribute('aria-hidden', 'true');
+            menu.inert = true;
             toggle.setAttribute('aria-expanded', 'false');
             document.body.classList.remove('menu-open');
         };
@@ -175,6 +183,7 @@
             menu.classList.add('active');
             overlay.classList.add('active');
             menu.setAttribute('aria-hidden', 'false');
+            menu.inert = false;
             toggle.setAttribute('aria-expanded', 'true');
             document.body.classList.add('menu-open');
             close.focus();
@@ -185,6 +194,18 @@
         overlay.addEventListener('click', closeMenu);
         menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
         document.addEventListener('keydown', (event) => {
+            if (event.key === 'Tab' && menu.classList.contains('active')) {
+                const focusable = [...menu.querySelectorAll('a[href], button:not([disabled])')];
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last?.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first?.focus();
+                }
+            }
             if (event.key === 'Escape' && menu.classList.contains('active')) {
                 closeMenu();
                 toggle.focus();
